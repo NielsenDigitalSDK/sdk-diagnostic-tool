@@ -1,0 +1,10 @@
+{
+"name": "sdk-diagnostic-tool",
+"version": "1.0.0",
+"channel": "stable",
+"updatedAt": "2026-01-26",
+"files": {
+"mac": "nls-validator-mac.zip",
+"win": "nls-validator-win.zip"
+}
+}
