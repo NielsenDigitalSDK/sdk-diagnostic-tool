@@ -1,6 +1,3 @@
-### 📄 README.md 
-
-```markdown
 # SDK Diagnostic Tool
 
 Nielsen SDK Integration and Validation Tool for client developers.
