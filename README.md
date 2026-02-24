@@ -13,7 +13,7 @@ Nielsen SDK Integration and Validation Tool for client developers.
 | **macOS** | [NielsenTool.dmg](https://github.com/NielsenDigitalSDK/sdk-diagnostic-tool/releases/latest/download/NielsenTool.dmg) |
 | **Windows** | [nls-validator-win.zip](https://github.com/NielsenDigitalSDK/sdk-diagnostic-tool/releases/latest/download/nls-validator-win.zip) |
 
-### AGF Version (without DTVR)
+### Cookieless Version (without DTVR)
 
 | Platform | Download |
 | --- | --- |
@@ -28,7 +28,7 @@ Nielsen SDK Integration and Validation Tool for client developers.
 
 ### macOS
 
-1. Download the appropriate `.dmg` file (Global or AGF).
+1. Download the appropriate `.dmg` file (Global or Cookieless).
 2. Double-click to open the disk image.
 3. Drag **NielsenTool** to your **Applications** folder.
 4. Open **NielsenTool** from Applications.
@@ -107,7 +107,7 @@ No action required — updates happen automatically!
 | Version | Use Case |
 | --- | --- |
 | **Global** | Standard Nielsen SDK integration with DTVR support |
-| **AGF** | AGF-specific integration (Germany) without DTVR |
+| **Cookieless** | Cookieless-specific integration (Germany) without DTVR |
 
 ---
 
