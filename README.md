@@ -37,7 +37,7 @@ Nielsen SDK Integration and Validation Tool for client developers.
 
 ### Windows
 
-1. Download the appropriate `.zip` file (Global or AGF).
+1. Download the appropriate `.zip` file (Global or Cookieless).
 2. Extract the zip to a folder.
 3. Double-click `nls-validator.bat`.
 
