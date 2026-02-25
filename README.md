@@ -1,6 +1,13 @@
-# SDK Diagnostic Tool
+# Nielsen SDK Diagnostic Tool
 
 Nielsen SDK Integration and Validation Tool for client developers.
+
+---
+
+## 📜 License
+
+© Nielsen SDK contains material that is protected by copyright laws, patent laws, trade secret laws, and by international treaty provisions and is Copyright © 2024 The Nielsen Company (US) LLC. All intellectual property rights and licenses therein are reserved by The Nielsen Company (US) LLC and its licensors. Please read the license agreement presented [here](https://engineeringportal.nielsen.com/docs/Special:ClickThrough), which must be accepted in order to download the Nielsen SDKs.
+For more information, reach out to your Nielsen Technical Account Manager(TAM).
 
 ---
 
@@ -114,12 +121,5 @@ No action required — updates happen automatically!
 ## 🆘 Support
 
 For assistance, contact the Nielsen Ops/Certification team.
-
----
-
-## 📜 License
-
-© Nielsen SDK contains material that is protected by copyright laws, patent laws, trade secret laws, and by international treaty provisions and is Copyright © 2024 The Nielsen Company (US) LLC. All intellectual property rights and licenses therein are reserved by The Nielsen Company (US) LLC and its licensors. Please read the license agreement presented [here](https://engineeringportal.nielsen.com/docs/Special:ClickThrough), which must be accepted in order to download the Nielsen SDKs.
-For more information, reach out to your Nielsen Technical Account Manager(TAM).
 
 ---
