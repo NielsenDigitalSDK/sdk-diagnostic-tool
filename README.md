@@ -13,14 +13,14 @@ For more information, reach out to your Nielsen Technical Account Manager(TAM).
 
 ## 🚀 Downloads
 
-### Global Version (with DTVR)
+### Global Version 
 
 | Platform | Download |
 | --- | --- |
 | **macOS** | [NielsenTool.dmg](https://github.com/NielsenDigitalSDK/sdk-diagnostic-tool/releases/latest/download/NielsenTool.dmg) |
 | **Windows** | [nls-validator-win.zip](https://github.com/NielsenDigitalSDK/sdk-diagnostic-tool/releases/latest/download/nls-validator-win.zip) |
 
-### Cookieless Version (without DTVR)
+### Cookieless Version 
 
 | Platform | Download |
 | --- | --- |
