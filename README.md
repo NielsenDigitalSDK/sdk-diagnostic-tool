@@ -118,8 +118,44 @@ No action required — updates happen automatically!
 
 ---
 
-## 🆘 Support
+## 🔧 Troubleshooting
 
-For assistance, contact the Nielsen Ops/Certification team.
+> For detailed step-by-step solutions, see the **[Troubleshooting Guide](docs/TROUBLESHOOTING.md)**.
+
+| Platform | Issue | Details |
+| --- | --- | --- |
+| iPhone / iPad (USB) | "Trust" dialog missing or device not detected | [View](docs/TROUBLESHOOTING.md#-iphone--ipad-usb) |
+| Android Phone (USB) | Device not detected — USB debugging not enabled | [View](docs/TROUBLESHOOTING.md#-android-phone-usb) |
+| Android Emulator | Emulator not listed — ADB server conflict | [View](docs/TROUBLESHOOTING.md#-android-emulator) |
+| Fire TV (Wi-Fi) | Cannot connect — ADB debugging or network issue | [View](docs/TROUBLESHOOTING.md#-fire-tv-standard--wi-fi) |
+| Fire TV (VegaOS) | No logs — requires USB, uses loggingctl not logcat | [View](docs/TROUBLESHOOTING.md#-fire-tv-vegaos) |
+| Apple TV (Wi-Fi) | Discovery, pairing, or tunnel issues | [View](docs/TROUBLESHOOTING.md#-apple-tv-wi-fi) |
+| Browser (Chrome/Firefox/Safari) | Browser fails to launch or no logs | [View](docs/TROUBLESHOOTING.md#-browser-chrome--firefox--safari) |
+| macOS | "NielsenTool" is damaged / can't be opened | [View](docs/TROUBLESHOOTING.md#-macos--general) |
+| Auto-Update | Update fails or settings lost | [View](docs/TROUBLESHOOTING.md#-auto-update-issues) |
+| All Platforms | No logs — incorrect operation order or debug flag not enabled | [View](docs/TROUBLESHOOTING.md#-before-you-start) |
+| All Platforms | Rules stay gray or show red (failed) | [View](docs/TROUBLESHOOTING.md#rules-stay-gray-never-pass-or-fail) |
 
 ---
+
+## ⚠️ Known Limitations
+
+| Limitation | Details |
+| --- | --- |
+| **Intel-based Macs** | Not supported. Requires **Apple Silicon** (M1/M2/M3/M4). Intel Macs have known incompatibilities with the iOS and Apple TV connectivity toolchain. |
+| **Apple TV — Wi-Fi only** | Apple TV connectivity is Wi-Fi only (Bonjour discovery → PIN pairing → tunnel). USB log capture is not available for Apple TV. |
+| **Domless SDK** | Domless SDK validation is currently supported **only via Fire TV (VegaOS)**. Other platforms (Android, iOS, standard Fire TV) do not support Domless SDK log capture at this time. |
+| **Mobile browser BSDK logs** | This tool cannot capture Browser SDK logs from a mobile device's browser (e.g., Chrome on iPhone). Mobile browsers sandbox console output. Browser validation uses **desktop Playwright only** (Chrome, Firefox, WebKit). |
+
+---
+
+## 🆘 Support
+
+For assistance, contact the Nielsen Ops/Certification team or your Nielsen Technical Account Manager (TAM).
+
+When reporting issues, please include:
+1. **Tool version** (shown in the header or terminal on launch).
+2. **Platform** (macOS/Windows) and **OS version**.
+3. **Device type** being validated.
+4. **Screenshot or export** of the error with reproducible steps.
+
