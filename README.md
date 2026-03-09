@@ -2,6 +2,9 @@
 
 Nielsen SDK Integration and Validation Tool for client developers.
 
+### 📖 [View the Interactive Client Guide →](https://nielsendigitalsdk.github.io/sdk-diagnostic-tool/)
+Step-by-step walkthrough with embedded videos — installation, validation workflow, interpreting results, and more.
+
 ---
 
 ## 📜 License

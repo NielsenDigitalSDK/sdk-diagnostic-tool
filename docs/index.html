@@ -1,0 +1,1587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SDK Diagnostic Tool — Client Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* ── Theme Variables ── */
+  :root {
+    /* Nielsen Brand */
+    --nielsen-purple: #6E37FA;
+    --nielsen-purple-light: #8B5CF6;
+    --nielsen-purple-bg: #ede9fe;
+    --nielsen-navy: #002041;
+
+    /* Light Mode */
+    --bg: #f8fafc;
+    --bg-card: #ffffff;
+    --bg-code: #f1f5f9;
+    --bg-sidebar: #0f172a;
+    --text: #1e293b;
+    --text-secondary: #334155;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    --border-light: #f1f5f9;
+
+    /* Status */
+    --green: #10b981;
+    --green-bg: #ecfdf5;
+    --green-border: #a7f3d0;
+    --red: #ef4444;
+    --red-bg: #fef2f2;
+    --red-border: #fecaca;
+    --amber: #f59e0b;
+    --amber-bg: #fffbeb;
+    --amber-border: #fde68a;
+    --blue: #3b82f6;
+    --blue-bg: #eff6ff;
+    --blue-border: #bfdbfe;
+
+    /* Layout */
+    --sidebar-w: 280px;
+    --max-content: 820px;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  /* ── Dark Mode ── */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f172a;
+      --bg-card: #1e293b;
+      --bg-code: #1e293b;
+      --text: #f1f5f9;
+      --text-secondary: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border: #334155;
+      --border-light: #1e293b;
+      --green-bg: #052e16;
+      --green-border: #166534;
+      --red-bg: #450a0a;
+      --red-border: #991b1b;
+      --amber-bg: #451a03;
+      --amber-border: #92400e;
+      --blue-bg: #172554;
+      --blue-border: #1e40af;
+      --nielsen-purple-bg: #2e1065;
+    }
+  }
+  [data-theme="dark"] {
+    --bg: #0f172a;
+    --bg-card: #1e293b;
+    --bg-code: #1e293b;
+    --text: #f1f5f9;
+    --text-secondary: #e2e8f0;
+    --text-muted: #94a3b8;
+    --border: #334155;
+    --border-light: #1e293b;
+    --green-bg: #052e16;
+    --green-border: #166534;
+    --red-bg: #450a0a;
+    --red-border: #991b1b;
+    --amber-bg: #451a03;
+    --amber-border: #92400e;
+    --blue-bg: #172554;
+    --blue-border: #1e40af;
+    --nielsen-purple-bg: #2e1065;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.7;
+    font-size: 15px;
+    transition: background 0.3s, color 0.3s;
+  }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    position: fixed; top: 0; left: 0;
+    width: var(--sidebar-w); height: 100vh;
+    background: var(--bg-sidebar);
+    overflow-y: auto; z-index: 100;
+    padding: 0;
+    transition: transform 0.3s ease;
+  }
+  .sidebar-header {
+    padding: 24px 20px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .sidebar-header h2 {
+    color: #fff; font-size: 14px; font-weight: 700;
+    letter-spacing: 0.5px; text-transform: uppercase;
+  }
+  .sidebar-header p {
+    color: #94a3b8; font-size: 12px; margin-top: 4px;
+  }
+  .nav-group { padding: 12px 0; }
+  .nav-group-label {
+    padding: 4px 20px; font-size: 10px; font-weight: 700;
+    color: #64748b; text-transform: uppercase; letter-spacing: 1px;
+  }
+  .nav-link {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 20px; font-size: 13px; color: #94a3b8;
+    text-decoration: none; transition: all 0.15s;
+    border-left: 3px solid transparent;
+  }
+  .nav-link:hover { color: #e2e8f0; background: rgba(255,255,255,0.04); }
+  .nav-link.active {
+    color: #fff; background: rgba(99,102,241,0.1);
+    border-left-color: var(--nielsen-purple);
+    font-weight: 600;
+  }
+  .nav-link .nav-num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 22px; height: 22px; border-radius: 6px;
+    font-size: 11px; font-weight: 700;
+    background: rgba(255,255,255,0.06); color: #64748b;
+    flex-shrink: 0;
+  }
+  .nav-link.active .nav-num {
+    background: var(--nielsen-purple); color: #fff;
+  }
+
+  /* Sub-nav links (indented, no number) */
+  .nav-sub {
+    padding: 5px 20px 5px 52px; font-size: 12px; color: #64748b;
+    text-decoration: none; display: block; transition: all 0.15s;
+    border-left: 3px solid transparent;
+  }
+  .nav-sub:hover { color: #94a3b8; background: rgba(255,255,255,0.03); }
+  .nav-sub.active { color: #e2e8f0; border-left-color: rgba(110,55,250,0.4); }
+
+  /* Theme toggle in sidebar */
+  .theme-toggle {
+    position: absolute; bottom: 16px; left: 20px; right: 20px;
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 12px; border-radius: 8px;
+    background: rgba(255,255,255,0.04);
+    cursor: pointer; border: none; color: #94a3b8;
+    font-size: 12px; font-family: inherit;
+  }
+  .theme-toggle:hover { background: rgba(255,255,255,0.08); color: #e2e8f0; }
+
+  /* ── Mobile hamburger ── */
+  .mobile-toggle {
+    display: none; position: fixed; top: 12px; left: 12px; z-index: 200;
+    width: 40px; height: 40px; border-radius: 10px;
+    background: var(--bg-card); border: 1px solid var(--border);
+    cursor: pointer; align-items: center; justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    font-size: 18px; color: var(--text);
+  }
+
+  /* ── Main Content ── */
+  .main { margin-left: var(--sidebar-w); padding: 48px 48px 96px; }
+  .content { max-width: var(--max-content); margin: 0 auto; }
+
+  /* ── Sections ── */
+  .section { margin-bottom: 64px; scroll-margin-top: 32px; }
+  .section h2 {
+    font-size: 24px; font-weight: 800; margin-bottom: 8px;
+    display: flex; align-items: center; gap: 12px;
+    color: var(--text);
+  }
+  .section-number {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 36px; height: 36px; border-radius: 10px;
+    background: var(--nielsen-purple); color: #fff;
+    font-size: 15px; font-weight: 800; flex-shrink: 0;
+  }
+  .lead { color: var(--text-secondary); font-size: 16px; margin-bottom: 24px; line-height: 1.7; }
+  h3 { font-size: 17px; font-weight: 700; margin: 32px 0 12px; color: var(--text); }
+
+  /* ── Cards ── */
+  .card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 20px 24px;
+    margin-bottom: 12px; transition: box-shadow 0.2s;
+  }
+  .card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+  .card h4 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+  .card p { color: var(--text-secondary); font-size: 14px; }
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin: 16px 0; }
+  .card-icon { font-size: 28px; margin-bottom: 12px; }
+
+  /* ── Feature Cards (3-col) ── */
+  .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin: 16px 0; }
+  .feature-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 16px;
+    text-align: center; transition: all 0.2s;
+  }
+  .feature-card:hover { border-color: var(--nielsen-purple); transform: translateY(-2px); box-shadow: 0 4px 16px rgba(110,55,250,0.1); }
+  .feature-card .fc-icon { font-size: 24px; margin-bottom: 8px; }
+  .feature-card h5 { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+  .feature-card p { font-size: 12px; color: var(--text-muted); }
+
+  /* ── Status Cards (pass/fail/gray) ── */
+  .status-grid { display: flex; gap: 16px; margin: 20px 0; flex-wrap: wrap; }
+  .status-card {
+    flex: 1; min-width: 180px; padding: 20px;
+    border-radius: var(--radius); text-align: center;
+    background: var(--bg-card); border: 1px solid var(--border);
+  }
+  .status-card .s-icon { font-size: 32px; margin-bottom: 8px; }
+  .status-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .status-card p { font-size: 13px; color: var(--text-muted); }
+
+  /* ── Steps ── */
+  .steps { margin: 16px 0 24px; }
+  .step {
+    display: flex; gap: 16px; margin-bottom: 16px;
+    align-items: flex-start;
+  }
+  .step-num {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: var(--nielsen-purple); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 800; flex-shrink: 0;
+  }
+  .step-content h4 { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+  .step-content p { font-size: 14px; color: var(--text-secondary); }
+
+  /* ── Accordion ── */
+  .accordion { margin: 16px 0; }
+  .acc-item {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm); margin-bottom: 8px;
+    background: var(--bg-card); overflow: hidden;
+  }
+  .acc-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 18px; cursor: pointer; user-select: none;
+    transition: background 0.15s;
+  }
+  .acc-header:hover { background: var(--border-light); }
+  .acc-header h4 { font-size: 14px; font-weight: 600; }
+  .acc-arrow { font-size: 12px; color: var(--text-muted); transition: transform 0.2s; }
+  .acc-body {
+    max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease;
+    padding: 0 18px;
+  }
+  .acc-item.open .acc-body { max-height: 2000px; padding: 0 18px 18px; }
+  .acc-item.open .acc-arrow { transform: rotate(180deg); }
+  .acc-body p { font-size: 14px; color: var(--text-secondary); margin-bottom: 8px; }
+  .acc-body ul { margin: 8px 0 8px 20px; font-size: 14px; color: var(--text-secondary); }
+  .acc-body li { margin-bottom: 4px; }
+
+  /* ── Callouts ── */
+  .callout {
+    display: flex; gap: 14px; padding: 16px 20px;
+    border-radius: var(--radius-sm); margin: 16px 0;
+    align-items: flex-start;
+  }
+  .callout-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+  .callout-text { font-size: 14px; }
+  .callout-text strong:first-child { display: block; margin-bottom: 2px; }
+  .callout.critical { background: var(--red-bg); border: 1px solid var(--red-border); }
+  .callout.warn { background: var(--amber-bg); border: 1px solid var(--amber-border); }
+  .callout.tip { background: var(--green-bg); border: 1px solid var(--green-border); }
+  .callout.info { background: var(--blue-bg); border: 1px solid var(--blue-border); }
+
+  /* ── Tables ── */
+  .table-wrap { overflow-x: auto; margin: 16px 0; }
+  table {
+    width: 100%; border-collapse: collapse;
+    font-size: 14px; background: var(--bg-card);
+    border-radius: var(--radius-sm); overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  th { background: var(--border-light); font-weight: 700; text-align: left; padding: 10px 14px; font-size: 13px; }
+  td { padding: 10px 14px; border-top: 1px solid var(--border); }
+
+  /* ── Code ── */
+  code {
+    background: var(--bg-code); padding: 2px 7px;
+    border-radius: 5px; font-size: 13px;
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    border: 1px solid var(--border);
+  }
+  pre {
+    background: var(--bg-code); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 16px;
+    overflow-x: auto; font-size: 13px; margin: 12px 0;
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    line-height: 1.6;
+  }
+
+  /* ── Link Reference Cards ── */
+  .link-ref {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 18px; margin: 10px 0;
+    border: 1px solid var(--border); border-radius: var(--radius-sm);
+    background: var(--bg-card); text-decoration: none; color: var(--text);
+    transition: all 0.15s;
+    border-left: 3px solid var(--nielsen-purple);
+  }
+  .link-ref:hover { border-color: var(--nielsen-purple); box-shadow: 0 2px 8px rgba(110,55,250,0.1); transform: translateX(2px); }
+  .link-ref-icon { font-size: 22px; flex-shrink: 0; }
+  .link-ref-text { font-size: 14px; font-weight: 600; }
+  .link-ref-url { font-size: 12px; color: var(--nielsen-purple); margin-top: 2px; }
+
+  /* ── UI Layout Mockup ── */
+  .ui-layout {
+    display: grid; grid-template-columns: 260px 1fr 200px;
+    gap: 8px; margin: 20px 0; border-radius: var(--radius);
+    overflow: hidden; border: 1px solid var(--border);
+    background: #0f172a; padding: 8px;
+  }
+  .ui-panel {
+    background: #1e293b; border-radius: 8px; padding: 12px;
+  }
+  .ui-panel h5 { color: #94a3b8; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+  .ui-mock-item { color: #cbd5e1; font-size: 12px; padding: 5px 4px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .ui-mock-badge {
+    display: inline-block; padding: 1px 6px; border-radius: 4px;
+    font-size: 10px; font-weight: 700; margin-right: 6px;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── Workflow Diagram ── */
+  .workflow {
+    display: flex; align-items: center; gap: 0;
+    margin: 20px 0; overflow-x: auto; padding: 12px 0;
+  }
+  .wf-step {
+    display: flex; flex-direction: column; align-items: center;
+    min-width: 90px; text-align: center;
+  }
+  .wf-circle {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--nielsen-purple); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: 700; margin-bottom: 6px;
+  }
+  .wf-circle.critical { background: var(--red); }
+  .wf-label { font-size: 11px; font-weight: 600; color: var(--text-secondary); max-width: 80px; }
+  .wf-arrow { font-size: 18px; color: var(--text-muted); margin: 0 4px; padding-bottom: 20px; }
+
+  /* ── Platform Cards ── */
+  .platform-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin: 16px 0; }
+  .platform-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 16px;
+    transition: all 0.2s;
+  }
+  .platform-card:hover { border-color: var(--nielsen-purple); }
+  .platform-card h5 { font-size: 14px; font-weight: 700; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+  .platform-card p { font-size: 12px; color: var(--text-muted); }
+  .platform-card .prereqs { margin-top: 8px; font-size: 12px; }
+  .platform-card .prereqs span { display: inline-block; padding: 2px 8px; margin: 2px 4px 2px 0; border-radius: 4px; background: var(--bg-code); border: 1px solid var(--border); font-size: 11px; }
+
+  /* ── Badge ── */
+  .badge {
+    display: inline-block; padding: 2px 8px; border-radius: 6px;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.3px;
+  }
+  .badge-purple { background: var(--nielsen-purple-bg); color: var(--nielsen-purple); }
+  .badge-green { background: var(--green-bg); color: var(--green); }
+  .badge-blue { background: var(--blue-bg); color: var(--blue); }
+  .badge-amber { background: var(--amber-bg); color: var(--amber); }
+
+  /* ── Links ── */
+  a { color: #7c3aed; text-decoration-color: rgba(124,58,237,0.3); }
+  a:hover { color: #6E37FA; text-decoration-color: #6E37FA; }
+  [data-theme="dark"] a { color: #a78bfa; text-decoration-color: rgba(167,139,250,0.3); }
+  [data-theme="dark"] a:hover { color: #c4b5fd; text-decoration-color: #c4b5fd; }
+  @media (prefers-color-scheme: dark) {
+    a { color: #a78bfa; text-decoration-color: rgba(167,139,250,0.3); }
+    a:hover { color: #c4b5fd; text-decoration-color: #c4b5fd; }
+  }
+  .link-ref, .link-ref:hover { color: var(--text); text-decoration: none; }
+  .nav-link, .nav-link:hover { color: inherit; text-decoration: none; }
+
+  /* ── Video Containers ── */
+  .video-wrap {
+    margin: 20px 0;
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+    background: #000;
+  }
+  .video-wrap video {
+    width: 100%; display: block;
+  }
+  .video-caption {
+    padding: 10px 16px;
+    font-size: 12px; font-weight: 600;
+    color: var(--text-muted);
+    background: var(--bg-card);
+    border-top: 1px solid var(--border);
+    text-align: center;
+    letter-spacing: 0.3px;
+  }
+
+  /* ── Screenshot / Mockup Containers ── */
+  .screenshot-wrap {
+    margin: 20px 0;
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+  }
+  .screenshot-wrap img {
+    width: 100%; display: block;
+  }
+  .screenshot-caption {
+    padding: 10px 16px;
+    font-size: 12px; font-weight: 600;
+    color: var(--text-muted);
+    background: var(--bg-card);
+    border-top: 1px solid var(--border);
+    text-align: center;
+    letter-spacing: 0.3px;
+  }
+  /* Tool UI Mockup panels */
+  .tool-mockup {
+    background: #0f172a;
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid #1e293b;
+    margin: 20px 0;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+    font-family: 'Inter', -apple-system, sans-serif;
+  }
+  .tool-mockup-header {
+    background: #1e293b;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid #334155;
+  }
+  .tool-mockup-header .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .tool-mockup-header .dot-r { background: #ef4444; }
+  .tool-mockup-header .dot-y { background: #f59e0b; }
+  .tool-mockup-header .dot-g { background: #10b981; }
+  .tool-mockup-header .title { color: #94a3b8; font-size: 12px; margin-left: 8px; }
+  .tool-mockup-body { padding: 16px; }
+  /* Three-column mockup layout */
+  .mock-3col {
+    display: grid;
+    grid-template-columns: 260px 1fr 220px;
+    gap: 8px;
+    min-height: 400px;
+  }
+  @media (max-width: 900px) {
+    .mock-3col { grid-template-columns: 1fr; }
+  }
+  .mock-panel {
+    background: #1e293b;
+    border-radius: 8px;
+    padding: 12px;
+    overflow: hidden;
+  }
+  .mock-panel-title {
+    color: #64748b;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #334155;
+  }
+  /* Mock log rows */
+  .mock-log-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 12px;
+    color: #cbd5e1;
+    border-radius: 4px;
+    transition: background 0.15s;
+  }
+  .mock-log-row:hover { background: rgba(255,255,255,0.04); }
+  .mock-log-row.error { background: rgba(239,68,68,0.12); border-left: 3px solid #ef4444; }
+  .mock-log-row.warning { background: rgba(245,158,11,0.12); border-left: 3px solid #f59e0b; }
+  .mock-log-time { color: #64748b; font-size: 11px; min-width: 62px; font-family: 'SF Mono', monospace; }
+  .mock-badge {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+  }
+  .mock-log-text { color: #94a3b8; font-size: 11px; flex: 1; }
+  /* Mock rule items */
+  .mock-rule {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 6px;
+    font-size: 12px;
+    color: #cbd5e1;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+  }
+  .mock-rule-icon { font-size: 13px; flex-shrink: 0; }
+  .mock-rule.pass { border-left: 2px solid #10b981; }
+  .mock-rule.fail { border-left: 2px solid #ef4444; }
+  .mock-rule.pending { border-left: 2px solid #334155; }
+  .mock-category {
+    color: #fbbf24;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 8px 6px 3px;
+    text-transform: uppercase;
+  }
+  /* Mock filter items */
+  .mock-filter {
+    margin-bottom: 8px;
+  }
+  .mock-filter-label {
+    color: #64748b;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 3px;
+  }
+  .mock-filter-select {
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 6px;
+    padding: 5px 10px;
+    color: #94a3b8;
+    font-size: 11px;
+    width: 100%;
+  }
+  /* Header mockup */
+  .mock-header-bar {
+    background: #1e293b;
+    border-radius: 8px;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 16px 0;
+    border: 1px solid #334155;
+  }
+  .mock-header-brand {
+    color: #f1f5f9;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .mock-header-badge {
+    background: #3b82f6;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 700;
+  }
+  .mock-header-icons {
+    margin-left: auto;
+    display: flex;
+    gap: 12px;
+    color: #94a3b8;
+    font-size: 16px;
+  }
+  .mock-product-btn {
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: default;
+  }
+  .mock-product-btn.active {
+    background: #6E37FA;
+    color: white;
+  }
+  .mock-product-btn.inactive {
+    background: #334155;
+    color: #94a3b8;
+  }
+  /* Error detail banner in log */
+  .mock-error-banner {
+    background: rgba(239,68,68,0.15);
+    border: 1px solid rgba(239,68,68,0.3);
+    border-radius: 6px;
+    padding: 8px 12px;
+    margin: 4px 8px 8px;
+    font-size: 11px;
+    color: #fca5a5;
+  }
+  .mock-error-banner strong { color: #ef4444; }
+
+  /* ── Responsive ── */
+  @media (max-width: 900px) {
+    .sidebar { transform: translateX(-100%); }
+    .sidebar.open { transform: translateX(0); box-shadow: 4px 0 32px rgba(0,0,0,0.3); }
+    .mobile-toggle { display: flex; }
+    .main { margin-left: 0; padding: 64px 20px 80px; }
+    .ui-layout { grid-template-columns: 1fr; }
+    .workflow { flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <h2>SDK Diagnostic Tool</h2>
+    <p>Client Guide</p>
+  </div>
+  <div class="nav-group">
+    <div class="nav-group-label">Getting Started</div>
+    <a class="nav-link active" href="#overview"><span class="nav-num">1</span> Overview</a>
+    <a class="nav-link" href="#install"><span class="nav-num">2</span> Installation</a>
+    <a class="nav-link" href="#quick-start"><span class="nav-num">3</span> Quick Start</a>
+  </div>
+  <div class="nav-group">
+    <div class="nav-group-label">Modules</div>
+    <a class="nav-link" href="#wizard"><span class="nav-num">4</span> Integration Wizard</a>
+    <a class="nav-link" href="#validation-ui"><span class="nav-num">5</span> Validation Interface</a>
+    <a class="nav-sub" href="#panel-left">Left Panel — Checklist</a>
+    <a class="nav-sub" href="#panel-center">Center Panel — Log Stream</a>
+    <a class="nav-sub" href="#panel-right">Right Panel — Filters</a>
+    <a class="nav-sub" href="#config-modal">Configuration Modal</a>
+  </div>
+  <div class="nav-group">
+    <div class="nav-group-label">Using the Tool</div>
+    <a class="nav-link" href="#workflow"><span class="nav-num">6</span> Running Validation</a>
+    <a class="nav-link" href="#results"><span class="nav-num">7</span> Interpreting Results</a>
+    <a class="nav-link" href="#failure-types"><span class="nav-num">8</span> Failure Types</a>
+    <a class="nav-link" href="#exports"><span class="nav-num">9</span> Session Export &amp; Import</a>
+  </div>
+  <div class="nav-group">
+    <div class="nav-group-label">Reference</div>
+    <a class="nav-link" href="#products"><span class="nav-num">10</span> Product Types</a>
+    <a class="nav-link" href="#platforms"><span class="nav-num">11</span> Supported Platforms</a>
+    <a class="nav-link" href="#tips"><span class="nav-num">12</span> Tips &amp; Best Practices</a>
+    <a class="nav-link" href="#links"><span class="nav-num">13</span> Quick Reference Links</a>
+  </div>
+  <button class="theme-toggle" onclick="toggleTheme()" title="Switch theme">
+    <span id="theme-icon">&#9790;</span>
+    <span id="theme-label">Dark Mode</span>
+  </button>
+</nav>
+
+<button class="mobile-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">&#9776;</button>
+
+<!-- Main Content -->
+<main class="main">
+  <div class="content">
+
+    <!-- 1. OVERVIEW -->
+    <div class="section" id="overview">
+      <h2><span class="section-number">1</span> Overview</h2>
+      <p class="lead">The <strong>Nielsen Digital SDK Integration Assistance &amp; Diagnostic Tool</strong> (short: <strong>SDK Diagnostic Tool</strong>) helps developers integrate the Nielsen SDK correctly and validate their implementation before certification.</p>
+
+      <div class="card-grid">
+        <div class="card" style="border-top: 3px solid #10b981">
+          <div class="card-icon">&#128268;</div>
+          <h4>Integration Wizard</h4>
+          <p>Step-by-step SDK integration guidance. Access documentation, code examples, and implementation assistance for DCR Static, DCR Video &amp; DTVR integrations.</p>
+        </div>
+        <div class="card" style="border-top: 3px solid #3b82f6">
+          <div class="card-icon">&#128269;</div>
+          <h4>Diagnostic Tool</h4>
+          <p>Diagnose and validate DCR Static, DCR Video &amp; DTVR integrations. Capture logs from mobile apps and browsers, run validation tests, and diagnose SDK implementation.</p>
+        </div>
+      </div>
+      <div class="screenshot-wrap"><img src="guide_images/HomeScreen.png" alt="SDK Diagnostic Tool — Home Screen showing Integration Wizard and Diagnostic Tool modules" style="width:100%;display:block;border-radius:8px;"><div class="screenshot-caption">Tool Home Screen — Choose between Integration Wizard and Diagnostic Tool</div></div>
+
+
+      <div class="callout info">
+        <span class="callout-icon">&#128161;</span>
+        <div class="callout-text">
+          <strong>Built-in Interactive Tutorial (Diagnostic Tool only)</strong>
+          The Diagnostic Tool includes a guided walkthrough that teaches you the interface step by step. On first launch, the tutorial starts automatically. After that, click the <strong>route icon</strong> in the header to restart it at any time.
+        </div>
+      </div>
+
+      <h3>Which Variant Do I Need?</h3>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Variant</th><th>Includes</th><th>Use When</th></tr>
+          <tr><td><strong>Global</strong></td><td>DCR Video, DCR Static, DTVR</td><td>Your integration targets the Global market and/or includes DTVR.</td></tr>
+          <tr><td><strong>Cookieless</strong></td><td>DCR Video, DCR Static</td><td>Your integration targets a cookieless deployment (e.g., the German market).</td></tr>
+        </table>
+      </div>
+
+      <h3>Key Resources</h3>
+      <a class="link-ref" href="https://github.com/NielsenDigitalSDK/sdk-diagnostic-tool" target="_blank">
+        <span class="link-ref-icon">&#128218;</span>
+        <div>
+          <div class="link-ref-text">README &mdash; Downloads, Installation, Supported Platforms</div>
+          <div class="link-ref-url">github.com/NielsenDigitalSDK/sdk-diagnostic-tool</div>
+        </div>
+      </a>
+      <a class="link-ref" href="https://github.com/NielsenDigitalSDK/sdk-diagnostic-tool/blob/main/docs/TROUBLESHOOTING.md" target="_blank">
+        <span class="link-ref-icon">&#128295;</span>
+        <div>
+          <div class="link-ref-text">Troubleshooting Guide &mdash; Platform-specific fixes</div>
+          <div class="link-ref-url">docs/TROUBLESHOOTING.md</div>
+        </div>
+      </a>
+      <a class="link-ref" href="https://github.com/NielsenDigitalSDK/sdk-diagnostic-tool/releases/latest" target="_blank">
+        <span class="link-ref-icon">&#128230;</span>
+        <div>
+          <div class="link-ref-text">Latest Release &mdash; Download macOS and Windows builds</div>
+          <div class="link-ref-url">GitHub Releases (always latest)</div>
+        </div>
+      </a>
+    </div>
+
+    <!-- 2. INSTALLATION -->
+    <div class="section" id="install">
+      <h2><span class="section-number">2</span> Installation</h2>
+      <p class="lead">Download the correct variant (Global or Cookieless) for your platform from the <a href="https://github.com/NielsenDigitalSDK/sdk-diagnostic-tool/releases/latest" target="_blank">GitHub Releases</a> page.</p>
+
+      <div class="video-wrap"><video controls preload="metadata"><source src="guide_videos/install-and-launch.mp4" type="video/mp4"></video><div class="video-caption">Video — Downloading, installing, and launching the SDK Diagnostic Tool on macOS</div></div>
+
+      <div class="accordion">
+        <div class="acc-item open">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <h4>&#127822; macOS (DMG)</h4>
+            <span class="acc-arrow">&#9660;</span>
+          </div>
+          <div class="acc-body">
+            <div class="steps">
+              <div class="step"><div class="step-num">1</div><div class="step-content"><h4>Download</h4><p>Download <code>NielsenTool.dmg</code> (Global) or <code>NielsenTool-Cookieless.dmg</code> (Cookieless) from GitHub Releases.</p></div></div>
+              <div class="step"><div class="step-num">2</div><div class="step-content"><h4>Open &amp; Install</h4><p>Open the DMG file. Drag <strong>NielsenTool.app</strong> to the <strong>Applications</strong> folder shortcut shown in the window.</p></div></div>
+              <div class="step"><div class="step-num">3</div><div class="step-content"><h4>First Launch</h4><p>Double-click <strong>NielsenTool.app</strong> in Applications. macOS may ask <em>"Are you sure you want to open it?"</em> &mdash; click <strong>Open</strong>. You may also see additional permission prompts (Accessibility, Terminal access, etc.) &mdash; click <strong>Allow</strong> for each. These are required for device log capture.</p></div></div>
+              <div class="step"><div class="step-num">4</div><div class="step-content"><h4>Grant Permissions</h4><p>The app may ask to control <strong>Terminal.app</strong> &mdash; click <strong>Allow</strong>. For certain devices like <strong>Apple TV</strong>, the tool may prompt for your macOS password (sudo access) to establish the wireless connection.</p></div></div>
+              <div class="step"><div class="step-num">5</div><div class="step-content"><h4>Ready</h4><p>Terminal opens, checks for updates, and launches the tool. Your <strong>default browser</strong> opens automatically at <code>localhost:3000</code>.</p></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <h4>&#128187; Windows (ZIP)</h4>
+            <span class="acc-arrow">&#9660;</span>
+          </div>
+          <div class="acc-body">
+            <div class="steps">
+              <div class="step"><div class="step-num">1</div><div class="step-content"><h4>Download</h4><p>Download <code>nls-validator-win.zip</code> (Global) or <code>nls-validator-win-agf.zip</code> (Cookieless) from GitHub Releases.</p></div></div>
+              <div class="step"><div class="step-num">2</div><div class="step-content"><h4>Extract</h4><p>Extract the ZIP to any folder.</p></div></div>
+              <div class="step"><div class="step-num">3</div><div class="step-content"><h4>Launch</h4><p>Double-click <code>nls-validator.bat</code>. The tool starts and your browser opens automatically at <code>localhost:3000</code>.</p></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout tip">
+        <span class="callout-icon">&#128161;</span>
+        <div class="callout-text">If the browser doesn't open automatically on either platform, paste <code>http://localhost:3000/</code> into any browser to access the tool.</div>
+      </div>
+
+      <h3>Auto-Update</h3>
+      <p>The tool <strong>automatically checks for updates</strong> every time you launch it. If a newer version is available, it downloads and installs before starting &mdash; no action needed on your part. If auto-update fails (e.g., behind a corporate proxy), download the latest version manually from <a href="https://github.com/NielsenDigitalSDK/sdk-diagnostic-tool/releases/latest" target="_blank">GitHub Releases</a>.</p>
+    </div>
+
+    <!-- 3. QUICK START -->
+    <div class="section" id="quick-start">
+      <h2><span class="section-number">3</span> Quick Start</h2>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-content"><h4>Launch the tool</h4><p>Open NielsenTool (macOS) or run <code>nls-validator.bat</code> (Windows). The UI opens at <code>localhost:3000</code>.</p></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-content"><h4>Choose a Module</h4><p>Select <strong>Integration Wizard</strong> (code generation) or <strong>Diagnostic Tool</strong> (validate your implementation).</p></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-content"><h4>Follow the guided flow</h4><p>Both modules provide step-by-step guidance. The Diagnostic Tool also includes a <strong>built-in interactive tutorial</strong> &mdash; click the route icon to start it.</p></div></div>
+      </div>
+    </div>
+
+    <!-- 4. INTEGRATION WIZARD -->
+    <div class="section" id="wizard">
+      <h2><span class="section-number">4</span> Integration Wizard</h2>
+      <p class="lead">A 7-step guided wizard that generates platform-specific code snippets for your Nielsen SDK integration. It helps you write the correct integration code before you test it.</p>
+
+      <div class="video-wrap"><video controls preload="metadata"><source src="guide_videos/wizard-walkthrough.mp4" type="video/mp4"></video><div class="video-caption">Video — Walking through all 7 steps of the Integration Wizard</div></div>
+
+      <div class="accordion">
+        <div class="acc-item">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <h4><span style="color:var(--nielsen-purple)">Step 1</span> &nbsp;Configuration <span class="badge badge-purple">Platform &amp; SDK Variant</span></h4>
+            <span class="acc-arrow">&#9660;</span>
+          </div>
+          <div class="acc-body">
+            <p>Select your application platform, programming language, and package manager. This choice determines all code snippets in later steps.</p>
+            <div class="table-wrap">
+              <table>
+                <tr><th>Platform</th><th>Languages</th><th>Package Managers</th></tr>
+                <tr><td><strong>iOS</strong></td><td>Swift, Objective-C</td><td>CocoaPods, Carthage, Swift Package Manager</td></tr>
+                <tr><td><strong>Android</strong></td><td>Java, Kotlin</td><td>Gradle (with SDK flavor: Ad ID, Vendor ID, No ID)</td></tr>
+                <tr><td><strong>Web/Browser</strong></td><td>JavaScript</td><td>NPM / CDN Static Queue</td></tr>
+                <tr><td><strong>tvOS</strong></td><td>Swift, Objective-C</td><td>CocoaPods, Carthage, Swift Package Manager</td></tr>
+                <tr><td><strong>Domless</strong></td><td>JavaScript</td><td>NPM (React Native, Amazon Fire TV, Node.js, Custom)</td></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <h4><span style="color:var(--nielsen-purple)">Step 2</span> &nbsp;App ID <span class="badge badge-purple">Nielsen Configuration</span></h4>
+            <span class="acc-arrow">&#9660;</span>
+          </div>
+          <div class="acc-body">
+            <p>Enter your Nielsen App ID &mdash; a unique identifier in P-UUID format provided by your Nielsen TAM. The wizard validates the format and (for Web) auto-detects your CDN domain (cookieless <code>nmrodam</code> vs standard <code>imrworldwide</code>). Optional advanced parameters can be added here.</p>
+          </div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <h4><span style="color:var(--nielsen-purple)">Step 3</span> &nbsp;Import &amp; Init <span class="badge badge-purple">Setup SDK</span></h4>
+            <span class="acc-arrow">&#9660;</span>
+          </div>
+          <div class="acc-body">
+            <p>The wizard generates SDK import statements, dependency installation instructions, and initialization code for your platform. Includes CDN domain configuration. All code blocks are copy-paste ready with inline comments.</p>
+          </div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <h4><span style="color:var(--nielsen-purple)">Step 4</span> &nbsp;Select Product <span class="badge badge-purple">Content Type</span></h4>
+            <span class="acc-arrow">&#9660;</span>
+          </div>
+          <div class="acc-body">
+            <p>Choose your measurement product:</p>
+            <ul>
+              <li><strong>Video (DCR Video)</strong> &mdash; For video content measurement</li>
+              <li><strong>Static Content/Pages (DCR Static)</strong> &mdash; For page view measurement</li>
+              <li><strong>Digital TV (DTVR)</strong> &mdash; For TV audience measurement <em>(Global variant only)</em></li>
+            </ul>
+            <p>You can integrate multiple products &mdash; the wizard tracks which ones you've completed.</p>
+          </div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <h4><span style="color:var(--nielsen-purple)">Step 5</span> &nbsp;Implementation <span class="badge badge-purple">API Integration</span></h4>
+            <span class="acc-arrow">&#9660;</span>
+          </div>
+          <div class="acc-body">
+            <p>Complete API integration code tailored to your selected product. Includes metadata objects, event handling, playhead tracking, and all required SDK API calls. For <strong>DCR Video</strong>, you can toggle between content-only and content + ads flows. Each code block includes inline comments explaining the purpose.</p>
+          </div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <h4><span style="color:var(--nielsen-purple)">Step 6</span> &nbsp;Advanced APIs <span class="badge badge-purple">Optional Features</span></h4>
+            <span class="acc-arrow">&#9660;</span>
+          </div>
+          <div class="acc-body">
+            <p>Optional advanced features you can add to your integration:</p>
+            <ul>
+              <li><strong>Update OTT Status</strong> &mdash; OTT device reporting</li>
+              <li><strong>Track Viewability</strong> &mdash; Ad viewability measurement</li>
+              <li><strong>Pagination Events</strong> &mdash; Paginated content tracking</li>
+              <li><strong>Update Metadata</strong> &mdash; Mid-stream metadata updates</li>
+              <li><strong>Volume Reporting</strong> &mdash; Audio volume level tracking</li>
+              <li><strong>Privacy and Opt-Out</strong> &mdash; User privacy controls (with flavor-specific implementation)</li>
+              <li><strong>Disable SDK</strong> &mdash; Runtime SDK enable/disable</li>
+            </ul>
+            <p>Skip any that don't apply to your use case.</p>
+          </div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <h4><span style="color:var(--nielsen-purple)">Step 7</span> &nbsp;Completion <span class="badge badge-purple">Summary &amp; Next Steps</span></h4>
+            <span class="acc-arrow">&#9660;</span>
+          </div>
+          <div class="acc-body">
+            <p>Summary of your configuration &mdash; shows your App ID, platform(s), and all integrated products with checkmarks. From here you can add more products, integrate for another platform, or return to the home screen to start validation testing.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout info">
+        <span class="callout-icon">&#128161;</span>
+        <div class="callout-text">
+          <strong>In-session state</strong>
+          Your wizard progress is kept in memory while you navigate between steps. Note: if you close the browser tab or restart the tool, you'll start fresh from Step 1. Use the <strong>Home</strong> button with the "Return to Home" dialog to intentionally clear progress.
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. VALIDATION INTERFACE -->
+    <div class="section" id="validation-ui">
+      <h2><span class="section-number">5</span> Validation Interface</h2>
+      <p class="lead">The Diagnostic Tool's validation screen is divided into three main areas. Here's a breakdown of each:</p>
+
+      <h3>Header Bar</h3>
+      <p>The top header bar displays the tool name, <span class="badge badge-blue">Cookieless</span> badge (shown if Cookieless variant), and action icons. From left to right: the <strong>hamburger menu</strong> (&#9776;) toggles the validation panel, then on the right side: <strong>Home</strong> (go back to module selection), <strong>Tutorial</strong> (route icon &mdash; restart the guided walkthrough), and <strong>Configuration</strong> (gear icon &mdash; open device/product settings).</p>
+      <div class="screenshot-wrap"><img src="guide_images/HeaderBar.png" alt="Header Bar showing tool name, Cookieless badge, and action icons" style="width:100%;display:block;border-radius:8px;"><div class="screenshot-caption">Header Bar — Tool name, variant badge, and navigation icons</div></div>
+      <p style="font-size:13px;color:var(--text-muted)">The header shows the tool name, variant badge (shown if Cookieless variant), and action icons: Hamburger menu (toggle panel), Home, Tutorial (route icon), Configuration (gear).</p>
+
+
+      <h3 id="panel-left" style="scroll-margin-top:32px">&#128203; Left Panel &mdash; Validation Checklist</h3>
+      <p>This is your test control center. It shows:</p>
+      <ul style="margin: 8px 0 16px 20px; font-size:14px; color:var(--text-secondary)">
+        <li><strong>Product buttons</strong> at the top (e.g., "DCR Static", "DCR Video") &mdash; click to expand/collapse that product's test cases</li>
+        <li><strong>Numbered test cases</strong> (e.g., "1. Play a VOD stream till end of video without pausing")</li>
+        <li>Each test case expands into <strong>grouped sub-rules</strong> organized by category</li>
+      </ul>
+
+      <p><strong>DCR Video checklist groups</strong> (example from Test Case 1):</p>
+      <div style="background:#0f172a;border-radius:var(--radius-sm);padding:16px;margin:12px 0;font-family:'SF Mono','Fira Code',monospace;font-size:13px;color:#cbd5e1;line-height:1.8">
+        <div style="color:#fbbf24;font-weight:700;font-size:11px;letter-spacing:1px">CHECKING SDK HEALTH (CONFIGURATION &amp; LOAD)</div>
+        <div>&nbsp;&nbsp;<span style="color:#10b981">&#10003;</span> SDK Core Loaded <span style="color:#64748b">&#8250;</span></div>
+        <div>&nbsp;&nbsp;<span style="color:#10b981">&#10003;</span> Config Response Received <span style="color:#64748b">&#8250;</span></div>
+        <div>&nbsp;&nbsp;<span style="color:#ef4444">&#10007;</span> Debug Flag Enabled <span style="color:#64748b">&#8250;</span></div>
+        <div style="color:#fbbf24;font-weight:700;font-size:11px;letter-spacing:1px;margin-top:8px">VALIDATING METADATA FIELDS</div>
+        <div>&nbsp;&nbsp;<span style="color:#ef4444">&#10007;</span> Content Metadata (validating mandatory params) <span style="color:#64748b">&#8250;</span></div>
+        <div>&nbsp;&nbsp;<span style="color:#64748b">&#9679;</span> Preroll Metadata (validating mandatory params)</div>
+        <div>&nbsp;&nbsp;<span style="color:#64748b">&#9679;</span> Midroll Metadata (validating mandatory params)</div>
+        <div>&nbsp;&nbsp;<span style="color:#64748b">&#9679;</span> Postroll Metadata (validating mandatory params)</div>
+        <div style="color:#fbbf24;font-weight:700;font-size:11px;letter-spacing:1px;margin-top:8px">VALIDATING PLAYHEADS</div>
+        <div>&nbsp;&nbsp;<span style="color:#10b981">&#10003;</span> Playhead Validation (non-negative) <span style="color:#64748b">&#8250;</span></div>
+        <div style="color:#fbbf24;font-weight:700;font-size:11px;letter-spacing:1px;margin-top:8px">VALIDATING SDK API/EVENT SEQUENCE</div>
+        <div>&nbsp;&nbsp;<span style="color:#64748b">&#9679;</span> Click Validate button once video is over &nbsp;<span style="background:#6E37FA;color:white;padding:2px 8px;border-radius:4px;font-size:10px">&#9654; Validate</span></div>
+      </div>
+      <p style="font-size:13px;color:var(--text-muted)">Each rule has a <strong>&#8250; expand arrow</strong> &mdash; click it to see the rule's FAQ with detailed guidance on what the rule checks and how to fix failures.</p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0">
+        <div><div class="screenshot-wrap"><img src="guide_images/ValidationPanelAll.png" alt="Validation Checklist showing all DCR Video test cases collapsed" style="width:100%;display:block;border-radius:8px;max-width:450px;margin:0 auto;"><div class="screenshot-caption">Checklist — All test cases (collapsed view)</div></div></div>
+        <div><div class="screenshot-wrap"><img src="guide_images/ValidationPanel.png" alt="Validation Checklist with Test Case 1 expanded showing all rule categories" style="width:100%;display:block;border-radius:8px;max-width:450px;margin:0 auto;"><div class="screenshot-caption">Checklist — Test Case 1 expanded with rule groups</div></div></div>
+      </div>
+
+      <h3 id="panel-center" style="scroll-margin-top:32px">&#128202; Center Panel &mdash; Live Log Stream</h3>
+      <p>Every SDK event appears here in real time as it's captured from your device. Each log entry shows:</p>
+      <ul style="margin: 8px 0 16px 20px; font-size:14px; color:var(--text-secondary)">
+        <li><strong>Timestamp</strong> (e.g., 3:04:31 PM)</li>
+        <li><strong>Color-coded badges</strong> with three color states:
+          <span class="ui-mock-badge" style="background:#2563eb;color:white;font-size:10px">REQUEST PING</span> <strong style="color:var(--blue)">Blue</strong> &mdash; ping/request events,
+          <span class="ui-mock-badge" style="background:#4b5563;color:white;font-size:10px">SDK INIT</span>
+          <span class="ui-mock-badge" style="background:#4b5563;color:white;font-size:10px">CONFIG RECEIVED</span>
+          <span class="ui-mock-badge" style="background:#4b5563;color:white;font-size:10px">PLAY</span>
+          <span class="ui-mock-badge" style="background:#4b5563;color:white;font-size:10px">METADATA</span>
+          <span class="ui-mock-badge" style="background:#4b5563;color:white;font-size:10px">PLAYHEAD</span> <strong style="color:var(--text-muted)">Grey</strong> &mdash; normal SDK events,
+          <span class="ui-mock-badge" style="background:#ef4444;color:white;font-size:10px">ERROR</span> <strong style="color:var(--red)">Red</strong> &mdash; only when validation fails for that log entry
+        </li>
+        <li><strong>Event description</strong> (e.g., "EMM/UAID Request Ping", "Event playheadPosition (5)")</li>
+      </ul>
+
+      <div class="callout info">
+        <span class="callout-icon">&#128270;</span>
+        <div class="callout-text">
+          <strong>Click any log entry to inspect it.</strong>
+          The right side opens a detail pane showing <strong>PING INFO</strong> and <strong>COMMENTS</strong> tabs. The Ping Info tab shows Request Summary, Response Summary, Parameter Table (searchable), and the full Request URL &mdash; useful for debugging exactly what the SDK sent.
+        </div>
+      </div>
+
+      <h4>Real-time Error Highlighting</h4>
+      <p>The log stream actively highlights problems:</p>
+      <ul style="margin: 8px 0 16px 20px; font-size:14px; color:var(--text-secondary)">
+        <li><strong style="color:var(--red)">Red background rows</strong> &mdash; Validation errors detected (e.g., metadata fields don't match CMS mapping, debug flag missing). A red banner shows "VALIDATION FAILED (N ISSUES)" with a description of what's wrong.</li>
+        <li><strong style="color:var(--amber)">Yellow background rows</strong> &mdash; Warnings that may need attention but aren't blocking failures.</li>
+        <li><strong>Normal rows</strong> &mdash; Events that passed validation or don't have validation rules.</li>
+      </ul>
+      <p>The test case label bar above the log stream shows which test is active (e.g., "Test 1: Play a VOD stream till end of video without pausing") and includes a <strong>"Jump to latest"</strong> button to scroll to the most recent log.</p>
+
+      <div class="screenshot-wrap"><img src="guide_images/LogSection.png" alt="Live Log Stream showing SDK events with color-coded badges" style="width:100%;display:block;border-radius:8px;"><div class="screenshot-caption">Live Log Stream — SDK events with timestamps, badges, and Jump to latest button</div></div>
+
+      <h3 id="panel-right" style="scroll-margin-top:32px">&#128196; Right Panel &mdash; Session &amp; Filters</h3>
+
+      <h4>Session Controls</h4>
+      <ul style="margin: 8px 0 16px 20px; font-size:14px; color:var(--text-secondary)">
+        <li><strong style="color:var(--nielsen-purple)">Export</strong> (purple button) &mdash; Downloads the current session as a <code>.json</code> file with all validation results, captured logs, and a SHA-256 integrity hash. Enabled once logs exist and an App ID is detected.</li>
+        <li><strong>Import</strong> &mdash; Load a previously exported <code>.json</code> session. Click the button or <strong>drag-and-drop</strong> the file directly onto "or drop file here" area. Imported sessions are verified for integrity.</li>
+      </ul>
+
+      <h4>Filters</h4>
+      <p>Below the session controls, a collapsible <strong>FILTERS</strong> section lets you narrow down the log stream. An active filter count badge appears when filters are applied. Available filters:</p>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Filter</th><th>Purpose</th></tr>
+          <tr><td><strong>App ID</strong></td><td>Filter by specific Nielsen App ID (useful if multiple SDK instances detected)</td></tr>
+          <tr><td><strong>Product</strong></td><td>Filter by product type (DCR Video, DCR Static, DTVR)</td></tr>
+          <tr><td><strong>Ping Type</strong></td><td>Filter by ping type (e.g., VIEW, TIMER, SESSION, EMM/UAID)</td></tr>
+          <tr><td><strong>Session</strong></td><td>Filter by SDK session ID (useful for multi-session validation)</td></tr>
+        </table>
+      </div>
+      <p style="font-size:13px;color:var(--text-muted)">Use "Clear all" to remove all active filters at once. Each filter dropdown shows the count of available options.</p>
+
+      <div class="screenshot-wrap"><img src="guide_images/RightPanel.png" alt="Right Panel showing Session controls and Filters" style="width:100%;display:block;border-radius:8px;max-width:380px;margin:0 auto;"><div class="screenshot-caption">Session & Filters Panel — Export/Import and log filters</div></div>
+
+      <h3 id="config-modal" style="scroll-margin-top:32px">Configuration Modal</h3>
+      <p>Click the <strong>gear icon</strong> (&#9881;) in the header to open Configuration. It shows:</p>
+
+      <div class="video-wrap"><video controls preload="metadata"><source src="guide_videos/diagnostic-configure.mp4" type="video/mp4"></video><div class="video-caption">Video — Opening the Diagnostic Tool, configuring device selection and product types</div></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0">
+        <div><div class="screenshot-wrap"><img src="guide_images/ConfigModal.png" alt="Configuration Modal with Device dropdown and Products checkboxes" style="width:100%;display:block;border-radius:8px;max-width:500px;margin:0 auto;"><div class="screenshot-caption">Configuration — Device & Products selection</div></div></div>
+        <div><div class="screenshot-wrap"><img src="guide_images/ConfigModalDeviceLists.png" alt="Configuration Modal showing all available device options in dropdown" style="width:100%;display:block;border-radius:8px;max-width:500px;margin:0 auto;"><div class="screenshot-caption">Device dropdown — All supported platforms</div></div></div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <tr><th>Setting</th><th>When</th><th>Purpose</th></tr>
+          <tr><td><strong>Device</strong></td><td>Always</td><td>Select your connected device, simulator, emulator, or browser from the dropdown</td></tr>
+          <tr><td><strong>Products</strong></td><td>Always</td><td>Check the product types to validate (e.g., DCR Video, DCR Static). DTVR only in Global variant.</td></tr>
+          <tr><td><strong>Web Address</strong></td><td>Browser selected</td><td>Full URL of the page with SDK integrated (include <code>https://</code>)</td></tr>
+          <tr><td><strong>IP Address</strong></td><td>Fire TV selected</td><td>Device IP address (e.g., 192.168.1.100)</td></tr>
+          <tr><td><strong>Refresh Devices</strong></td><td>Always</td><td>Re-scan for connected devices if yours doesn't appear</td></tr>
+          <tr><td><strong>Continue</strong></td><td>Always</td><td>Saves configuration and returns to the validation view</td></tr>
+        </table>
+      </div>
+
+      <div class="callout tip">
+        <span class="callout-icon">&#128161;</span>
+        <div class="callout-text">
+          <strong>Device not showing up?</strong>
+          Click <strong>Refresh Devices</strong> to re-scan for connected devices. This works for both <strong>USB-connected</strong> devices (iPhone, Android, Fire TV VegaOS) and <strong>wireless</strong> devices (Fire TV via Wi-Fi, Apple TV). The dropdown updates with any newly detected devices. For iOS, make sure the device is unlocked and the "Trust This Computer" prompt has been accepted. For Android, enable USB debugging in Developer Options.
+        </div>
+      </div>
+
+      <h3>Full Interface Overview</h3>
+      <p>Here's how all three panels work together during a live validation session:</p>
+
+      <div class="screenshot-wrap"><img src="guide_images/FullInterface.png" alt="Full Validation Interface showing all three panels working together" style="width:100%;display:block;border-radius:8px;"><div class="screenshot-caption">Full Interface — Left: validation checklist | Center: live log stream | Right: session & filters</div></div>
+      <p style="font-size:13px;color:var(--text-muted)">The three-panel layout: <strong>Left</strong> — validation checklist with expandable rules. <strong>Center</strong> — live log stream with color-coded badges. <strong>Right</strong> — session export/import and log filters.</p>
+    </div>
+
+    <!-- 6. RUNNING VALIDATION -->
+    <div class="section" id="workflow">
+      <h2><span class="section-number">6</span> Running Your First Validation</h2>
+
+      <div class="callout critical">
+        <span class="callout-icon">&#9888;&#65039;</span>
+        <div class="callout-text">
+          <strong>The #1 rule: Click Play BEFORE launching your app (mobile only)</strong>
+          The tool needs to be listening when the SDK initializes. Click <strong>Play</strong> on the test case first, then launch your app. If you launch the app before clicking Play, the SDK Init events are missed and rules stay gray. <strong>For browser devices</strong>, this is handled automatically &mdash; clicking Play opens the URL in the browser for you, so the tool is already listening.
+        </div>
+      </div>
+
+      <h3>Workflow</h3>
+      <div class="workflow">
+        <div class="wf-step"><div class="wf-circle">&#9881;</div><div class="wf-label">Configure</div></div>
+        <div class="wf-arrow">&#8594;</div>
+        <div class="wf-step"><div class="wf-circle">&#128268;</div><div class="wf-label">Connect Device</div></div>
+        <div class="wf-arrow">&#8594;</div>
+        <div class="wf-step"><div class="wf-circle">&#9745;</div><div class="wf-label">Select Product</div></div>
+        <div class="wf-arrow">&#8594;</div>
+        <div class="wf-step"><div class="wf-circle critical">&#9654;</div><div class="wf-label">Click Play</div></div>
+        <div class="wf-arrow">&#8594;</div>
+        <div class="wf-step"><div class="wf-circle">&#128241;</div><div class="wf-label">Launch App</div></div>
+        <div class="wf-arrow">&#8594;</div>
+        <div class="wf-step"><div class="wf-circle">&#128064;</div><div class="wf-label">Watch Rules</div></div>
+        <div class="wf-arrow">&#8594;</div>
+        <div class="wf-step"><div class="wf-circle">&#128229;</div><div class="wf-label">Export</div></div>
+      </div>
+
+      <div class="screenshot-wrap"><img src="guide_images/DebugWarningOrAppNotRun.png" alt="Validation interface showing Waiting for logs state with debug flag reminder" style="width:100%;display:block;border-radius:8px;"><div class="screenshot-caption">Initial State — "Waiting for logs" with debug flag reminder. Click Play on a test case, then launch your app.</div></div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:20px 0">
+        <div class="video-wrap"><video controls preload="metadata"><source src="guide_videos/browser-play-and-validate.mp4" type="video/mp4"></video><div class="video-caption">Video — Browser flow: Click Play, URL opens automatically, logs stream in</div></div>
+        <div class="video-wrap"><video controls preload="metadata"><source src="guide_videos/mobile-play-and-validate.mp4" type="video/mp4"></video><div class="video-caption">Video — Mobile flow: Click Play, launch app on device, watch rules turn green</div></div>
+      </div>
+
+      <h3>Before You Begin</h3>
+      <p>&#9989; Device connected and unlocked (USB) or on same Wi-Fi network</p>
+      <p>&#9989; App installed but <strong>NOT launched yet</strong> (mobile only &mdash; browser opens automatically)</p>
+      <p>&#9989; Debug flag set (mobile only &mdash; browser is automatic, see below)</p>
+
+      <div class="accordion" style="margin:16px 0">
+        <div class="acc-item">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <h4>&#128272; Debug Flag Setup</h4>
+            <span class="acc-arrow">&#9660;</span>
+          </div>
+          <div class="acc-body">
+            <p>The debug flag enables detailed log output the tool needs for full validation. Without it, the SDK still produces some logs, but the <strong>"Debug Flag Enabled"</strong> rule will fail.</p>
+            <p><strong>App SDK (iOS, Android, tvOS, Fire TV)</strong> &mdash; set in your SDK initialization options:</p>
+            <div style="background:var(--nielsen-purple-bg);padding:12px 20px;border-radius:8px;margin:10px 0;text-align:center">
+              <code style="font-size:16px;background:none;padding:0;border:none;font-weight:700">nol_devDebug = DEBUG</code>
+            </div>
+            <p><strong>Browser SDK (BSDK)</strong> &mdash; <strong>no manual setup needed.</strong> The tool automatically appends the debug parameter when you enter the URL.</p>
+            <div class="callout warn" style="margin:12px 0">
+              <span class="callout-icon">&#9888;</span>
+              <div class="callout-text">
+                <strong>Remove before production</strong>
+                DEBUG logging should not ship to end users. Remove or change <code>nol_devDebug</code> before your production release.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3>Step-by-Step</h3>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-content"><h4>Open the tool, select Diagnostic Tool</h4><p>Click the Diagnostic Tool card on the home screen.</p></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-content"><h4>Configure your device</h4><p>Click the <strong>gear icon</strong> to open Configuration. Select your device from the dropdown. For <strong>browsers</strong>, enter the full URL. For <strong>Fire TV</strong> (Wi-Fi), enter the IP address. For <strong>Apple TV</strong>, follow the pairing flow (see <a href="#platforms">Section 11</a>).</p></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-content"><h4>Select your product types</h4><p>Check the product types you want to validate (DCR Video, DCR Static, DTVR) and click <strong>Continue</strong>. Product buttons appear in the header bar.</p></div></div>
+        <div class="step"><div class="step-num" style="background:var(--red);color:white">4</div><div class="step-content"><h4>Click Play on a test case</h4><p>This activates log capture and starts evaluating rules. <strong>For mobile apps:</strong> do this BEFORE launching your app. <strong>For browsers:</strong> clicking Play automatically opens the URL &mdash; no manual launch needed.</p></div></div>
+        <div class="step"><div class="step-num">5</div><div class="step-content"><h4>Launch your app (mobile only)</h4><p>Open the app on your device. For <strong>browser devices</strong>, skip this step &mdash; the URL was already opened automatically in step 4. Log entries begin appearing once the SDK initializes. You should see <span class="ui-mock-badge" style="background:#4b5563;color:white;font-size:10px">SDK INIT</span> and <span class="ui-mock-badge" style="background:#4b5563;color:white;font-size:10px">CONFIG RECEIVED</span> events first.</p></div></div>
+        <div class="step"><div class="step-num">6</div><div class="step-content"><h4>Perform the test case actions</h4><p>Follow the instructions shown in the test case label (e.g., "Play a VOD stream till end of video without pausing"). Watch rules turn green as events pass validation. Once playback is complete, click the purple <strong>Validate</strong> button on any sequence rule to check the full event order.</p></div></div>
+        <div class="step"><div class="step-num">7</div><div class="step-content"><h4>Complete remaining test cases</h4><p>Click Play on the next test case and follow its instructions. Repeat for all test cases in the product.</p></div></div>
+        <div class="step"><div class="step-num">8</div><div class="step-content"><h4>Export results</h4><p>Click <strong>Export</strong> in the Session panel to download a <code>.json</code> file. Share with your Nielsen contact.</p></div></div>
+      </div>
+
+      <a class="link-ref" href="https://github.com/NielsenDigitalSDK/sdk-diagnostic-tool/blob/main/docs/TROUBLESHOOTING.md" target="_blank">
+        <span class="link-ref-icon">&#128295;</span>
+        <div>
+          <div class="link-ref-text">Common Issues? See the Troubleshooting Guide</div>
+          <div class="link-ref-url">Detailed platform-specific fixes for all devices</div>
+        </div>
+      </a>
+    </div>
+
+    <!-- 7. INTERPRETING RESULTS -->
+    <div class="section" id="results">
+      <h2><span class="section-number">7</span> Interpreting Results</h2>
+
+      <div class="status-grid">
+        <div class="status-card" style="border-top: 3px solid #94a3b8">
+          <div class="s-icon">&#9898;</div>
+          <h4 style="color:#94a3b8">Gray &mdash; Not Evaluated</h4>
+          <p>Rule hasn't been checked yet. Play isn't active or relevant events haven't fired.</p>
+        </div>
+        <div class="status-card" style="border-top: 3px solid var(--green)">
+          <div class="s-icon">&#9989;</div>
+          <h4 style="color:var(--green)">Green &mdash; Passed</h4>
+          <p>Log data matched expectations. This rule is satisfied.</p>
+        </div>
+        <div class="status-card" style="border-top: 3px solid var(--red)">
+          <div class="s-icon">&#10060;</div>
+          <h4 style="color:var(--red)">Red &mdash; Failed</h4>
+          <p>Data didn't match. Expand the rule to read the FAQ with fix guidance.</p>
+        </div>
+      </div>
+
+      <div class="video-wrap"><video controls preload="metadata"><source src="guide_videos/inspect-logs.mp4" type="video/mp4"></video><div class="video-caption">Video — Inspecting log details, error highlighting, and the Parameter Table</div></div>
+
+      <h3>Every Rule Has Help Text</h3>
+      <p>Click the <strong>&#8250; expand arrow</strong> next to any rule (pass or fail) to see its FAQ panel. This shows exactly what the rule checks, what went wrong, and how to fix it. For metadata failures, it identifies the specific field that didn't match the CMS mapping.</p>
+
+      <div class="screenshot-wrap"><img src="guide_images/RuleExpanded.png" alt="Expanded rules showing FAQ help text for each validation check" style="width:100%;display:block;border-radius:8px;max-width:450px;margin:0 auto;"><div class="screenshot-caption">Rule Expanded View — Each rule has an expand arrow showing what it checks and how to fix failures</div></div>
+
+      
+      <div class="screenshot-wrap"><img src="guide_images/LogWithErrorDetails.png" alt="Log stream with error highlighting and VALIDATION FAILED banner" style="width:100%;display:block;border-radius:8px;"><div class="screenshot-caption">Error Highlighting — Red SDK INIT row with "VALIDATION FAILED (1 ISSUES)" detail panel</div></div>
+      <div class="screenshot-wrap"><img src="guide_images/LogWithWarningDetails.png" alt="Log stream with warning highlighting and metadata warnings" style="width:100%;display:block;border-radius:8px;"><div class="screenshot-caption">Warning & Error Details — Yellow warnings for optional fields, red errors for required fields, with Parameter Table</div></div>
+      <p style="font-size:13px;color:var(--text-muted)"><strong style="color:var(--red)">Red rows</strong> indicate validation failures — click to expand the PING INFO panel and see exactly what went wrong. <strong style="color:var(--amber)">Yellow warnings</strong> highlight optional field issues. The Parameter Table shows the exact values sent.</p>
+
+      <h3>How Failures Appear</h3>
+      <p>When a validation issue is detected, you'll see it in <strong>two places simultaneously</strong>:</p>
+      <ul style="margin: 8px 0 16px 20px; font-size:14px; color:var(--text-secondary)">
+        <li><strong>Validation Checklist</strong> (left panel) &mdash; the rule turns <span style="color:var(--red)">&#10007; red</span> with a red left border</li>
+        <li><strong>Log Stream</strong> (center panel) &mdash; the offending log row gets a <strong>red background highlight</strong>. Click the row to see "VALIDATION FAILED (N ISSUES)" with a description of exactly what went wrong (e.g., "Debug flag (nol_devDebug: &quot;DEBUG&quot;) is missing or disabled in SDK initialization")</li>
+      </ul>
+
+      <h3>"Validate" Button</h3>
+      <p>For <strong>event sequence validation</strong>, you'll see a purple <span style="background:#6E37FA;color:white;padding:2px 10px;border-radius:5px;font-size:12px;font-weight:600">&#9654; Validate</span> button inside the checklist. This button appears on <strong>any rule that checks an event sequence</strong> &mdash; you'll find it under DCR Video product that has sequence-type rules. Click it <strong>after you've completed the playback or interaction flow</strong> for that test case &mdash; the tool then checks whether all the collected logs match the expected API event sequence. The result expands to show each step in the sequence with pass/fail status.</p>
+
+      <div class="video-wrap"><video controls preload="metadata"><source src="guide_videos/validate-sequence.mp4" type="video/mp4"></video><div class="video-caption">Video — Clicking Validate on a sequence rule and reviewing pass/fail results</div></div>
+
+    </div>
+
+    <!-- 8. FAILURE TYPES -->
+    <div class="section" id="failure-types">
+      <h2><span class="section-number">8</span> Failure Types</h2>
+      <p class="lead">When validation detects an issue, the tool categorizes it into one of these failure types. Each type appears differently in the log stream and checklist.</p>
+
+      <div class="accordion">
+        <div class="acc-item">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <h4>&#128308; Metadata failure</h4>
+            <span class="acc-arrow">&#9660;</span>
+          </div>
+          <div class="acc-body">
+            <p>A mandatory metadata field is missing, empty, or doesn't match the expected format. The METADATA log row is highlighted red. Expand the rule to see <strong>which specific field</strong> failed and what was expected (e.g., <code>assetid</code> must be a non-empty string, <code>type</code> must be "content" or "ad"). Fix the field value in your SDK's <code>loadMetadata</code> call and re-run.</p>
+          </div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <h4>&#128308; CMS Mismatch failure</h4>
+            <span class="acc-arrow">&#9660;</span>
+          </div>
+          <div class="acc-body">
+            <p>The metadata values sent by the SDK don't match the expected CMS mapping provided by Nielsen. This typically means the <code>assetid</code>, <code>program</code>, <code>title</code>, or other fields in your <code>loadMetadata</code> call don't correspond to what Nielsen has on record for your App ID. Check with your Nielsen TAM to confirm the correct CMS mapping values for your content.</p>
+          </div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <h4>&#128308; Sequence failure</h4>
+            <span class="acc-arrow">&#9660;</span>
+          </div>
+          <div class="acc-body">
+            <p>SDK API events arrived in the wrong order or a required step was missing. After completing playback, click the <strong>Validate</strong> button &mdash; the tool compares your captured logs against the expected event sequence and shows each step with pass/fail status so you can pinpoint exactly where it broke.</p>
+            <p>The basic content-only sequence is: <code>play &#8594; loadMetadata &#8594; setPlayheadPosition &#8594; stop &#8594; end</code>. If your content includes ads, the sequence is longer &mdash; each ad break (preroll, midroll, postroll) inserts its own <code>loadMetadata &#8594; setPlayheadPosition &#8594; stop</code> cycle, with content metadata resent when returning to main content. The <strong>Integration Wizard</strong> (Step 5) shows the exact sequence for your specific configuration.</p>
+            <p>Sequence failures are <strong>latching</strong> &mdash; once red, they stay red for the session. Use Reset, then relaunch and retry.</p>
+          </div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <h4>&#128308; Playhead failure</h4>
+            <span class="acc-arrow">&#9660;</span>
+          </div>
+          <div class="acc-body">
+            <p>Playhead values didn't meet criteria &mdash; negative values detected. The tool validates that all <code>setPlayheadPosition</code> values are non-negative integers. Check your playhead implementation to ensure you're not passing negative numbers.</p>
+          </div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <h4>&#128308; Debug flag failure</h4>
+            <span class="acc-arrow">&#9660;</span>
+          </div>
+          <div class="acc-body">
+            <p>The SDK initialized without the debug flag enabled. The "Debug Flag Enabled" rule turns red. For mobile apps, set <code>nol_devDebug = DEBUG</code> in your SDK initialization options (see the Debug Flag Setup in <a href="#workflow">Section 6</a>). For browser devices, this is handled automatically by the tool.</p>
+          </div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <h4>&#128993; Warning (yellow)</h4>
+            <span class="acc-arrow">&#9660;</span>
+          </div>
+          <div class="acc-body">
+            <p>An <strong>optional</strong> metadata field is missing or blank. Warnings appear as yellow-highlighted rows in the log stream and are shown separately from red validation errors. They don't block certification but should be reviewed &mdash; filling in optional fields like <code>crossRefID1</code> improves measurement quality.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 9. EXPORTS -->
+    <div class="section" id="exports">
+      <h2><span class="section-number">9</span> Session Export &amp; Import</h2>
+
+      
+      <div class="video-wrap"><video controls preload="metadata"><source src="guide_videos/export-and-import.mp4" type="video/mp4"></video><div class="video-caption">Video — Exporting a session to JSON and importing it back with full state restored</div></div>
+
+      <div class="screenshot-wrap"><img src="guide_images/SessionExport.png" alt="Session Export and Import panel" style="width:100%;display:block;border-radius:8px;max-width:380px;margin:0 auto;"><div class="screenshot-caption">Session Panel — Export (purple) and Import buttons with drag-and-drop zone</div></div>
+
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-icon">&#128229;</div>
+          <h4>Export</h4>
+          <p>Downloads a <code>.json</code> file containing all validation results, captured logs, and session metadata. The file includes a SHA-256 integrity hash to detect modifications.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">&#128228;</div>
+          <h4>Import</h4>
+          <p>Load a previously exported <code>.json</code> session file. Click the <strong>Import</strong> button or <strong>drag-and-drop</strong> the file directly onto the "or drop file here" area. The tool verifies the integrity hash before restoring the session. Once imported, the session is fully interactive &mdash; you can click logs to inspect them, expand rules, use filters, and review all validation results exactly as they were at export time.</p>
+        </div>
+      </div>
+
+      <div class="callout info">
+        <span class="callout-icon">&#128161;</span>
+        <div class="callout-text">
+          <strong>Why Import?</strong>
+          Importing lets you review a session without re-running the tests. Share the exported JSON with your team or your Nielsen contact &mdash; anyone with the tool can import it and see the full session. This is useful for collaborative debugging, certification review, or comparing results across different test runs.
+        </div>
+      </div>
+
+      <h3>What to Send to Your Nielsen Contact</h3>
+      <p>When submitting for certification review:</p>
+      <p>&#10004; <strong>The exported .json session file</strong> &mdash; the primary deliverable containing everything Nielsen needs.</p>
+      <p>&#10004; <strong>Platform and device</strong> &mdash; e.g., "iPhone 15, iOS 18.3, USB" or "Chrome via Playwright, macOS".</p>
+
+      <div class="callout tip">
+        <span class="callout-icon">&#128161;</span>
+        <div class="callout-text">
+          <strong>Export after every session</strong>
+          Even if everything passed. This creates a record that speeds up the certification process with Nielsen Ops.
+        </div>
+      </div>
+    </div>
+
+    <!-- 10. PRODUCT TYPES -->
+    <div class="section" id="products">
+      <h2><span class="section-number">10</span> Product Types</h2>
+      <p>Select the product type matching your integration. Each loads different test cases and validation rules.</p>
+
+      <div class="accordion">
+        <div class="acc-item open">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <h4>&#127909; DCR Video <span class="badge badge-blue">Most Comprehensive</span></h4>
+            <span class="acc-arrow">&#9660;</span>
+          </div>
+          <div class="acc-body">
+            <p><strong>For apps that play video content</strong> (live streams, VOD, clips). Includes ads certification (preroll, midroll, postroll).</p>
+            <p><strong>Test cases (exact labels):</strong></p>
+            <div class="table-wrap">
+              <table>
+                <tr><th>#</th><th>Test Case</th><th>What It Validates</th></tr>
+                <tr><td>1</td><td><strong>Play a VOD stream till end of video without pausing</strong></td><td>SDK Health, Content &amp; Ad Metadata, Playhead, full API/Event Sequence, Measurement Pings (Session, EMM, Duration, View)</td></tr>
+                <tr><td>2</td><td><strong>Forward the video playback for VOD by more than 30 seconds</strong></td><td>Seek/scrub forward detection (&gt;30s jump)</td></tr>
+                <tr><td>3</td><td><strong>Rewind the video playback for VOD</strong></td><td>Seek/scrub backward detection</td></tr>
+                <tr><td>4</td><td><strong>Pause and Resume Validation (&gt;5s)</strong></td><td>Gap detection in playhead positions (&gt;5 second pause)</td></tr>
+                <tr><td>5</td><td><strong>Background and Foreground Validation (&gt;5s)</strong></td><td>App lifecycle handling &mdash; mobile/app SDK only</td></tr>
+              </table>
+            </div>
+            <p style="font-size:12px;color:var(--text-muted);margin-top:8px">Available in: Global + Cookieless variants</p>
+          </div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <h4>&#128196; DCR Static</h4>
+            <span class="acc-arrow">&#9660;</span>
+          </div>
+          <div class="acc-body">
+            <p><strong>For non-video content</strong> &mdash; articles, news pages, text content.</p>
+            <p><strong>Test cases (exact labels):</strong></p>
+            <div class="table-wrap">
+              <table>
+                <tr><th>#</th><th>Test Case</th><th>What It Validates</th></tr>
+                <tr><td>1</td><td><strong>View static page and scroll till end of page or switch to another page</strong></td><td>SDK Initialization (Core Loaded, Config, Debug Flag), Metadata Fields, Page Navigation. <em>Note: Browser and mobile platforms have separate rule sets.</em></td></tr>
+                <tr><td>2</td><td><strong>Move app to background for 20 secs and relaunch</strong></td><td>App lifecycle handling &mdash; background the app for 20+ seconds, then bring it back to foreground</td></tr>
+              </table>
+            </div>
+            <p style="font-size:12px;color:var(--text-muted);margin-top:8px">Available in: Global + Cookieless variants</p>
+          </div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <h4>&#128225; DTVR</h4>
+            <span class="acc-arrow">&#9660;</span>
+          </div>
+          <div class="acc-body">
+            <p><strong>For Digital TV Ratings</strong> &mdash; linear/live TV with ID3 tags.</p>
+            <p><strong>Test cases (exact labels):</strong></p>
+            <div class="table-wrap">
+              <table>
+                <tr><th>#</th><th>Test Case</th><th>What It Validates</th></tr>
+                <tr><td>1</td><td><strong>Play DTVR stream for 2 mins</strong></td><td>SDK Health (Core, Config, Debug), DTVR Metadata (admodel field), ID3 Tag validation (249 chars, starts with <code>www.nielsen.com</code>)</td></tr>
+                <tr><td>2</td><td><strong>DTVR Pause/Resume content for 30 seconds</strong></td><td>Gap detection in playback &mdash; pause for 30+ seconds, then resume</td></tr>
+                <tr><td>3</td><td><strong>DTVR Scrub back for 30 seconds</strong></td><td>Seek/scrub backward detection in DTVR stream</td></tr>
+                <tr><td>4</td><td><strong>DTVR Scrub forward for 2 mins</strong></td><td>Seek/scrub forward detection in DTVR stream (&gt;2 min jump)</td></tr>
+              </table>
+            </div>
+            <p style="font-size:12px;color:var(--text-muted);margin-top:8px">Available in: <strong>Global variant only</strong> (not in Cookieless)</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 11. SUPPORTED PLATFORMS -->
+    <div class="section" id="platforms">
+      <h2><span class="section-number">11</span> Supported Platforms</h2>
+      <p>The Diagnostic Tool captures logs from the following devices and environments:</p>
+
+      <div class="platform-grid">
+        <div class="platform-card">
+          <h5>&#128241; iPhone / iPad (USB)</h5>
+          <p>Physical device via USB cable</p>
+          <div class="prereqs"><span>USB cable</span><span>Unlocked</span><span>"Trust" accepted</span><span>iOS 16+ Dev Mode</span></div>
+        </div>
+        <div class="platform-card">
+          <h5>&#128241; iOS Simulator</h5>
+          <p>Xcode iOS Simulator (booted)</p>
+          <div class="prereqs"><span>Xcode installed</span><span>Simulator booted</span></div>
+        </div>
+        <div class="platform-card">
+          <h5>&#129302; Android Device (USB)</h5>
+          <p>Physical device via USB cable</p>
+          <div class="prereqs"><span>USB cable</span><span>USB debugging ON</span><span>Computer authorized</span></div>
+        </div>
+        <div class="platform-card">
+          <h5>&#129302; Android Emulator</h5>
+          <p>Android Studio emulator (booted)</p>
+          <div class="prereqs"><span>Emulator running</span></div>
+        </div>
+        <div class="platform-card">
+          <h5>&#128250; Fire TV (Wi-Fi)</h5>
+          <p>Amazon Fire TV via IP connection</p>
+          <div class="prereqs"><span>Same Wi-Fi</span><span>ADB debugging ON</span><span>IP address</span></div>
+        </div>
+        <div class="platform-card">
+          <h5>&#128250; Fire TV VegaOS (USB)</h5>
+          <p>Fire TV VegaOS variant via USB only</p>
+          <div class="prereqs"><span>USB cable</span><span>Developer Mode ON</span><span>ADB debugging ON</span></div>
+        </div>
+        <div class="platform-card">
+          <h5>&#127760; Browser</h5>
+          <p>Chrome, Firefox, Safari via Playwright</p>
+          <div class="prereqs"><span>Full URL</span><span>Internet (first run ~500MB)</span></div>
+        </div>
+        <div class="platform-card">
+          <h5>&#128250; Apple TV (Wi-Fi)</h5>
+          <p>Apple TV via Wi-Fi pairing &amp; tunnel</p>
+          <div class="prereqs"><span>Same Wi-Fi</span><span>tvOS 17+</span><span>sudo password</span></div>
+        </div>
+      </div>
+
+      <h3>Apple TV Connection Flow</h3>
+      <p>Apple TV requires a multi-step pairing process:</p>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-content"><h4>Open Remote Settings on Apple TV</h4><p>Go to Settings &#8594; Remotes and Devices &#8594; Remote App and Devices. Keep this screen open.</p></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-content"><h4>Select your device</h4><p>In the tool's Configuration, discovered Apple TV devices appear in the device list. Select yours.</p></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-content"><h4>Start Pairing</h4><p>Click the Connect button. A 6-digit PIN appears on your Apple TV screen.</p></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-content"><h4>Enter PIN</h4><p>Type the 6-digit PIN into the tool's dialog. Pairing is persistent across sessions &mdash; no re-pairing needed next time.</p></div></div>
+        <div class="step"><div class="step-num">5</div><div class="step-content"><h4>Start Tunnel</h4><p>The tool starts a log tunnel. You may be asked for your Mac's admin (sudo) password.</p></div></div>
+        <div class="step"><div class="step-num">6</div><div class="step-content"><h4>Verify &amp; Capture</h4><p>The tool verifies syslog connectivity. Once confirmed, you're ready to start validation.</p></div></div>
+      </div>
+
+      <div class="callout tip">
+        <span class="callout-icon">&#128161;</span>
+        <div class="callout-text">
+          <strong>Both devices must be on the same network.</strong>
+          Corporate Wi-Fi may block device discovery (mDNS). As a workaround, use a phone's mobile hotspot &mdash; connect both your Mac and Apple TV to it.
+        </div>
+      </div>
+
+      <a class="link-ref" href="https://github.com/NielsenDigitalSDK/sdk-diagnostic-tool/blob/main/docs/TROUBLESHOOTING.md" target="_blank">
+        <span class="link-ref-icon">&#128295;</span>
+        <div>
+          <div class="link-ref-text">Platform-specific troubleshooting</div>
+          <div class="link-ref-url">Detailed fixes for each device type in TROUBLESHOOTING.md</div>
+        </div>
+      </a>
+    </div>
+
+    <!-- 12. TIPS -->
+    <div class="section" id="tips">
+      <h2><span class="section-number">12</span> Tips &amp; Best Practices</h2>
+
+      <div class="callout critical">
+        <span class="callout-icon">&#9888;&#65039;</span>
+        <div class="callout-text">
+          <strong>One tool instance at a time</strong>
+          Launching NielsenTool <strong>kills any previous running instance</strong> (it terminates whatever is using port 3000). If you have an active validation session with unsaved results, <strong>export your session first</strong> before opening the tool again. Otherwise, all captured logs and validation results from the previous session will be lost.
+        </div>
+      </div>
+
+      <h3>&#127919; Workflow</h3>
+      <div class="card" style="margin-bottom:12px">
+        <h4>&#9654; Always Play before launching the app (mobile)</h4>
+        <p>The #1 cause of gray rules. The tool must be listening when the SDK initializes. For browser devices, clicking Play opens the URL automatically.</p>
+      </div>
+      <div class="card" style="margin-bottom:12px">
+        <h4>&#128260; Don't uninstall between retries</h4>
+        <p>Just close the app and relaunch. No need to uninstall and reinstall.</p>
+      </div>
+      <div class="card" style="margin-bottom:12px">
+        <h4>&#9199; One test case at a time</h4>
+        <p>Complete each test case fully before moving to the next. Out-of-order actions cause sequence failures.</p>
+      </div>
+      <div class="card" style="margin-bottom:12px">
+        <h4>&#128190; Export frequently</h4>
+        <p>Export after completing each product type. Preserves results even if you Reset later.</p>
+      </div>
+
+      <h3>&#128268; Connectivity</h3>
+      <div class="card" style="margin-bottom:12px">
+        <h4>&#128241; USB devices</h4>
+        <p>Keep device <strong>unlocked</strong> during validation. On iOS, tap "Trust" when prompted. Screen lock interrupts the log stream.</p>
+      </div>
+      <div class="card" style="margin-bottom:12px">
+        <h4>&#128246; Wi-Fi devices (Fire TV, Apple TV)</h4>
+        <p>Both devices must be on the <strong>same network and subnet</strong>. Corporate Wi-Fi blocking discovery? Use your phone's <strong>mobile hotspot</strong> as a workaround.</p>
+      </div>
+      <div class="card" style="margin-bottom:12px">
+        <h4>&#127760; Browser validation</h4>
+        <p>Enter the complete URL including <code>https://</code>. The tool launches its own browser via Playwright &mdash; it doesn't use your installed Chrome. First run downloads browser binaries (~500 MB).</p>
+      </div>
+    </div>
+
+    <!-- 13. LINKS -->
+    <div class="section" id="links">
+      <h2><span class="section-number">13</span> Quick Reference Links</h2>
+      <p>These resources on GitHub always reflect the latest version:</p>
+
+      <a class="link-ref" href="https://github.com/NielsenDigitalSDK/sdk-diagnostic-tool" target="_blank">
+        <span class="link-ref-icon">&#128218;</span>
+        <div>
+          <div class="link-ref-text">README</div>
+          <div class="link-ref-url">Installation, downloads, supported platforms, known limitations</div>
+        </div>
+      </a>
+      <a class="link-ref" href="https://github.com/NielsenDigitalSDK/sdk-diagnostic-tool/blob/main/docs/TROUBLESHOOTING.md" target="_blank">
+        <span class="link-ref-icon">&#128295;</span>
+        <div>
+          <div class="link-ref-text">Troubleshooting Guide</div>
+          <div class="link-ref-url">Platform-specific fixes for device detection, trust, ADB, Apple TV, browsers</div>
+        </div>
+      </a>
+      <a class="link-ref" href="https://github.com/NielsenDigitalSDK/sdk-diagnostic-tool/releases/latest" target="_blank">
+        <span class="link-ref-icon">&#128230;</span>
+        <div>
+          <div class="link-ref-text">Latest Release</div>
+          <div class="link-ref-url">Download macOS and Windows builds (Global + Cookieless)</div>
+        </div>
+      </a>
+
+      <div style="margin-top:48px;padding-top:24px;border-top:1px solid var(--border);text-align:center">
+        <p style="color:var(--text-muted);font-size:13px">For assistance, contact the Nielsen Ops/Certification team or your Nielsen Technical Account Manager (TAM).</p>
+        <p style="color:var(--text-muted);font-size:12px;margin-top:8px">&copy; 2026 The Nielsen Company (US), LLC. All Rights Reserved. Confidential and Proprietary.</p>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+  // Accordion toggle
+  function toggleAcc(header) {
+    const item = header.parentElement;
+    item.classList.toggle('open');
+  }
+
+  // Theme toggle
+  function toggleTheme() {
+    const body = document.body;
+    const isDark = body.getAttribute('data-theme') === 'dark';
+    if (isDark) {
+      body.removeAttribute('data-theme');
+      document.getElementById('theme-icon').textContent = '\u263E';
+      document.getElementById('theme-label').textContent = 'Dark Mode';
+      localStorage.setItem('theme', 'light');
+    } else {
+      body.setAttribute('data-theme', 'dark');
+      document.getElementById('theme-icon').textContent = '\u2600';
+      document.getElementById('theme-label').textContent = 'Light Mode';
+      localStorage.setItem('theme', 'dark');
+    }
+  }
+
+  // Restore saved theme
+  (function() {
+    const saved = localStorage.getItem('theme');
+    if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.body.setAttribute('data-theme', 'dark');
+      document.getElementById('theme-icon').textContent = '\u2600';
+      document.getElementById('theme-label').textContent = 'Light Mode';
+    }
+  })();
+
+  // Active nav highlighting on scroll (sections + sub-sections)
+  const sections = document.querySelectorAll('.section');
+  const navLinks = document.querySelectorAll('.nav-link');
+  const navSubs = document.querySelectorAll('.nav-sub');
+  const subIds = ['panel-left','panel-center','panel-right','config-modal'];
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(link => link.classList.remove('active'));
+        const id = entry.target.id;
+        const activeLink = document.querySelector(`.nav-link[href="#${id}"]`);
+        if (activeLink) activeLink.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => observer.observe(s));
+
+  // Sub-nav highlighting for §5 panels
+  const subObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navSubs.forEach(s => s.classList.remove('active'));
+        const sub = document.querySelector(`.nav-sub[href="#${entry.target.id}"]`);
+        if (sub) sub.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -60% 0px' });
+  subIds.forEach(id => { const el = document.getElementById(id); if (el) subObserver.observe(el); });
+
+  // Close mobile sidebar on any nav click
+  document.querySelectorAll('.nav-link, .nav-sub').forEach(link => {
+    link.addEventListener('click', () => {
+      document.getElementById('sidebar').classList.remove('open');
+    });
+  });
+</script>
+</body>
+</html>
