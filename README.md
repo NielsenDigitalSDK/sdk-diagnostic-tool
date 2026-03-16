@@ -116,8 +116,8 @@ No action required — updates happen automatically!
 
 | Version | Use Case |
 | --- | --- |
-| **Global** | Standard Nielsen SDK integration with DTVR support |
-| **Cookieless** | Cookieless-specific integration (Germany) without DTVR |
+| **Global** | Standard Nielsen SDK integration |
+| **Cookieless** | Cookieless-specific integration (Germany) |
 
 ---
 
