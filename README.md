@@ -103,7 +103,7 @@ No action required — updates happen automatically!
 | Platform | Log Source |
 | --- | --- |
 | iOS | Physical iPhone (USB) |
-| tvOS | Apple TV |
+| tvOS | Apple TV (Wifi) |
 | iOS | iOS Simulator |
 | Android | Physical Android (USB) |
 | Android | Android Emulator |
