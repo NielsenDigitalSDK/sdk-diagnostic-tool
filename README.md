@@ -108,7 +108,7 @@ No action required — updates happen automatically!
 | Android | Physical Android (USB) |
 | Android | Android Emulator |
 | Browser | Chrome, Firefox, Safari |
-| Domless | Fire TV |
+| Domless | Fire TV (VegaOS) |
 
 ---
 
