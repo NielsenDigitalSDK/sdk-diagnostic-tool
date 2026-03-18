@@ -621,6 +621,50 @@
   }
   .mock-error-banner strong { color: #ef4444; }
 
+  /* ── Platform / Device Tabs ── */
+  .platform-tabs, .device-tabs {
+    display: flex; gap: 0; margin: 20px 0 0;
+    border-bottom: 2px solid var(--border);
+  }
+  .platform-tabs { margin-bottom: 0; }
+  .device-tabs { margin-top: 0; border-bottom: 2px solid var(--border); }
+  .tab-btn {
+    padding: 10px 20px; font-size: 13px; font-weight: 600;
+    color: var(--text-muted); background: none; border: none;
+    cursor: pointer; border-bottom: 2px solid transparent;
+    margin-bottom: -2px; transition: all 0.15s;
+    font-family: inherit; display: flex; align-items: center; gap: 6px;
+  }
+  .tab-btn:hover { color: var(--text); background: var(--border-light); }
+  .tab-btn.active {
+    color: var(--nielsen-purple); border-bottom-color: var(--nielsen-purple);
+    font-weight: 700;
+  }
+  .tab-btn .tab-icon { font-size: 16px; }
+  .tab-content { display: none; padding: 20px 0; }
+  .tab-content.active { display: block; }
+  .device-tab-content { display: none; padding: 16px 0; }
+  .device-tab-content.active { display: block; }
+
+  /* ── Market Dropdown Highlight ── */
+  .market-highlight {
+    background: linear-gradient(135deg, var(--nielsen-purple-bg), var(--blue-bg));
+    border: 1px solid var(--nielsen-purple);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin: 20px 0;
+  }
+  .market-highlight h4 { font-size: 15px; font-weight: 700; margin-bottom: 8px; color: var(--text); }
+  .market-options-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0;
+  }
+  .market-option-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 14px;
+  }
+  .market-option-card h5 { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+  .market-option-card p { font-size: 12px; color: var(--text-muted); }
+
   /* ── Responsive ── */
   @media (max-width: 900px) {
     .sidebar { transform: translateX(-100%); }
@@ -698,7 +742,7 @@
           <p>Diagnose and validate DCR Static, DCR Video &amp; DTVR integrations. Capture logs from mobile apps and browsers, run validation tests, and diagnose SDK implementation.</p>
         </div>
       </div>
-      <div class="screenshot-wrap"><img src="guide_images/HomeScreen.png" alt="SDK Diagnostic Tool — Home Screen showing Integration Wizard and Diagnostic Tool modules" style="width:100%;display:block;border-radius:8px;"><div class="screenshot-caption">Tool Home Screen — Choose between Integration Wizard and Diagnostic Tool</div></div>
+      <div class="screenshot-wrap"><img src="guide_images/HomeScreen.png" alt="SDK Diagnostic Tool — Home Screen showing Integration Wizard and Diagnostic Tool modules with market dropdown" style="width:100%;display:block;border-radius:8px;"><div class="screenshot-caption">Tool Home Screen — Choose between Integration Wizard and Diagnostic Tool.</div></div>
 
 
       <div class="callout info">
@@ -712,9 +756,9 @@
       <h3>Which Variant Do I Need?</h3>
       <div class="table-wrap">
         <table>
-          <tr><th>Variant</th><th>Includes</th><th>Use When</th></tr>
-          <tr><td><strong>Global</strong></td><td>DCR Video, DCR Static, DTVR</td><td>Your integration targets the Global market and/or includes DTVR.</td></tr>
-          <tr><td><strong>Cookieless</strong></td><td>DCR Video, DCR Static</td><td>Your integration targets a cookieless deployment (e.g., the German market).</td></tr>
+          <tr><th>Variant</th><th>Includes</th><th>Market Dropdown Options</th><th>Use When</th></tr>
+          <tr><td><strong>Global</strong></td><td>DCR Video, DCR Static, DTVR</td><td>Global, M&eacute;diam&eacute;trie</td><td>Your integration targets the Global market and/or includes DTVR.</td></tr>
+          <tr><td><strong>Cookieless (AGF)</strong></td><td>DCR Video, DCR Static</td><td>AGF, M&eacute;diam&eacute;trie</td><td>Your integration targets a cookieless deployment (e.g., the German or French market).</td></tr>
         </table>
       </div>
 
@@ -747,7 +791,16 @@
       <h2><span class="section-number">2</span> Installation</h2>
       <p class="lead">Download the correct variant (Global or Cookieless) for your platform from the <a href="https://github.com/NielsenDigitalSDK/sdk-diagnostic-tool/releases/latest" target="_blank">GitHub Releases</a> page.</p>
 
-      <div class="video-wrap"><video controls preload="metadata"><source src="guide_videos/install-and-launch.mp4" type="video/mp4"></video><div class="video-caption">Video — Downloading, installing, and launching the SDK Diagnostic Tool on macOS</div></div>
+      <div class="platform-tabs" data-group="install">
+        <button class="tab-btn active" onclick="switchTab('install','mac')"><span class="tab-icon">&#127822;</span> macOS</button>
+        <button class="tab-btn" onclick="switchTab('install','win')"><span class="tab-icon">&#128187;</span> Windows</button>
+      </div>
+      <div class="tab-content active" data-group="install" data-tab="mac">
+        <div class="video-wrap"><video controls preload="metadata"><source src="guide_videos/mac/install-and-launch-mac.mp4" type="video/mp4"></video><div class="video-caption">Video — Downloading, installing, and launching the SDK Diagnostic Tool on macOS</div></div>
+      </div>
+      <div class="tab-content" data-group="install" data-tab="win">
+        <div class="video-wrap"><video controls preload="metadata"><source src="guide_videos/win/install-and-launch-win.mp4" type="video/mp4"></video><div class="video-caption">Video — Downloading, extracting, and launching the SDK Diagnostic Tool on Windows</div></div>
+      </div>
 
       <div class="accordion">
         <div class="acc-item open">
@@ -804,7 +857,7 @@
       <h2><span class="section-number">4</span> Integration Wizard</h2>
       <p class="lead">A 7-step guided wizard that generates platform-specific code snippets for your Nielsen SDK integration. It helps you write the correct integration code before you test it.</p>
 
-      <div class="video-wrap"><video controls preload="metadata"><source src="guide_videos/wizard-walkthrough.mp4" type="video/mp4"></video><div class="video-caption">Video — Walking through all 7 steps of the Integration Wizard</div></div>
+      <div class="video-wrap"><video controls preload="metadata"><source src="guide_videos/wizard-walkthrough.mp4" type="video/mp4"></video><div class="video-caption">Video — Walking through all 7 steps of the Integration Wizard (common across platforms)</div></div>
 
       <div class="accordion">
         <div class="acc-item">
@@ -913,7 +966,7 @@
       <p class="lead">The Diagnostic Tool's validation screen is divided into three main areas. Here's a breakdown of each:</p>
 
       <h3>Header Bar</h3>
-      <p>The top header bar displays the tool name, <span class="badge badge-blue">Cookieless</span> badge (shown if Cookieless variant), and action icons. From left to right: the <strong>hamburger menu</strong> (&#9776;) toggles the validation panel, then on the right side: <strong>Home</strong> (go back to module selection), <strong>Tutorial</strong> (route icon &mdash; restart the guided walkthrough), and <strong>Configuration</strong> (gear icon &mdash; open device/product settings).</p>
+      <p>The top header bar displays the tool name, <span class="badge badge-blue">Cookieless</span> badge (shown for AGF/M&eacute;diam&eacute;trie markets), and action icons. From left to right: the <strong>hamburger menu</strong> (&#9776;) toggles the validation panel, then on the right side: <strong>Home</strong> (go back to module selection), <strong>Tutorial</strong> (route icon &mdash; restart the guided walkthrough), and <strong>Configuration</strong> (gear icon &mdash; open device/product settings).</p>
       <div class="screenshot-wrap"><img src="guide_images/HeaderBar.png" alt="Header Bar showing tool name, Cookieless badge, and action icons" style="width:100%;display:block;border-radius:8px;"><div class="screenshot-caption">Header Bar — Tool name, variant badge, and navigation icons</div></div>
       <p style="font-size:13px;color:var(--text-muted)">The header shows the tool name, variant badge (shown if Cookieless variant), and action icons: Hamburger menu (toggle panel), Home, Tutorial (route icon), Configuration (gear).</p>
 
@@ -926,22 +979,31 @@
         <li>Each test case expands into <strong>grouped sub-rules</strong> organized by category</li>
       </ul>
 
-      <p><strong>DCR Video checklist groups</strong> (example from Test Case 1):</p>
+      <p><strong>DCR Video checklist</strong> (example showing Test Case 1 expanded, others locked):</p>
       <div style="background:#0f172a;border-radius:var(--radius-sm);padding:16px;margin:12px 0;font-family:'SF Mono','Fira Code',monospace;font-size:13px;color:#cbd5e1;line-height:1.8">
-        <div style="color:#fbbf24;font-weight:700;font-size:11px;letter-spacing:1px">CHECKING SDK HEALTH (CONFIGURATION &amp; LOAD)</div>
-        <div>&nbsp;&nbsp;<span style="color:#10b981">&#10003;</span> SDK Core Loaded <span style="color:#64748b">&#8250;</span></div>
-        <div>&nbsp;&nbsp;<span style="color:#10b981">&#10003;</span> Config Response Received <span style="color:#64748b">&#8250;</span></div>
-        <div>&nbsp;&nbsp;<span style="color:#ef4444">&#10007;</span> Debug Flag Enabled <span style="color:#64748b">&#8250;</span></div>
-        <div style="color:#fbbf24;font-weight:700;font-size:11px;letter-spacing:1px;margin-top:8px">VALIDATING METADATA FIELDS</div>
-        <div>&nbsp;&nbsp;<span style="color:#ef4444">&#10007;</span> Content Metadata (validating mandatory params) <span style="color:#64748b">&#8250;</span></div>
-        <div>&nbsp;&nbsp;<span style="color:#64748b">&#9679;</span> Preroll Metadata (validating mandatory params)</div>
-        <div>&nbsp;&nbsp;<span style="color:#64748b">&#9679;</span> Midroll Metadata (validating mandatory params)</div>
-        <div>&nbsp;&nbsp;<span style="color:#64748b">&#9679;</span> Postroll Metadata (validating mandatory params)</div>
-        <div style="color:#fbbf24;font-weight:700;font-size:11px;letter-spacing:1px;margin-top:8px">VALIDATING PLAYHEADS</div>
-        <div>&nbsp;&nbsp;<span style="color:#10b981">&#10003;</span> Playhead Validation (non-negative) <span style="color:#64748b">&#8250;</span></div>
-        <div style="color:#fbbf24;font-weight:700;font-size:11px;letter-spacing:1px;margin-top:8px">VALIDATING SDK API/EVENT SEQUENCE</div>
-        <div>&nbsp;&nbsp;<span style="color:#64748b">&#9679;</span> Click Validate button once video is over &nbsp;<span style="background:#6E37FA;color:white;padding:2px 8px;border-radius:4px;font-size:10px">&#9654; Validate</span></div>
+        <div style="font-weight:600;color:#f1f5f9;margin-bottom:4px">1. Verify SDK initialization and configuration <span style="color:#64748b">&#9660;</span> &nbsp;<span style="color:#10b981">&#9654;</span></div>
+        <div style="color:#fbbf24;font-weight:700;font-size:11px;letter-spacing:1px;padding-left:12px">CHECKING SDK HEALTH (CONFIGURATION &amp; LOAD)</div>
+        <div style="padding-left:12px">&nbsp;&nbsp;<span style="color:#10b981">&#10003;</span> SDK Core Loaded <span style="color:#64748b">&#8250;</span></div>
+        <div style="padding-left:12px">&nbsp;&nbsp;<span style="color:#10b981">&#10003;</span> Config Response Received <span style="color:#64748b">&#8250;</span></div>
+        <div style="padding-left:12px">&nbsp;&nbsp;<span style="color:#ef4444">&#10007;</span> Debug Flag Enabled <span style="color:#64748b">&#8250;</span></div>
+        <div style="border-top:1px solid #1e293b;margin:8px 0"></div>
+        <div style="font-weight:600;color:#f1f5f9">2. Play a VOD stream till end of video without pausing <span style="color:#64748b">&#8250;</span> &nbsp;&#128274;</div>
+        <div style="color:#fbbf24;font-weight:700;font-size:11px;letter-spacing:1px;padding-left:12px;margin-top:4px">VALIDATING METADATA FIELDS</div>
+        <div style="padding-left:12px">&nbsp;&nbsp;<span style="color:#64748b">&#9679;</span> Content Metadata (validating mandatory params)</div>
+        <div style="padding-left:12px">&nbsp;&nbsp;<span style="color:#64748b">&#9679;</span> Preroll Metadata (validating mandatory params)</div>
+        <div style="padding-left:12px">&nbsp;&nbsp;<span style="color:#64748b">&#9679;</span> Midroll Metadata (validating mandatory params)</div>
+        <div style="padding-left:12px">&nbsp;&nbsp;<span style="color:#64748b">&#9679;</span> Postroll Metadata (validating mandatory params)</div>
+        <div style="padding-left:12px;color:#fbbf24;font-weight:700;font-size:11px;letter-spacing:1px;margin-top:8px">VALIDATING PLAYHEADS</div>
+        <div style="padding-left:12px">&nbsp;&nbsp;<span style="color:#64748b">&#9679;</span> Playhead Validation (non-negative)</div>
+        <div style="padding-left:12px;color:#fbbf24;font-weight:700;font-size:11px;letter-spacing:1px;margin-top:8px">VALIDATING SDK API/EVENT SEQUENCE</div>
+        <div style="padding-left:12px">&nbsp;&nbsp;<span style="color:#64748b">&#9679;</span> Click Validate button once video is over &nbsp;<span style="background:#6E37FA;color:white;padding:2px 8px;border-radius:4px;font-size:10px">&#9654; Validate</span></div>
+        <div style="border-top:1px solid #1e293b;margin:8px 0"></div>
+        <div style="font-weight:600;color:#64748b">3. Forward the video playback for VOD by more than 30 seconds <span style="color:#64748b">&#8250;</span> &nbsp;&#128274;</div>
+        <div style="font-weight:600;color:#64748b">4. Rewind the video playback for VOD <span style="color:#64748b">&#8250;</span> &nbsp;&#128274;</div>
+        <div style="font-weight:600;color:#64748b">5. Pause and Resume Validation (&gt;5s) <span style="color:#64748b">&#8250;</span> &nbsp;&#128274;</div>
+        <div style="font-weight:600;color:#64748b">6. Move the app to Background and then relaunch (&gt;5s) <span style="color:#64748b">&#8250;</span> &nbsp;&#128274;</div>
       </div>
+      <p style="font-size:13px;color:var(--text-muted)">&#128274; = Locked (run Test Case 1 first to unlock). &#128275; = Unlocked once SDK health check completes.</p>
       <p style="font-size:13px;color:var(--text-muted)">Each rule has a <strong>&#8250; expand arrow</strong> &mdash; click it to see the rule's FAQ with detailed guidance on what the rule checks and how to fix failures.</p>
 
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0">
@@ -1010,10 +1072,15 @@
       <h3 id="config-modal" style="scroll-margin-top:32px">Configuration Modal</h3>
       <p>Click the <strong>gear icon</strong> (&#9881;) in the header to open Configuration. It shows:</p>
 
-      <div class="video-wrap"><video controls preload="metadata"><source src="guide_videos/diagnostic-configure.mp4" type="video/mp4"></video><div class="video-caption">Video — Opening the Diagnostic Tool, configuring device selection and product types</div></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0">
-        <div><div class="screenshot-wrap"><img src="guide_images/ConfigModal.png" alt="Configuration Modal with Device dropdown and Products checkboxes" style="width:100%;display:block;border-radius:8px;max-width:500px;margin:0 auto;"><div class="screenshot-caption">Configuration — Device & Products selection</div></div></div>
-        <div><div class="screenshot-wrap"><img src="guide_images/ConfigModalDeviceLists.png" alt="Configuration Modal showing all available device options in dropdown" style="width:100%;display:block;border-radius:8px;max-width:500px;margin:0 auto;"><div class="screenshot-caption">Device dropdown — All supported platforms</div></div></div>
+      <div class="platform-tabs" data-group="config">
+        <button class="tab-btn active" onclick="switchTab('config','mac')"><span class="tab-icon">&#127822;</span> macOS</button>
+        <button class="tab-btn" onclick="switchTab('config','win')"><span class="tab-icon">&#128187;</span> Windows</button>
+      </div>
+      <div class="tab-content active" data-group="config" data-tab="mac">
+        <div class="video-wrap"><video controls preload="metadata"><source src="guide_videos/mac/diagnostic-configure-mac.mp4" type="video/mp4"></video><div class="video-caption">Video — macOS: Opening the Diagnostic Tool, configuring device selection and product types</div></div>
+      </div>
+      <div class="tab-content" data-group="config" data-tab="win">
+        <div class="video-wrap"><video controls preload="metadata"><source src="guide_videos/win/diagnostic-configure-win.mp4" type="video/mp4"></video><div class="video-caption">Video — Windows: Opening the Diagnostic Tool, configuring device selection and product types</div></div>
       </div>
 
       <div class="table-wrap">
@@ -1038,8 +1105,9 @@
 
       <h3>Full Interface Overview</h3>
       <p>Here's how all three panels work together during a live validation session:</p>
-
-      <div class="screenshot-wrap"><img src="guide_images/FullInterface.png" alt="Full Validation Interface showing all three panels working together" style="width:100%;display:block;border-radius:8px;"><div class="screenshot-caption">Full Interface — Left: validation checklist | Center: live log stream | Right: session & filters</div></div>
+      <div class="tab-content active" data-group="fullui" data-tab="mac">
+        <div class="screenshot-wrap"><img src="guide_images/mac/FullInterface-mac.png" alt="Full Validation Interface showing all three panels" style="width:100%;display:block;border-radius:8px;"><div class="screenshot-caption">macOS — Full Interface: Left: validation checklist | Center: live log stream | Right: session & filters</div></div>
+      </div>
       <p style="font-size:13px;color:var(--text-muted)">The three-panel layout: <strong>Left</strong> — validation checklist with expandable rules. <strong>Center</strong> — live log stream with color-coded badges. <strong>Right</strong> — session export/import and log filters.</p>
     </div>
 
@@ -1072,11 +1140,45 @@
         <div class="wf-step"><div class="wf-circle">&#128229;</div><div class="wf-label">Export</div></div>
       </div>
 
-      <div class="screenshot-wrap"><img src="guide_images/DebugWarningOrAppNotRun.png" alt="Validation interface showing Waiting for logs state with debug flag reminder" style="width:100%;display:block;border-radius:8px;"><div class="screenshot-caption">Initial State — "Waiting for logs" with debug flag reminder. Click Play on a test case, then launch your app.</div></div>
+      <div class="platform-tabs" data-group="waitlogs">
+        <button class="tab-btn active" onclick="switchTab('waitlogs','mac')"><span class="tab-icon">&#127822;</span> macOS</button>
+        <button class="tab-btn" onclick="switchTab('waitlogs','win')"><span class="tab-icon">&#128187;</span> Windows</button>
+      </div>
+      <div class="tab-content active" data-group="waitlogs" data-tab="mac">
+        <div class="screenshot-wrap"><img src="guide_images/mac/DebugWarningOrAppNotRun-mac.png" alt="macOS validation interface showing Waiting for logs state" style="width:100%;display:block;border-radius:8px;"><div class="screenshot-caption">macOS — Initial State: "Waiting for logs" with debug flag reminder. Click Play, then launch your app.</div></div>
+      </div>
+      <div class="tab-content" data-group="waitlogs" data-tab="win">
+        <div class="screenshot-wrap"><img src="guide_images/win/DebugWarningOrAppNotRun-win.png" alt="Windows validation interface showing Waiting for logs state" style="width:100%;display:block;border-radius:8px;"><div class="screenshot-caption">Windows — Initial State: "Waiting for logs" with debug flag reminder. Click Play, then launch your app.</div></div>
+      </div>
 
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:20px 0">
-        <div class="video-wrap"><video controls preload="metadata"><source src="guide_videos/browser-play-and-validate.mp4" type="video/mp4"></video><div class="video-caption">Video — Browser flow: Click Play, URL opens automatically, logs stream in</div></div>
-        <div class="video-wrap"><video controls preload="metadata"><source src="guide_videos/mobile-play-and-validate.mp4" type="video/mp4"></video><div class="video-caption">Video — Mobile flow: Click Play, launch app on device, watch rules turn green</div></div>
+      <h3>Platform &amp; Device Walkthroughs</h3>
+      <div class="platform-tabs" data-group="validate">
+        <button class="tab-btn active" onclick="switchTab('validate','mac')"><span class="tab-icon">&#127822;</span> macOS</button>
+        <button class="tab-btn" onclick="switchTab('validate','win')"><span class="tab-icon">&#128187;</span> Windows</button>
+      </div>
+
+      <!-- macOS tab -->
+      <div class="tab-content active" data-group="validate" data-tab="mac">
+        <div class="device-tabs" data-group="validate-mac">
+          <button class="tab-btn active" onclick="switchDeviceTab('validate-mac','ios')"><span class="tab-icon">&#128241;</span> iOS</button>
+          <button class="tab-btn" onclick="switchDeviceTab('validate-mac','browser')"><span class="tab-icon">&#127760;</span> Browser</button>
+        </div>
+        <div class="device-tab-content active" data-group="validate-mac" data-tab="ios">
+          <div class="video-wrap"><video controls preload="metadata"><source src="guide_videos/mac/ios-play-and-validate.mp4" type="video/mp4"></video><div class="video-caption">Video — macOS + iOS: Click Play, launch app on iPhone/iPad, watch rules turn green</div></div>
+        </div>
+        <div class="device-tab-content" data-group="validate-mac" data-tab="browser">
+          <div class="video-wrap"><video controls preload="metadata"><source src="guide_videos/mac/browser-play-and-validate-mac.mp4" type="video/mp4"></video><div class="video-caption">Video — macOS + Browser: Click Play, URL opens automatically via Playwright, logs stream in</div></div>
+        </div>
+      </div>
+
+      <!-- Windows tab -->
+      <div class="tab-content" data-group="validate" data-tab="win">
+        <div class="device-tabs" data-group="validate-win">
+          <button class="tab-btn active" onclick="switchDeviceTab('validate-win','android')"><span class="tab-icon">&#129302;</span> Android</button>
+        </div>
+        <div class="device-tab-content active" data-group="validate-win" data-tab="android">
+          <div class="video-wrap"><video controls preload="metadata"><source src="guide_videos/win/android-play-and-validate-win.mp4" type="video/mp4"></video><div class="video-caption">Video — Windows + Android: Click Play, launch app on Android device, watch rules turn green</div></div>
+        </div>
       </div>
 
       <h3>Before You Begin</h3>
@@ -1113,10 +1215,10 @@
         <div class="step"><div class="step-num">1</div><div class="step-content"><h4>Open the tool, select Diagnostic Tool</h4><p>Click the Diagnostic Tool card on the home screen.</p></div></div>
         <div class="step"><div class="step-num">2</div><div class="step-content"><h4>Configure your device</h4><p>Click the <strong>gear icon</strong> to open Configuration. Select your device from the dropdown. For <strong>browsers</strong>, enter the full URL. For <strong>Fire TV</strong> (Wi-Fi), enter the IP address. For <strong>Apple TV</strong>, follow the pairing flow (see <a href="#platforms">Section 11</a>).</p></div></div>
         <div class="step"><div class="step-num">3</div><div class="step-content"><h4>Select your product types</h4><p>Check the product types you want to validate (DCR Video, DCR Static, DTVR) and click <strong>Continue</strong>. Product buttons appear in the header bar.</p></div></div>
-        <div class="step"><div class="step-num" style="background:var(--red);color:white">4</div><div class="step-content"><h4>Click Play on a test case</h4><p>This activates log capture and starts evaluating rules. <strong>For mobile apps:</strong> do this BEFORE launching your app. <strong>For browsers:</strong> clicking Play automatically opens the URL &mdash; no manual launch needed.</p></div></div>
+        <div class="step"><div class="step-num" style="background:var(--red);color:white">4</div><div class="step-content"><h4>Click Play on Test Case 1 ("Verify SDK initialization and configuration")</h4><p>This is <strong>mandatory first</strong> &mdash; all other test cases are locked until this one completes. It activates log capture and evaluates SDK health rules. <strong>For mobile apps:</strong> do this BEFORE launching your app. <strong>For browsers:</strong> clicking Play automatically opens the URL &mdash; no manual launch needed. Once Test Case 1 passes or fails, the remaining tests unlock automatically (&#128274; &#8594; &#128275;).</p></div></div>
         <div class="step"><div class="step-num">5</div><div class="step-content"><h4>Launch your app (mobile only)</h4><p>Open the app on your device. For <strong>browser devices</strong>, skip this step &mdash; the URL was already opened automatically in step 4. Log entries begin appearing once the SDK initializes. You should see <span class="ui-mock-badge" style="background:#4b5563;color:white;font-size:10px">SDK INIT</span> and <span class="ui-mock-badge" style="background:#4b5563;color:white;font-size:10px">CONFIG RECEIVED</span> events first.</p></div></div>
-        <div class="step"><div class="step-num">6</div><div class="step-content"><h4>Perform the test case actions</h4><p>Follow the instructions shown in the test case label (e.g., "Play a VOD stream till end of video without pausing"). Watch rules turn green as events pass validation. Once playback is complete, click the purple <strong>Validate</strong> button on any sequence rule to check the full event order.</p></div></div>
-        <div class="step"><div class="step-num">7</div><div class="step-content"><h4>Complete remaining test cases</h4><p>Click Play on the next test case and follow its instructions. Repeat for all test cases in the product.</p></div></div>
+        <div class="step"><div class="step-num">6</div><div class="step-content"><h4>Perform the test case actions</h4><p>Follow the instructions shown in the test case label (e.g., "Play a VOD stream till end of video without pausing"). Watch rules turn green as events pass validation. For DCR Video Test Case 2, click the purple <strong>Validate</strong> button after playback completes to check the full event sequence.</p></div></div>
+        <div class="step"><div class="step-num">7</div><div class="step-content"><h4>Complete remaining test cases</h4><p>Click Play on the next test case (now unlocked) and follow its instructions. Repeat for all test cases in the product.</p></div></div>
         <div class="step"><div class="step-num">8</div><div class="step-content"><h4>Export results</h4><p>Click <strong>Export</strong> in the Session panel to download a <code>.json</code> file. Share with your Nielsen contact.</p></div></div>
       </div>
 
@@ -1151,7 +1253,7 @@
         </div>
       </div>
 
-      <div class="video-wrap"><video controls preload="metadata"><source src="guide_videos/inspect-logs.mp4" type="video/mp4"></video><div class="video-caption">Video — Inspecting log details, error highlighting, and the Parameter Table</div></div>
+      <div class="video-wrap"><video controls preload="metadata"><source src="guide_videos/inspect-logs.mp4" type="video/mp4"></video><div class="video-caption">Video — Inspecting log details, error highlighting, and the Parameter Table (common across platforms)</div></div>
 
       <h3>Every Rule Has Help Text</h3>
       <p>Click the <strong>&#8250; expand arrow</strong> next to any rule (pass or fail) to see its FAQ panel. This shows exactly what the rule checks, what went wrong, and how to fix it. For metadata failures, it identifies the specific field that didn't match the CMS mapping.</p>
@@ -1171,9 +1273,9 @@
       </ul>
 
       <h3>"Validate" Button</h3>
-      <p>For <strong>event sequence validation</strong>, you'll see a purple <span style="background:#6E37FA;color:white;padding:2px 10px;border-radius:5px;font-size:12px;font-weight:600">&#9654; Validate</span> button inside the checklist. This button appears on <strong>any rule that checks an event sequence</strong> &mdash; you'll find it under DCR Video product that has sequence-type rules. Click it <strong>after you've completed the playback or interaction flow</strong> for that test case &mdash; the tool then checks whether all the collected logs match the expected API event sequence. The result expands to show each step in the sequence with pass/fail status.</p>
+      <p>For <strong>event sequence validation</strong>, you'll see a purple <span style="background:#6E37FA;color:white;padding:2px 10px;border-radius:5px;font-size:12px;font-weight:600">&#9654; Validate</span> button inside Test Case 2 (<em>"Play a VOD stream till end of video without pausing"</em>) under DCR Video. Click it <strong>after you've completed the full playback flow</strong> for that test case &mdash; the tool then checks whether all the collected logs match the expected API event sequence (play &#8594; loadMetadata &#8594; setPlayheadPosition &#8594; stop &#8594; end, with ad break cycles if ads are present). The result expands to show each step in the sequence with pass/fail status.</p>
 
-      <div class="video-wrap"><video controls preload="metadata"><source src="guide_videos/validate-sequence.mp4" type="video/mp4"></video><div class="video-caption">Video — Clicking Validate on a sequence rule and reviewing pass/fail results</div></div>
+      <div class="video-wrap"><video controls preload="metadata"><source src="guide_videos/validate-sequence.mp4" type="video/mp4"></video><div class="video-caption">Video — Clicking Validate on a sequence rule and reviewing pass/fail results (common across platforms)</div></div>
 
     </div>
 
@@ -1248,7 +1350,7 @@
       <h2><span class="section-number">9</span> Session Export &amp; Import</h2>
 
       
-      <div class="video-wrap"><video controls preload="metadata"><source src="guide_videos/export-and-import.mp4" type="video/mp4"></video><div class="video-caption">Video — Exporting a session to JSON and importing it back with full state restored</div></div>
+      <div class="video-wrap"><video controls preload="metadata"><source src="guide_videos/export-and-import.mp4" type="video/mp4"></video><div class="video-caption">Video — Exporting a session to JSON and importing it back with full state restored (common across platforms)</div></div>
 
       <div class="screenshot-wrap"><img src="guide_images/SessionExport.png" alt="Session Export and Import panel" style="width:100%;display:block;border-radius:8px;max-width:380px;margin:0 auto;"><div class="screenshot-caption">Session Panel — Export (purple) and Import buttons with drag-and-drop zone</div></div>
 
@@ -1292,6 +1394,14 @@
       <h2><span class="section-number">10</span> Product Types</h2>
       <p>Select the product type matching your integration. Each loads different test cases and validation rules.</p>
 
+      <div class="callout critical" style="margin-bottom:20px">
+        <span class="callout-icon">&#128274;</span>
+        <div class="callout-text">
+          <strong>Test Case 1 is mandatory and must run first</strong>
+          For every product type, <strong>"Verify SDK initialization and configuration"</strong> must be completed before any other test case unlocks. This test depends on the SDK config response from Nielsen servers to confirm the SDK initialized correctly. All subsequent test cases remain <strong>locked</strong> (&#128274;) until this first test passes or fails. Once it completes, the remaining tests unlock automatically.
+        </div>
+      </div>
+
       <div class="accordion">
         <div class="acc-item open">
           <div class="acc-header" onclick="toggleAcc(this)">
@@ -1303,15 +1413,16 @@
             <p><strong>Test cases (exact labels):</strong></p>
             <div class="table-wrap">
               <table>
-                <tr><th>#</th><th>Test Case</th><th>What It Validates</th></tr>
-                <tr><td>1</td><td><strong>Play a VOD stream till end of video without pausing</strong></td><td>SDK Health, Content &amp; Ad Metadata, Playhead, full API/Event Sequence, Measurement Pings (Session, EMM, Duration, View)</td></tr>
-                <tr><td>2</td><td><strong>Forward the video playback for VOD by more than 30 seconds</strong></td><td>Seek/scrub forward detection (&gt;30s jump)</td></tr>
-                <tr><td>3</td><td><strong>Rewind the video playback for VOD</strong></td><td>Seek/scrub backward detection</td></tr>
-                <tr><td>4</td><td><strong>Pause and Resume Validation (&gt;5s)</strong></td><td>Gap detection in playhead positions (&gt;5 second pause)</td></tr>
-                <tr><td>5</td><td><strong>Background and Foreground Validation (&gt;5s)</strong></td><td>App lifecycle handling &mdash; mobile/app SDK only</td></tr>
+                <tr><th>#</th><th>Test Case</th><th>What It Validates</th><th>Notes</th></tr>
+                <tr style="background:rgba(110,55,250,0.08)"><td>1</td><td><strong>Verify SDK initialization and configuration</strong> &#128275;</td><td>SDK Core Loaded, Config Response Received, Debug Flag Enabled (mobile only &mdash; browser is automatic)</td><td><strong>Must run first.</strong> Unlocks all other test cases once completed.</td></tr>
+                <tr><td>2</td><td><strong>Play a VOD stream till end of video without pausing</strong></td><td>Content &amp; Ad Metadata (preroll, midroll, postroll), Playhead values, full API/Event Sequence (play &#8594; loadMetadata &#8594; playhead &#8594; stop &#8594; end)</td><td>Ad metadata rules are optional &mdash; only validated if ads are detected.</td></tr>
+                <tr><td>3</td><td><strong>Forward the video playback for VOD by more than 30 seconds</strong></td><td>Seek/scrub forward detection (&gt;30s jump in playhead)</td><td></td></tr>
+                <tr><td>4</td><td><strong>Rewind the video playback for VOD</strong></td><td>Seek/scrub backward detection (playhead decreases)</td><td></td></tr>
+                <tr><td>5</td><td><strong>Pause and Resume Validation (&gt;5s)</strong></td><td>Gap detection in playhead positions (&gt;5 second pause between consecutive playheads)</td><td></td></tr>
+                <tr><td>6</td><td><strong>Move the app to Background and then relaunch (&gt;5s)</strong></td><td>App lifecycle handling &mdash; detects &gt;5 second gap when app goes to background and returns</td><td>Mobile/TV only (not shown for browser devices)</td></tr>
               </table>
             </div>
-            <p style="font-size:12px;color:var(--text-muted);margin-top:8px">Available in: Global + Cookieless variants</p>
+            <p style="font-size:12px;color:var(--text-muted);margin-top:8px">Available in: Global + AGF + M&eacute;diam&eacute;trie markets. <em>Fire TV VegaOS also includes additional blur/focus and app-close tests.</em></p>
           </div>
         </div>
         <div class="acc-item">
@@ -1324,12 +1435,13 @@
             <p><strong>Test cases (exact labels):</strong></p>
             <div class="table-wrap">
               <table>
-                <tr><th>#</th><th>Test Case</th><th>What It Validates</th></tr>
-                <tr><td>1</td><td><strong>View static page and scroll till end of page or switch to another page</strong></td><td>SDK Initialization (Core Loaded, Config, Debug Flag), Metadata Fields, Page Navigation. <em>Note: Browser and mobile platforms have separate rule sets.</em></td></tr>
-                <tr><td>2</td><td><strong>Move app to background for 20 secs and relaunch</strong></td><td>App lifecycle handling &mdash; background the app for 20+ seconds, then bring it back to foreground</td></tr>
+                <tr><th>#</th><th>Test Case</th><th>What It Validates</th><th>Notes</th></tr>
+                <tr style="background:rgba(110,55,250,0.08)"><td>1</td><td><strong>Verify SDK initialization and configuration</strong> &#128275;</td><td>SDK Core Loaded, Config Response Received, Debug Flag Enabled (mobile only)</td><td><strong>Must run first.</strong> Unlocks all other test cases.</td></tr>
+                <tr><td>2</td><td><strong>View static page and scroll till end of page or switch to another page</strong></td><td>Static Metadata Fields, Page Navigation (separate rule sets for browser vs. mobile platforms)</td><td></td></tr>
+                <tr><td>3</td><td><strong>Move app to background for 20 secs and relaunch</strong></td><td>App lifecycle handling &mdash; background the app for 20+ seconds, then bring it back to foreground</td><td>Mobile/TV only (not shown for browser devices)</td></tr>
               </table>
             </div>
-            <p style="font-size:12px;color:var(--text-muted);margin-top:8px">Available in: Global + Cookieless variants</p>
+            <p style="font-size:12px;color:var(--text-muted);margin-top:8px">Available in: Global + AGF + M&eacute;diam&eacute;trie markets. <em>Fire TV VegaOS also includes blur/focus and app-close tests.</em></p>
           </div>
         </div>
         <div class="acc-item">
@@ -1342,14 +1454,15 @@
             <p><strong>Test cases (exact labels):</strong></p>
             <div class="table-wrap">
               <table>
-                <tr><th>#</th><th>Test Case</th><th>What It Validates</th></tr>
-                <tr><td>1</td><td><strong>Play DTVR stream for 2 mins</strong></td><td>SDK Health (Core, Config, Debug), DTVR Metadata (admodel field), ID3 Tag validation (249 chars, starts with <code>www.nielsen.com</code>)</td></tr>
-                <tr><td>2</td><td><strong>DTVR Pause/Resume content for 30 seconds</strong></td><td>Gap detection in playback &mdash; pause for 30+ seconds, then resume</td></tr>
-                <tr><td>3</td><td><strong>DTVR Scrub back for 30 seconds</strong></td><td>Seek/scrub backward detection in DTVR stream</td></tr>
-                <tr><td>4</td><td><strong>DTVR Scrub forward for 2 mins</strong></td><td>Seek/scrub forward detection in DTVR stream (&gt;2 min jump)</td></tr>
+                <tr><th>#</th><th>Test Case</th><th>What It Validates</th><th>Notes</th></tr>
+                <tr style="background:rgba(110,55,250,0.08)"><td>1</td><td><strong>Verify SDK initialization and configuration</strong> &#128275;</td><td>SDK Core Loaded, Config Response Received, Debug Flag Enabled (mobile only)</td><td><strong>Must run first.</strong> Unlocks all other test cases.</td></tr>
+                <tr><td>2</td><td><strong>Play DTVR stream for 2 mins</strong></td><td>DTVR Metadata (<code>admodel</code> field), ID3 Tag validation (249 chars, starts with <code>www.nielsen.com</code>)</td><td></td></tr>
+                <tr><td>3</td><td><strong>DTVR Pause/Resume content for 30 seconds</strong></td><td>Offset validation &mdash; pause for 30+ seconds, then resume; checks pcOffset and fdOffset ranges</td><td></td></tr>
+                <tr><td>4</td><td><strong>DTVR Scrub back for 30 seconds</strong></td><td>Offset backward detection &mdash; scrub back 30+ seconds in DTVR stream</td><td></td></tr>
+                <tr><td>5</td><td><strong>DTVR Scrub forward for 2 mins</strong></td><td>Offset forward detection &mdash; scrub forward 120+ seconds in DTVR stream</td><td></td></tr>
               </table>
             </div>
-            <p style="font-size:12px;color:var(--text-muted);margin-top:8px">Available in: <strong>Global variant only</strong> (not in Cookieless)</p>
+            <p style="font-size:12px;color:var(--text-muted);margin-top:8px">Available in: <strong>Global market only</strong> (not in AGF or M&eacute;diam&eacute;trie). <em>Fire TV VegaOS also includes blur/focus and app-close tests.</em></p>
           </div>
         </div>
       </div>
@@ -1575,6 +1688,26 @@
     });
   }, { rootMargin: '-20% 0px -60% 0px' });
   subIds.forEach(id => { const el = document.getElementById(id); if (el) subObserver.observe(el); });
+
+  // Platform tab switching
+  function switchTab(group, tab) {
+    // Deactivate all tabs/content in this group
+    document.querySelectorAll(`.platform-tabs[data-group="${group}"] .tab-btn`).forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll(`.tab-content[data-group="${group}"]`).forEach(content => content.classList.remove('active'));
+    // Activate selected
+    event.currentTarget.classList.add('active');
+    const target = document.querySelector(`.tab-content[data-group="${group}"][data-tab="${tab}"]`);
+    if (target) target.classList.add('active');
+  }
+
+  // Device sub-tab switching
+  function switchDeviceTab(group, tab) {
+    document.querySelectorAll(`.device-tabs[data-group="${group}"] .tab-btn`).forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll(`.device-tab-content[data-group="${group}"]`).forEach(content => content.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+    const target = document.querySelector(`.device-tab-content[data-group="${group}"][data-tab="${tab}"]`);
+    if (target) target.classList.add('active');
+  }
 
   // Close mobile sidebar on any nav click
   document.querySelectorAll('.nav-link, .nav-sub').forEach(link => {
