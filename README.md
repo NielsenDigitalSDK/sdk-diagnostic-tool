@@ -100,15 +100,29 @@ No action required — updates happen automatically!
 
 ## 🛠️ Supported Platforms
 
-| Platform | Log Source |
-| --- | --- |
-| iOS | Physical iPhone (USB) |
-| tvOS | Apple TV (Wifi) |
-| iOS | iOS Simulator |
-| Android | Physical Android (USB) |
-| Android | Android Emulator |
-| Browser | Chrome, Firefox, Safari |
-| Domless | Fire TV (VegaOS) |
+### Host Requirements
+
+| Host OS | Architecture | Min Version |
+| --- | --- | --- |
+| **macOS** | Apple Silicon (M1/M2/M3/M4) | macOS 13.0+ (Ventura) |
+| **Windows** | x64 | Windows 10 (21H2)+ |
+
+> Intel-based Macs and Linux are not supported. See [Known Limitations](#-known-limitations).
+
+### Device & Log Source Support
+
+| Platform | Log Source | Connection | Min Device Version | Host OS |
+| --- | --- | --- | --- | --- |
+| iOS | Physical iPhone/iPad (USB) | USB | iOS 14.0+ | macOS only |
+| iOS | iOS Simulator | Xcode | iOS 14.0+ | macOS only |
+| tvOS | Apple TV | Wi-Fi | tvOS 14.0+ | macOS only |
+| Android | Physical Android (USB) | USB | Android 10 (API 29)+ | macOS, Windows |
+| Android | Android Emulator | ADB | Android 10 (API 29)+ | macOS, Windows |
+| Browser | Chrome, Firefox, Safari | Playwright | Latest stable | macOS, Windows |
+| Domless | Fire TV (VegaOS) | USB / Emulator | Fire OS 8+ | macOS, Windows |
+| Domless | Fire TV (Standard) | Wi-Fi (ADB) | Fire OS 7+ | macOS, Windows |
+
+> **Note:** Minimum device versions listed above are based on Nielsen SDK requirements and initial testing. Please verify against your specific device/OS combination and report any issues.
 
 ---
 
