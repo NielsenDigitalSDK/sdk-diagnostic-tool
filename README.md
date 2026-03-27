@@ -56,7 +56,7 @@ For more information, reach out to your Nielsen Technical Account Manager(TAM).
 ## ▶️ How to Use
 
 1. **Connect your device:**
-* **iOS:** Unlock device and ensure it is “Trusted”.
+* **iOS:** Connect via USB, unlock device and ensure it is “Trusted”.
 * **Android:** Enable USB debugging.
 * **Simulators:** Ensure Xcode/Android Studio simulator is booted.
 
@@ -104,10 +104,10 @@ No action required — updates happen automatically!
 
 | Host OS | Architecture | Min Version |
 | --- | --- | --- |
-| **macOS** | Apple Silicon (M1/M2/M3/M4) | macOS 13.0+ (Ventura) |
+| **macOS** | Apple Silicon (M series) | macOS 13.0+ (Ventura) |
 | **Windows** | x64 | Windows 10 (21H2)+ |
 
-> Intel-based Macs and Linux are not supported. See [Known Limitations](#-known-limitations).
+> Intel-based Macs are not supported. Linux support is planned for a future release.
 
 ### Device & Log Source Support
 
@@ -118,9 +118,8 @@ No action required — updates happen automatically!
 | tvOS | Apple TV | Wi-Fi | tvOS 14.0+ | macOS only |
 | Android | Physical Android (USB) | USB | Android 10 (API 29)+ | macOS, Windows |
 | Android | Android Emulator | ADB | Android 10 (API 29)+ | macOS, Windows |
-| Browser | Chrome, Firefox, Safari | Playwright | Latest stable | macOS, Windows |
+| Browser | Chrome, Firefox, Safari | Network | Latest stable | macOS, Windows |
 | Domless | Fire TV (VegaOS) | USB / Emulator | Fire OS 8+ | macOS, Windows |
-| Domless | Fire TV (Standard) | Wi-Fi (ADB) | Fire OS 7+ | macOS, Windows |
 
 > **Note:** Minimum device versions listed above are based on Nielsen SDK requirements and initial testing. Please verify against your specific device/OS combination and report any issues.
 
@@ -131,7 +130,7 @@ No action required — updates happen automatically!
 | Version | Use Case |
 | --- | --- |
 | **Global** | Standard Nielsen SDK integration |
-| **Cookieless** | Cookieless-specific integration (Germany) |
+| **Cookieless** | Cookieless-specific integration |
 
 ---
 
@@ -159,10 +158,10 @@ No action required — updates happen automatically!
 
 | Limitation | Details |
 | --- | --- |
-| **Intel-based Macs** | Not supported. Requires **Apple Silicon** (M1/M2/M3/M4). Intel Macs have known incompatibilities with the iOS and Apple TV connectivity toolchain. |
+| **Intel-based Macs** | Not supported. Requires **Apple Silicon** (M series). |
 | **Apple TV — Wi-Fi only** | Apple TV connectivity is Wi-Fi only (Bonjour discovery → PIN pairing → tunnel). USB log capture is not available for Apple TV. |
-| **Domless SDK** | Domless SDK validation is currently supported **only via Fire TV (VegaOS)**. Other platforms (Android, iOS, standard Fire TV) do not support Domless SDK log capture at this time. |
-| **Mobile browser BSDK logs** | This tool cannot capture Browser SDK logs from a mobile device's browser (e.g., Chrome on iPhone). Mobile browsers sandbox console output. Browser validation uses **desktop Playwright only** (Chrome, Firefox, WebKit). |
+| **Domless SDK** | Domless SDK validation is currently supported **only via Fire TV (VegaOS)**. |
+| **Mobile browser BSDK logs** | This tool cannot capture Browser SDK logs from a mobile device's browser (e.g., Chrome on iPhone). |
 
 ---
 
