@@ -215,13 +215,13 @@ Apple TV uses a 3-step connection process: **Discover → Pair → Connect**. Is
 
 ## 🍎 macOS — General
 
-### "NielsenTool" is damaged / can't be opened
+### "NielsenSDKTool" is damaged / can't be opened
 
 This should not happen with the signed and notarized builds. If it does:
 - Try: **right-click → Open** (bypasses the first-launch Gatekeeper check).
 - If it persists, remove the quarantine attribute:
   ```
-  xattr -cr /Applications/NielsenTool.app
+  xattr -cr /Applications/NielsenSDKTool.app
   ```
 
 ### Port 3000 already in use

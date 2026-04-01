@@ -20,15 +20,15 @@ For more information, reach out to your Nielsen Technical Account Manager(TAM).
 
 | Platform | Download |
 | --- | --- |
-| **macOS** | [NielsenTool.dmg](https://github.com/NielsenDigitalSDK/sdk-diagnostic-tool/releases/latest/download/NielsenTool.dmg) |
-| **Windows** | [nls-validator-win.zip](https://github.com/NielsenDigitalSDK/sdk-diagnostic-tool/releases/latest/download/nls-validator-win.zip) |
+| **macOS** | [NielsenSDKTool.dmg](https://github.com/NielsenDigitalSDK/sdk-diagnostic-tool/releases/latest/download/NielsenSDKTool.dmg) |
+| **Windows** | [NielsenSDKTool-win.zip](https://github.com/NielsenDigitalSDK/sdk-diagnostic-tool/releases/latest/download/NielsenSDKTool-win.zip) |
 
 ### Cookieless Version 
 
 | Platform | Download |
 | --- | --- |
-| **macOS** | [NielsenTool-AGF.dmg](https://github.com/NielsenDigitalSDK/sdk-diagnostic-tool/releases/latest/download/NielsenTool-AGF.dmg) |
-| **Windows** | [nls-validator-win-agf.zip](https://github.com/NielsenDigitalSDK/sdk-diagnostic-tool/releases/latest/download/nls-validator-win-agf.zip) |
+| **macOS** | [NielsenSDKTool-Cookieless.dmg](https://github.com/NielsenDigitalSDK/sdk-diagnostic-tool/releases/latest/download/NielsenSDKTool-Cookieless.dmg) |
+| **Windows** | [NielsenSDKTool-Cookieless-win.zip](https://github.com/NielsenDigitalSDK/sdk-diagnostic-tool/releases/latest/download/NielsenSDKTool-Cookieless-win.zip) |
 
 > 💡 These links always point to the **latest version**. The tool auto-updates itself!
 
@@ -40,8 +40,8 @@ For more information, reach out to your Nielsen Technical Account Manager(TAM).
 
 1. Download the appropriate `.dmg` file (Global or Cookieless).
 2. Double-click to open the disk image.
-3. Drag **NielsenTool** to your **Applications** folder.
-4. Open **NielsenTool** from Applications.
+3. Drag **NielsenSDKTool** to your **Applications** folder.
+4. Open **NielsenSDKTool** from Applications.
 
 > ✅ The macOS version is **signed and notarized** by Apple — no security warnings!
 
@@ -49,7 +49,7 @@ For more information, reach out to your Nielsen Technical Account Manager(TAM).
 
 1. Download the appropriate `.zip` file (Global or Cookieless).
 2. Extract the zip to a folder.
-3. Double-click `nls-validator.bat`.
+3. Double-click `NielsenSDKTool.bat`.
 
 ---
 
@@ -62,8 +62,8 @@ For more information, reach out to your Nielsen Technical Account Manager(TAM).
 
 
 2. **Launch the tool:**
-* **macOS:** Open NielsenTool from Applications.
-* **Windows:** Double-click `nls-validator.bat`.
+* **macOS:** Open NielsenSDKTool from Applications.
+* **Windows:** Double-click `NielsenSDKTool.bat`.
 
 
 3. **Validate:** A browser window will open automatically showing live logs and a validation checklist.
@@ -147,7 +147,7 @@ No action required — updates happen automatically!
 | Fire TV (VegaOS) | No logs — requires USB, uses loggingctl not logcat | [View](docs/TROUBLESHOOTING.md#-fire-tv-vegaos) |
 | Apple TV (Wi-Fi) | Discovery, pairing, or tunnel issues | [View](docs/TROUBLESHOOTING.md#-apple-tv-wi-fi) |
 | Browser (Chrome/Firefox/Safari) | Browser fails to launch or no logs | [View](docs/TROUBLESHOOTING.md#-browser-chrome--firefox--safari) |
-| macOS | "NielsenTool" is damaged / can't be opened | [View](docs/TROUBLESHOOTING.md#-macos--general) |
+| macOS | "NielsenSDKTool" is damaged / can't be opened | [View](docs/TROUBLESHOOTING.md#-macos--general) |
 | Auto-Update | Update fails or settings lost | [View](docs/TROUBLESHOOTING.md#-auto-update-issues) |
 | All Platforms | No logs — incorrect operation order or debug flag not enabled | [View](docs/TROUBLESHOOTING.md#-before-you-start) |
 | All Platforms | Rules stay gray or show red (failed) | [View](docs/TROUBLESHOOTING.md#rules-stay-gray-never-pass-or-fail) |
