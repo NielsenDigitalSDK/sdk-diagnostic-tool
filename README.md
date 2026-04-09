@@ -49,7 +49,10 @@ For more information, reach out to your Nielsen Technical Account Manager(TAM).
 
 1. Download the appropriate `.zip` file (Global or Cookieless).
 2. Extract the zip to a folder.
-3. Double-click `NielsenSDKTool.bat`.
+3. **To check for updates and launch:** Double-click `UpdateAndLaunch.bat`. Windows may show a security prompt — click "Run" to proceed.
+4. **To launch directly (no auto-update):** Double-click `NielsenSDKTool.exe`. The `.exe` is signed by The Nielsen Company (US), LLC — no security warnings.
+
+> ℹ️ The `.exe` is digitally signed with an EV code signing certificate. The `.bat` launcher handles auto-updates but may trigger a Windows security prompt since `.bat` files cannot be signed.
 
 ---
 
@@ -63,7 +66,7 @@ For more information, reach out to your Nielsen Technical Account Manager(TAM).
 
 2. **Launch the tool:**
 * **macOS:** Open NielsenSDKTool from Applications.
-* **Windows:** Double-click `NielsenSDKTool.bat`.
+* **Windows:** Double-click `NielsenSDKTool.exe`.
 
 
 3. **Validate:** A browser window will open automatically showing live logs and a validation checklist.
@@ -72,7 +75,9 @@ For more information, reach out to your Nielsen Technical Account Manager(TAM).
 
 ## 🔄 Auto-Update
 
-The tool **automatically checks for updates** every time you launch it.
+The tool **automatically checks for updates** when launched via `UpdateAndLaunch.bat` (Windows) or the app (macOS).
+
+> ℹ️ **Windows:** Auto-update only works when using `UpdateAndLaunch.bat`. Running `NielsenSDKTool.exe` directly skips the update check.
 
 ```text
   ┌─────────────────────────────────────────────────┐

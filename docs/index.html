@@ -810,9 +810,9 @@
           </div>
           <div class="acc-body">
             <div class="steps">
-              <div class="step"><div class="step-num">1</div><div class="step-content"><h4>Download</h4><p>Download <code>NielsenTool.dmg</code> (Global) or <code>NielsenTool-Cookieless.dmg</code> (Cookieless) from GitHub Releases.</p></div></div>
-              <div class="step"><div class="step-num">2</div><div class="step-content"><h4>Open &amp; Install</h4><p>Open the DMG file. Drag <strong>NielsenTool.app</strong> to the <strong>Applications</strong> folder shortcut shown in the window.</p></div></div>
-              <div class="step"><div class="step-num">3</div><div class="step-content"><h4>First Launch</h4><p>Double-click <strong>NielsenTool.app</strong> in Applications. macOS may ask <em>"Are you sure you want to open it?"</em> &mdash; click <strong>Open</strong>. You may also see additional permission prompts (Accessibility, Terminal access, etc.) &mdash; click <strong>Allow</strong> for each. These are required for device log capture.</p></div></div>
+              <div class="step"><div class="step-num">1</div><div class="step-content"><h4>Download</h4><p>Download <code>NielsenSDKTool.dmg</code> (Global) or <code>NielsenSDKTool-Cookieless.dmg</code> (Cookieless) from GitHub Releases.</p></div></div>
+              <div class="step"><div class="step-num">2</div><div class="step-content"><h4>Open &amp; Install</h4><p>Open the DMG file. Drag <strong>NielsenSDKTool.app</strong> to the <strong>Applications</strong> folder shortcut shown in the window.</p></div></div>
+              <div class="step"><div class="step-num">3</div><div class="step-content"><h4>First Launch</h4><p>Double-click <strong>NielsenSDKTool.app</strong> in Applications. macOS may ask <em>"Are you sure you want to open it?"</em> &mdash; click <strong>Open</strong>. You may also see additional permission prompts (Accessibility, Terminal access, etc.) &mdash; click <strong>Allow</strong> for each. These are required for device log capture.</p></div></div>
               <div class="step"><div class="step-num">4</div><div class="step-content"><h4>Grant Permissions</h4><p>The app may ask to control <strong>Terminal.app</strong> &mdash; click <strong>Allow</strong>. For certain devices like <strong>Apple TV</strong>, the tool may prompt for your macOS password (sudo access) to establish the wireless connection.</p></div></div>
               <div class="step"><div class="step-num">5</div><div class="step-content"><h4>Ready</h4><p>Terminal opens, checks for updates, and launches the tool. Your <strong>default browser</strong> opens automatically at <code>localhost:3000</code>.</p></div></div>
             </div>
@@ -825,9 +825,9 @@
           </div>
           <div class="acc-body">
             <div class="steps">
-              <div class="step"><div class="step-num">1</div><div class="step-content"><h4>Download</h4><p>Download <code>nls-validator-win.zip</code> (Global) or <code>nls-validator-win-agf.zip</code> (Cookieless) from GitHub Releases.</p></div></div>
+              <div class="step"><div class="step-num">1</div><div class="step-content"><h4>Download</h4><p>Download <code>NielsenSDKTool-win.zip</code> (Global) or <code>NielsenSDKTool-Cookieless-win.zip</code> (Cookieless) from GitHub Releases.</p></div></div>
               <div class="step"><div class="step-num">2</div><div class="step-content"><h4>Extract</h4><p>Extract the ZIP to any folder.</p></div></div>
-              <div class="step"><div class="step-num">3</div><div class="step-content"><h4>Launch</h4><p>Double-click <code>nls-validator.bat</code>. The tool starts and your browser opens automatically at <code>localhost:3000</code>.</p></div></div>
+              <div class="step"><div class="step-num">3</div><div class="step-content"><h4>Launch</h4><p>Double-click <code>UpdateAndLaunch.bat</code> to check for updates and start the tool. Windows may show a security prompt &mdash; click &ldquo;Run&rdquo; to proceed. Alternatively, run <code>NielsenSDKTool.exe</code> directly for a clean launch without auto-update (signed by The Nielsen Company).</p></div></div>
             </div>
           </div>
         </div>
@@ -846,7 +846,7 @@
     <div class="section" id="quick-start">
       <h2><span class="section-number">3</span> Quick Start</h2>
       <div class="steps">
-        <div class="step"><div class="step-num">1</div><div class="step-content"><h4>Launch the tool</h4><p>Open NielsenTool (macOS) or run <code>nls-validator.bat</code> (Windows). The UI opens at <code>localhost:3000</code>.</p></div></div>
+        <div class="step"><div class="step-num">1</div><div class="step-content"><h4>Launch the tool</h4><p>Open NielsenSDKTool (macOS) or run <code>NielsenSDKTool.exe</code> (Windows). The UI opens at <code>localhost:3000</code>.</p></div></div>
         <div class="step"><div class="step-num">2</div><div class="step-content"><h4>Choose a Module</h4><p>Select <strong>Integration Wizard</strong> (code generation) or <strong>Diagnostic Tool</strong> (validate your implementation).</p></div></div>
         <div class="step"><div class="step-num">3</div><div class="step-content"><h4>Follow the guided flow</h4><p>Both modules provide step-by-step guidance. The Diagnostic Tool also includes a <strong>built-in interactive tutorial</strong> &mdash; click the route icon to start it.</p></div></div>
       </div>
@@ -1552,7 +1552,7 @@
         <span class="callout-icon">&#9888;&#65039;</span>
         <div class="callout-text">
           <strong>One tool instance at a time</strong>
-          Launching NielsenTool <strong>kills any previous running instance</strong> (it terminates whatever is using port 3000). If you have an active validation session with unsaved results, <strong>export your session first</strong> before opening the tool again. Otherwise, all captured logs and validation results from the previous session will be lost.
+          Launching NielsenSDKTool <strong>kills any previous running instance</strong> (it terminates whatever is using port 3000). If you have an active validation session with unsaved results, <strong>export your session first</strong> before opening the tool again. Otherwise, all captured logs and validation results from the previous session will be lost.
         </div>
       </div>
 
