@@ -194,7 +194,7 @@ Apple TV uses a 3-step connection process: **Discover → Pair → Connect**. Is
 
 ## 🌐 Browser (Chrome / Firefox / Safari)
 
-> **Desktop browsers only.** Mobile browser BSDK log capture is not supported — see [Known Limitations](../README.md#%EF%B8%8F-known-limitations) in the README.
+> **Desktop browsers only.** For mobile browser capture, see [Android Chrome (USB)](#-android-chrome-usb) and [iOS Safari (Wi-Fi)](#-ios-safari-wi-fi) below.
 
 ### Browser fails to launch
 
@@ -263,6 +263,195 @@ Kill the process using that port, then relaunch the tool.
 
 ---
 
+## 🔐 Login & Account
+
+### Invalid username
+
+- Usernames are **case-sensitive** — enter it exactly as provided by your Nielsen TAM (e.g., "JohnSmith" is different from "johnsmith").
+- If you've never logged in before, your TAM may not have registered your account yet. Contact them to confirm.
+
+### Session expired
+
+- Client sessions expire after **24 hours of inactivity**. Simply enter your username again to log back in.
+- Any interaction (click, keystroke, mouse movement) resets the inactivity timer.
+
+### Offline mode
+
+- If the tool cannot reach the server, it uses cached credentials from your last successful login. You'll see a yellow "Offline mode — using cached credentials" banner at the top.
+- Full functionality remains available in offline mode, except for **Share with Nielsen** (requires server connectivity).
+
 ---
 
-*For additional help, contact the Nielsen Ops/Certification team or your Nielsen Technical Account Manager (TAM).*
+## 🚫 Client ID Verification ("Unauthorized" Error)
+
+### "Unauthorized — this app belongs to a different client"
+
+This error means the `nol_clientid` detected in the Nielsen SDK config does not match any of the client IDs registered to your account. The capture stops immediately.
+
+**Common causes:**
+1. **Wrong URL or app** — you're testing a website or app that belongs to a different Nielsen client.
+2. **Client ID recently changed** — if your Nielsen configuration was recently updated, your TAM may need to update your registered client IDs.
+3. **Multiple App IDs in one app** — if your app uses multiple Nielsen App IDs, only one may be registered to your account.
+
+**How to resolve:**
+- Verify the URL or app uses one of YOUR registered Nielsen client IDs.
+- Contact your TAM to check or update the client IDs linked to your account.
+- Note: the error **persists until you change your device configuration** (click the gear icon). Re-running the same test won't clear it.
+
+---
+
+## 📤 Share with Nielsen
+
+### Upload fails
+
+- Requires an internet connection — the session is uploaded to Nielsen's servers.
+- If you see "Failed to share session", check your network connectivity and try again.
+- **Workaround:** Use the purple **Export** button to download the session as a `.json` file, then send it to your TAM via email.
+
+### "Share with Nielsen" button is disabled
+
+- The button is only enabled when there are captured logs AND at least one App ID is detected.
+- Run a test case first until logs appear, then try sharing again.
+
+---
+
+## 📺 Samsung Tizen TV
+
+### Cannot connect / "Connection timed out"
+
+1. **Developer Mode must be ON** — on the TV: Apps panel → enter `12345` → turn Developer Mode ON → enter your PC's IP → reboot the TV.
+2. **Same Wi-Fi network** — your computer and Samsung TV must be on the same local network.
+3. **App launched in debug mode** — the tool connects via Chrome DevTools Protocol (CDP). Your app must be running in debug mode from Tizen Studio, not launched normally from the TV's home screen.
+4. **Correct IP address** — verify the TV's IP at Settings → General → Network → Network Status.
+
+### Wrong debug port
+
+- The debug port is **dynamic** — it changes every time you launch the app in debug mode.
+- Always check the Tizen Studio console output for a URL like `http://192.168.x.x:XXXXX` — the number after the colon is the port.
+- If you enter the wrong port, the tool will fail to connect. Stop, re-check the port in Tizen Studio, and try again.
+
+### "No web app loaded — waiting..."
+
+- This appears when the tool connects to the TV's debug port but no app is running yet.
+- The tool will poll for up to 60 seconds. Launch your app on the TV within this window.
+- If it times out, click Continue again after ensuring the app is running in debug mode.
+
+---
+
+## 📺 LG webOS TV
+
+### Cannot connect
+
+1. **Developer Mode app installed and enabled** — install from LG Content Store, sign in, enable Dev Mode, enable **Key Server**.
+2. **ares-inspect must be running** — the debug connection only works while `ares-inspect` is active in your terminal. If you close it (Ctrl+C), the connection drops.
+3. **Correct port number** — copy the port from the `ares-inspect` output (e.g., `Application Debugging - http://localhost:56999/...` → port is `56999`).
+
+### Port changes every time
+
+- This is expected. The port number changes each time you run `ares-inspect`. Always copy the fresh port before entering it in the tool.
+
+### "Developer Mode" app keeps turning off
+
+- The LG Developer Mode app session expires every 50 hours. You need to reactivate it periodically by opening the app and re-enabling Dev Mode.
+
+---
+
+## 📺 LG webOS Simulator
+
+### No connection / tool hangs
+
+- The simulator **must** be launched with `--remote-debugging-port=9998`. Double-clicking the app directly will NOT enable debugging.
+- **macOS:** `open /Applications/webOS_TV*Simulator*.app --args --remote-debugging-port=9998`
+- **Windows:** Run the `.exe` with the flag: `.\webOS_TV_26_Simulator_1.5.0.exe --remote-debugging-port=9998`
+
+### App not detected
+
+- Launch your app in the simulator via **File → Launch App** AFTER clicking Continue in the tool. The tool must be listening first.
+
+---
+
+## 📺 Android TV
+
+### Cannot connect
+
+1. **Enable ADB Debugging** — Settings → Device Preferences → Developer Options → ADB Debugging ON.
+   - If Developer Options isn't visible: Settings → Device Preferences → About → click **Build** 7 times.
+2. **Find the IP** — Settings → Network & Internet → (your Wi-Fi) → note the IP address.
+3. **Same Wi-Fi** — your computer and Android TV must be on the same network.
+4. **Authorization prompt** — first-time connection shows a prompt on the TV. Select "Always allow from this computer" and click OK.
+
+### Connected but no logs
+
+- Ensure the app is running in the foreground on the TV.
+- Confirm `nol_devDebug` is set to `DEBUG` in the app's Nielsen SDK initialization.
+- Verify you selected the correct product type (DCR Video, DCR Static, or DTVR).
+
+---
+
+## 📱 Android Chrome (USB)
+
+### Chrome flag not enabled
+
+The tool requires the Chrome command line flag to inject the debug parameter:
+1. On the Android phone, open Chrome.
+2. Navigate to `chrome://flags`.
+3. Search for **"Enable command line on non-rooted devices"**.
+4. Set to **Enabled** and tap **Relaunch**.
+
+Without this flag, the tool cannot inject the Nielsen debug parameter into Chrome.
+
+### Device not detected
+
+- Same as [Android Phone (USB)](#-android-phone-usb) — enable USB debugging and authorize the computer.
+- Make sure no other ADB client (like Android Studio) is actively connected.
+- Try a different USB cable — some cables are charge-only.
+
+### Chrome opens but no Nielsen logs
+
+- The website must have the Nielsen Browser SDK (BSDK) integrated.
+- Verify the URL is correct and the page loads successfully on the device.
+- Check that the page isn't blocked by geo-restrictions (use device VPN if needed).
+
+---
+
+## 📱 iOS Safari (Wi-Fi)
+
+### No logs appearing
+
+**Check in order:**
+1. **CA certificate installed AND trusted** — you must do BOTH: install the profile (Settings → General → VPN & Device Management) AND enable trust (Settings → General → About → Certificate Trust Settings → toggle ON for "NielsenToolCA").
+2. **Wi-Fi proxy configured** — Settings → Wi-Fi → (i) → Configure Proxy → Manual. Server and Port must match what the setup wizard shows.
+3. **Same Wi-Fi network** — iPhone and Mac must be on the same network.
+4. **iPhone VPN is OFF** — when iPhone VPN is on, traffic bypasses the Wi-Fi proxy entirely. No logs will be captured.
+5. **URL opened in Safari** — the URL must be opened in Safari (not Chrome or another browser) on the iPhone.
+
+### "Stale cache" warning
+
+- If you previously visited the URL, Safari may serve cached content that doesn't go through the proxy.
+- Fix: on iPhone, go to **Settings → Safari → Clear History and Website Data → Clear**, then revisit the URL.
+
+### iPhone has no internet after testing
+
+- You left the Wi-Fi proxy ON after closing the tool. 
+- Fix: **Settings → Wi-Fi → tap (i) on your network → Configure Proxy → Off**.
+
+### Tool shows "Waiting for logs" indefinitely
+
+- Use the red **Reset Setup** button at the top of the validation page. It stops the proxy, regenerates the CA certificate, and clears all state.
+- After reset, you'll need to:
+  1. Delete the old "NielsenToolCA" profile on iPhone (Settings → General → VPN & Device Management → NielsenToolCA → Remove Profile).
+  2. Turn off the Wi-Fi proxy (Settings → Wi-Fi → (i) → Configure Proxy → Off).
+  3. Clear Safari cache (Settings → Safari → Clear History and Website Data).
+  4. Then follow the setup wizard again from the beginning.
+
+### Geo-locked sites
+
+- Turn ON VPN on your **Mac** (not iPhone) to the target country. Keep it connected the entire session.
+- Keep **iPhone VPN OFF** — it bypasses the proxy.
+- If the site blocks login even with Mac VPN: turn iPhone VPN ON only to log in, then turn it OFF before testing.
+
+---
+
+---
+
+*For additional help, contact your Nielsen Technical Account Manager (TAM).*

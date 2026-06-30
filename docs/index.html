@@ -121,10 +121,15 @@
     color: #94a3b8; font-size: 12px; margin-top: 4px;
   }
   .nav-group { padding: 12px 0; }
+  .nav-group:last-of-type { padding-bottom: 16px; }
   .nav-group-label {
     padding: 4px 20px; font-size: 10px; font-weight: 700;
     color: #64748b; text-transform: uppercase; letter-spacing: 1px;
+    margin-top: 4px;
+    border-top: 1px solid rgba(255,255,255,0.04);
+    padding-top: 12px;
   }
+  .nav-group:first-of-type .nav-group-label { border-top: none; padding-top: 4px; }
   .nav-link {
     display: flex; align-items: center; gap: 10px;
     padding: 8px 20px; font-size: 13px; color: #94a3b8;
@@ -151,22 +156,31 @@
   /* Sub-nav links (indented, no number) */
   .nav-sub {
     padding: 5px 20px 5px 52px; font-size: 12px; color: #64748b;
-    text-decoration: none; display: block; transition: all 0.15s;
+    text-decoration: none; display: flex; align-items: center; gap: 6px; transition: all 0.15s;
     border-left: 3px solid transparent;
   }
+  .nav-sub::before {
+    content: ''; display: inline-block; width: 5px; height: 5px;
+    border-radius: 50%; background: #475569; flex-shrink: 0;
+  }
   .nav-sub:hover { color: #94a3b8; background: rgba(255,255,255,0.03); }
+  .nav-sub:hover::before { background: #94a3b8; }
   .nav-sub.active { color: #e2e8f0; border-left-color: rgba(110,55,250,0.4); }
+  .nav-sub.active::before { background: var(--nielsen-purple); }
 
   /* Theme toggle in sidebar */
   .theme-toggle {
-    position: absolute; bottom: 16px; left: 20px; right: 20px;
+    position: sticky; bottom: 0; left: 0; right: 0;
     display: flex; align-items: center; gap: 8px;
-    padding: 8px 12px; border-radius: 8px;
-    background: rgba(255,255,255,0.04);
-    cursor: pointer; border: none; color: #94a3b8;
+    padding: 10px 20px; margin-top: 12px;
+    background: var(--bg-sidebar);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    cursor: pointer; border-left: none; border-right: none; border-bottom: none;
+    color: #94a3b8;
     font-size: 12px; font-family: inherit;
+    width: 100%;
   }
-  .theme-toggle:hover { background: rgba(255,255,255,0.08); color: #e2e8f0; }
+  .theme-toggle:hover { background: rgba(255,255,255,0.06); color: #e2e8f0; }
 
   /* ── Mobile hamburger ── */
   .mobile-toggle {
@@ -688,30 +702,32 @@
     <div class="nav-group-label">Getting Started</div>
     <a class="nav-link active" href="#overview"><span class="nav-num">1</span> Overview</a>
     <a class="nav-link" href="#install"><span class="nav-num">2</span> Installation</a>
-    <a class="nav-link" href="#quick-start"><span class="nav-num">3</span> Quick Start</a>
+    <a class="nav-link" href="#login"><span class="nav-num">3</span> Login</a>
   </div>
   <div class="nav-group">
     <div class="nav-group-label">Modules</div>
     <a class="nav-link" href="#wizard"><span class="nav-num">4</span> Integration Wizard</a>
     <a class="nav-link" href="#validation-ui"><span class="nav-num">5</span> Validation Interface</a>
-    <a class="nav-sub" href="#panel-left">Left Panel — Checklist</a>
-    <a class="nav-sub" href="#panel-center">Center Panel — Log Stream</a>
-    <a class="nav-sub" href="#panel-right">Right Panel — Filters</a>
-    <a class="nav-sub" href="#config-modal">Configuration Modal</a>
   </div>
   <div class="nav-group">
     <div class="nav-group-label">Using the Tool</div>
-    <a class="nav-link" href="#workflow"><span class="nav-num">6</span> Running Validation</a>
-    <a class="nav-link" href="#results"><span class="nav-num">7</span> Interpreting Results</a>
-    <a class="nav-link" href="#failure-types"><span class="nav-num">8</span> Failure Types</a>
-    <a class="nav-link" href="#exports"><span class="nav-num">9</span> Session Export &amp; Import</a>
+    <a class="nav-link" href="#platforms"><span class="nav-num">6</span> Select Device &amp; Setup</a>
+    <a class="nav-sub" href="#platform-mobile">Mobile</a>
+    <a class="nav-sub" href="#platform-browser">Browser</a>
+    <a class="nav-sub" href="#platform-tv">TV / Streaming</a>
+    <a class="nav-link" href="#workflow"><span class="nav-num">7</span> Running Validation</a>
+    <a class="nav-link" href="#results"><span class="nav-num">8</span> Interpreting Results</a>
+    <a class="nav-link" href="#failure-types"><span class="nav-num">9</span> Failure Types</a>
+    <a class="nav-link" href="#exports"><span class="nav-num">10</span> Sharing Results</a>
+    <a class="nav-sub" href="#share-with-nielsen">Share with Nielsen</a>
+    <a class="nav-sub" href="#shared-sessions">Shared Sessions</a>
+    <a class="nav-link" href="#after-testing"><span class="nav-num">11</span> After Testing</a>
   </div>
   <div class="nav-group">
     <div class="nav-group-label">Reference</div>
-    <a class="nav-link" href="#products"><span class="nav-num">10</span> Product Types</a>
-    <a class="nav-link" href="#platforms"><span class="nav-num">11</span> Supported Platforms</a>
-    <a class="nav-link" href="#tips"><span class="nav-num">12</span> Tips &amp; Best Practices</a>
-    <a class="nav-link" href="#links"><span class="nav-num">13</span> Quick Reference Links</a>
+    <a class="nav-link" href="#client-id-verification"><span class="nav-num">12</span> Client ID Verification</a>
+    <a class="nav-link" href="#products"><span class="nav-num">13</span> Product Types</a>
+    <a class="nav-link" href="#tips"><span class="nav-num">14</span> Tips &amp; Best Practices</a>
   </div>
   <button class="theme-toggle" onclick="toggleTheme()" title="Switch theme">
     <span id="theme-icon">&#9790;</span>
@@ -731,16 +747,16 @@
       <p class="lead">The <strong>Nielsen Digital SDK Integration Assistance &amp; Diagnostic Tool</strong> (short: <strong>SDK Diagnostic Tool</strong>) helps developers integrate the Nielsen SDK correctly and validate their implementation before certification.</p>
 
       <div class="card-grid">
-        <div class="card" style="border-top: 3px solid #10b981">
+        <a href="#wizard" class="card" style="border-top: 3px solid #10b981; text-decoration:none; color:inherit; cursor:pointer">
           <div class="card-icon">&#128268;</div>
           <h4>Integration Wizard</h4>
           <p>Step-by-step SDK integration guidance. Access documentation, code examples, and implementation assistance for DCR Static, DCR Video &amp; DTVR integrations.</p>
-        </div>
-        <div class="card" style="border-top: 3px solid #3b82f6">
+        </a>
+        <a href="#validation-ui" class="card" style="border-top: 3px solid #3b82f6; text-decoration:none; color:inherit; cursor:pointer">
           <div class="card-icon">&#128269;</div>
           <h4>Diagnostic Tool</h4>
           <p>Diagnose and validate DCR Static, DCR Video &amp; DTVR integrations. Capture logs from mobile apps and browsers, run validation tests, and diagnose SDK implementation.</p>
-        </div>
+        </a>
       </div>
       <div class="screenshot-wrap"><img src="guide_images/HomeScreen.png" alt="SDK Diagnostic Tool — Home Screen showing Integration Wizard and Diagnostic Tool modules with market dropdown" style="width:100%;display:block;border-radius:8px;"><div class="screenshot-caption">Tool Home Screen — Choose between Integration Wizard and Diagnostic Tool.</div></div>
 
@@ -753,13 +769,12 @@
         </div>
       </div>
 
-      <h3>Which Variant Do I Need?</h3>
-      <div class="table-wrap">
-        <table>
-          <tr><th>Variant</th><th>Includes</th><th>Market Dropdown Options</th><th>Use When</th></tr>
-          <tr><td><strong>Global</strong></td><td>DCR Video, DCR Static, DTVR</td><td>Global, M&eacute;diam&eacute;trie</td><td>Your integration targets the Global market and/or includes DTVR.</td></tr>
-          <tr><td><strong>Cookieless (AGF)</strong></td><td>DCR Video, DCR Static</td><td>AGF, M&eacute;diam&eacute;trie</td><td>Your integration targets a cookieless deployment (e.g., the German or French market).</td></tr>
-        </table>
+      <div class="callout info">
+        <span class="callout-icon">&#128161;</span>
+        <div class="callout-text">
+          <strong>Products are assigned by your TAM</strong>
+          During onboarding, your TAM configures which products (DCR Video, DCR Static, DTVR) you'll validate. The tool shows only the products relevant to your integration — no extra setup needed on your end.
+        </div>
       </div>
 
       <h3>Key Resources</h3>
@@ -786,10 +801,10 @@
       </a>
     </div>
 
-    <!-- 2. INSTALLATION -->
+    <!-- 3. INSTALLATION -->
     <div class="section" id="install">
       <h2><span class="section-number">2</span> Installation</h2>
-      <p class="lead">Download the correct variant (Global or Cookieless) for your platform from the <a href="https://github.com/NielsenDigitalSDK/sdk-diagnostic-tool/releases/latest" target="_blank">GitHub Releases</a> page.</p>
+      <p class="lead">Download the tool for your platform from the <a href="https://github.com/NielsenDigitalSDK/sdk-diagnostic-tool#downloads" target="_blank">Downloads</a> section on GitHub.</p>
 
       <div class="platform-tabs" data-group="install">
         <button class="tab-btn active" onclick="switchTab('install','mac')"><span class="tab-icon">&#127822;</span> macOS</button>
@@ -810,7 +825,7 @@
           </div>
           <div class="acc-body">
             <div class="steps">
-              <div class="step"><div class="step-num">1</div><div class="step-content"><h4>Download</h4><p>Download <code>NielsenSDKTool.dmg</code> (Global) or <code>NielsenSDKTool-Cookieless.dmg</code> (Cookieless) from GitHub Releases.</p></div></div>
+              <div class="step"><div class="step-num">1</div><div class="step-content"><h4>Download</h4><p>Download <code>NielsenSDKTool.dmg</code> from GitHub Releases.</p></div></div>
               <div class="step"><div class="step-num">2</div><div class="step-content"><h4>Open &amp; Install</h4><p>Open the DMG file. Drag <strong>NielsenSDKTool.app</strong> to the <strong>Applications</strong> folder shortcut shown in the window.</p></div></div>
               <div class="step"><div class="step-num">3</div><div class="step-content"><h4>First Launch</h4><p>Double-click <strong>NielsenSDKTool.app</strong> in Applications. macOS may ask <em>"Are you sure you want to open it?"</em> &mdash; click <strong>Open</strong>. You may also see additional permission prompts (Accessibility, Terminal access, etc.) &mdash; click <strong>Allow</strong> for each. These are required for device log capture.</p></div></div>
               <div class="step"><div class="step-num">4</div><div class="step-content"><h4>Grant Permissions</h4><p>The app may ask to control <strong>Terminal.app</strong> &mdash; click <strong>Allow</strong>. For certain devices like <strong>Apple TV</strong>, the tool may prompt for your macOS password (sudo access) to establish the wireless connection.</p></div></div>
@@ -825,7 +840,7 @@
           </div>
           <div class="acc-body">
             <div class="steps">
-              <div class="step"><div class="step-num">1</div><div class="step-content"><h4>Download</h4><p>Download <code>NielsenSDKTool-win.zip</code> (Global) or <code>NielsenSDKTool-Cookieless-win.zip</code> (Cookieless) from GitHub Releases.</p></div></div>
+              <div class="step"><div class="step-num">1</div><div class="step-content"><h4>Download</h4><p>Download <code>NielsenSDKTool-win.zip</code> from GitHub Releases.</p></div></div>
               <div class="step"><div class="step-num">2</div><div class="step-content"><h4>Extract</h4><p>Extract the ZIP to any folder.</p></div></div>
               <div class="step"><div class="step-num">3</div><div class="step-content"><h4>Launch</h4><p>Double-click <code>UpdateAndLaunch.bat</code> to check for updates and start the tool. Windows may show a security prompt &mdash; click &ldquo;Run&rdquo; to proceed. Alternatively, run <code>NielsenSDKTool.exe</code> directly for a clean launch without auto-update (signed by The Nielsen Company).</p></div></div>
             </div>
@@ -842,13 +857,49 @@
       <p>The tool <strong>automatically checks for updates</strong> every time you launch it. If a newer version is available, it downloads and installs before starting &mdash; no action needed on your part. If auto-update fails (e.g., behind a corporate proxy), download the latest version manually from <a href="https://github.com/NielsenDigitalSDK/sdk-diagnostic-tool/releases/latest" target="_blank">GitHub Releases</a>.</p>
     </div>
 
-    <!-- 3. QUICK START -->
-    <div class="section" id="quick-start">
-      <h2><span class="section-number">3</span> Quick Start</h2>
+    <!-- 3. LOGIN -->
+    <div class="section" id="login">
+      <h2><span class="section-number">3</span> Login</h2>
+      <p class="lead">The tool requires authentication. Your Nielsen TAM provides your username during onboarding — no password required for client accounts.</p>
+
+      <h3>How to Get Your Credentials</h3>
+      <p>Your Nielsen Technical Account Manager (TAM) onboards you via this tool and shares a <strong>username</strong> with you. This is the only credential you need. If you don't have one yet, contact your TAM.</p>
+
+      <div class="callout critical">
+        <span class="callout-icon">&#9888;&#65039;</span>
+        <div class="callout-text">
+          <strong>Usernames are case-sensitive</strong>
+          Enter your username exactly as provided by your Nielsen representative. "JohnSmith" and "johnsmith" are treated as different accounts.
+        </div>
+      </div>
+
+      <h3>Login Flow</h3>
       <div class="steps">
-        <div class="step"><div class="step-num">1</div><div class="step-content"><h4>Launch the tool</h4><p>Open NielsenSDKTool (macOS) or run <code>NielsenSDKTool.exe</code> (Windows). The UI opens at <code>localhost:3000</code>.</p></div></div>
-        <div class="step"><div class="step-num">2</div><div class="step-content"><h4>Choose a Module</h4><p>Select <strong>Integration Wizard</strong> (code generation) or <strong>Diagnostic Tool</strong> (validate your implementation).</p></div></div>
-        <div class="step"><div class="step-num">3</div><div class="step-content"><h4>Follow the guided flow</h4><p>Both modules provide step-by-step guidance. The Diagnostic Tool also includes a <strong>built-in interactive tutorial</strong> &mdash; click the route icon to start it.</p></div></div>
+        <div class="step"><div class="step-num">1</div><div class="step-content"><h4>Launch the tool</h4><p>Open NielsenSDKTool (macOS) or run <code>NielsenSDKTool.exe</code> (Windows). The login screen appears.</p></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-content"><h4>Enter your username</h4><p>Type the username provided by your TAM. You can also enter a <strong>display name</strong> &mdash; this is optional but helpful when multiple team members share the same client account. Your display name appears in shared sessions so your TAM can see who ran which test.</p></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-content"><h4>Click "Sign in"</h4><p>You're logged in immediately &mdash; no OTP or password needed for client accounts.</p></div></div>
+      </div>
+
+      <!-- VIDEO NEEDED: login-client.mp4 — Full login flow: launch > enter username > sign in > home screen -->
+      <div class="video-wrap"><video controls preload="metadata"><source src="guide_videos/login-client.mp4" type="video/mp4"></video><div class="video-caption">Video &mdash; Logging into the tool with your username</div></div>
+
+      <h3>Session &amp; Timeout</h3>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Behavior</th><th>Details</th></tr>
+          <tr><td><strong>Session duration</strong></td><td>Stays active for 24 hours of inactivity. Any click, keystroke, or interaction resets the timer.</td></tr>
+          <tr><td><strong>Offline mode</strong></td><td>If the server is unreachable, the tool uses cached credentials &mdash; you can keep working.</td></tr>
+          <tr><td><strong>Sign out</strong></td><td>Click your name (top-right corner of the home screen) &rarr; <strong>Sign out</strong>.</td></tr>
+          <tr><td><strong>Expired session</strong></td><td>If your session expires, you'll see "Session expired &mdash; please log in again". Just enter your username again.</td></tr>
+        </table>
+      </div>
+
+      <div class="callout tip">
+        <span class="callout-icon">&#128161;</span>
+        <div class="callout-text">
+          <strong>Trouble logging in?</strong>
+          If you see "Invalid username", double-check the capitalization. If the problem persists, contact your Nielsen TAM &mdash; your account may not be set up yet.
+        </div>
       </div>
     </div>
 
@@ -960,160 +1011,415 @@
       </div>
     </div>
 
+
     <!-- 5. VALIDATION INTERFACE -->
     <div class="section" id="validation-ui">
       <h2><span class="section-number">5</span> Validation Interface</h2>
-      <p class="lead">The Diagnostic Tool's validation screen is divided into three main areas. Here's a breakdown of each:</p>
+      <p class="lead">The Diagnostic Tool validates your SDK integration in real time. Watch the video below to see how it works, then explore the panel details.</p>
 
-      <h3>Header Bar</h3>
-      <p>The top header bar displays the tool name, <span class="badge badge-blue">Cookieless</span> badge (shown for AGF/M&eacute;diam&eacute;trie markets), and action icons. From left to right: the <strong>hamburger menu</strong> (&#9776;) toggles the validation panel, then on the right side: <strong>Home</strong> (go back to module selection), <strong>Tutorial</strong> (route icon &mdash; restart the guided walkthrough), and <strong>Configuration</strong> (gear icon &mdash; open device/product settings).</p>
-      <div class="screenshot-wrap"><img src="guide_images/HeaderBar.png" alt="Header Bar showing tool name, Cookieless badge, and action icons" style="width:100%;display:block;border-radius:8px;"><div class="screenshot-caption">Header Bar — Tool name, variant badge, and navigation icons</div></div>
-      <p style="font-size:13px;color:var(--text-muted)">The header shows the tool name, variant badge (shown if Cookieless variant), and action icons: Hamburger menu (toggle panel), Home, Tutorial (route icon), Configuration (gear).</p>
-
-
-      <h3 id="panel-left" style="scroll-margin-top:32px">&#128203; Left Panel &mdash; Validation Checklist</h3>
-      <p>This is your test control center. It shows:</p>
-      <ul style="margin: 8px 0 16px 20px; font-size:14px; color:var(--text-secondary)">
-        <li><strong>Product buttons</strong> at the top (e.g., "DCR Static", "DCR Video") &mdash; click to expand/collapse that product's test cases</li>
-        <li><strong>Numbered test cases</strong> (e.g., "1. Play a VOD stream till end of video without pausing")</li>
-        <li>Each test case expands into <strong>grouped sub-rules</strong> organized by category</li>
-      </ul>
-
-      <p><strong>DCR Video checklist</strong> (example showing Test Case 1 expanded, others locked):</p>
-      <div style="background:#0f172a;border-radius:var(--radius-sm);padding:16px;margin:12px 0;font-family:'SF Mono','Fira Code',monospace;font-size:13px;color:#cbd5e1;line-height:1.8">
-        <div style="font-weight:600;color:#f1f5f9;margin-bottom:4px">1. Verify SDK initialization and configuration <span style="color:#64748b">&#9660;</span> &nbsp;<span style="color:#10b981">&#9654;</span></div>
-        <div style="color:#fbbf24;font-weight:700;font-size:11px;letter-spacing:1px;padding-left:12px">CHECKING SDK HEALTH (CONFIGURATION &amp; LOAD)</div>
-        <div style="padding-left:12px">&nbsp;&nbsp;<span style="color:#10b981">&#10003;</span> SDK Core Loaded <span style="color:#64748b">&#8250;</span></div>
-        <div style="padding-left:12px">&nbsp;&nbsp;<span style="color:#10b981">&#10003;</span> Config Response Received <span style="color:#64748b">&#8250;</span></div>
-        <div style="padding-left:12px">&nbsp;&nbsp;<span style="color:#ef4444">&#10007;</span> Debug Flag Enabled <span style="color:#64748b">&#8250;</span></div>
-        <div style="border-top:1px solid #1e293b;margin:8px 0"></div>
-        <div style="font-weight:600;color:#f1f5f9">2. Play a VOD stream till end of video without pausing <span style="color:#64748b">&#8250;</span> &nbsp;&#128274;</div>
-        <div style="color:#fbbf24;font-weight:700;font-size:11px;letter-spacing:1px;padding-left:12px;margin-top:4px">VALIDATING METADATA FIELDS</div>
-        <div style="padding-left:12px">&nbsp;&nbsp;<span style="color:#64748b">&#9679;</span> Content Metadata (validating mandatory params)</div>
-        <div style="padding-left:12px">&nbsp;&nbsp;<span style="color:#64748b">&#9679;</span> Preroll Metadata (validating mandatory params)</div>
-        <div style="padding-left:12px">&nbsp;&nbsp;<span style="color:#64748b">&#9679;</span> Midroll Metadata (validating mandatory params)</div>
-        <div style="padding-left:12px">&nbsp;&nbsp;<span style="color:#64748b">&#9679;</span> Postroll Metadata (validating mandatory params)</div>
-        <div style="padding-left:12px;color:#fbbf24;font-weight:700;font-size:11px;letter-spacing:1px;margin-top:8px">VALIDATING PLAYHEADS</div>
-        <div style="padding-left:12px">&nbsp;&nbsp;<span style="color:#64748b">&#9679;</span> Playhead Validation (non-negative)</div>
-        <div style="padding-left:12px;color:#fbbf24;font-weight:700;font-size:11px;letter-spacing:1px;margin-top:8px">VALIDATING SDK API/EVENT SEQUENCE</div>
-        <div style="padding-left:12px">&nbsp;&nbsp;<span style="color:#64748b">&#9679;</span> Click Validate button once video is over &nbsp;<span style="background:#6E37FA;color:white;padding:2px 8px;border-radius:4px;font-size:10px">&#9654; Validate</span></div>
-        <div style="border-top:1px solid #1e293b;margin:8px 0"></div>
-        <div style="font-weight:600;color:#64748b">3. Forward the video playback for VOD by more than 30 seconds <span style="color:#64748b">&#8250;</span> &nbsp;&#128274;</div>
-        <div style="font-weight:600;color:#64748b">4. Rewind the video playback for VOD <span style="color:#64748b">&#8250;</span> &nbsp;&#128274;</div>
-        <div style="font-weight:600;color:#64748b">5. Pause and Resume Validation (&gt;5s) <span style="color:#64748b">&#8250;</span> &nbsp;&#128274;</div>
-        <div style="font-weight:600;color:#64748b">6. Move the app to Background and then relaunch (&gt;5s) <span style="color:#64748b">&#8250;</span> &nbsp;&#128274;</div>
+      <div class="platform-tabs" data-group="overview-vid">
+        <button class="tab-btn active" onclick="switchTab('overview-vid','mac')"><span class="tab-icon">&#127822;</span> macOS</button>
+        <button class="tab-btn" onclick="switchTab('overview-vid','win')"><span class="tab-icon">&#128187;</span> Windows</button>
       </div>
-      <p style="font-size:13px;color:var(--text-muted)">&#128274; = Locked (run Test Case 1 first to unlock). &#128275; = Unlocked once SDK health check completes.</p>
-      <p style="font-size:13px;color:var(--text-muted)">Each rule has a <strong>&#8250; expand arrow</strong> &mdash; click it to see the rule's FAQ with detailed guidance on what the rule checks and how to fix failures.</p>
-
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0">
-        <div><div class="screenshot-wrap"><img src="guide_images/ValidationPanelAll.png" alt="Validation Checklist showing all DCR Video test cases collapsed" style="width:100%;display:block;border-radius:8px;max-width:450px;margin:0 auto;"><div class="screenshot-caption">Checklist — All test cases (collapsed view)</div></div></div>
-        <div><div class="screenshot-wrap"><img src="guide_images/ValidationPanel.png" alt="Validation Checklist with Test Case 1 expanded showing all rule categories" style="width:100%;display:block;border-radius:8px;max-width:450px;margin:0 auto;"><div class="screenshot-caption">Checklist — Test Case 1 expanded with rule groups</div></div></div>
+      <div class="tab-content active" data-group="overview-vid" data-tab="mac">
+        <div class="device-tabs" data-group="overview-mac">
+          <button class="tab-btn active" onclick="switchDeviceTab('overview-mac','ios')"><span class="tab-icon">&#128241;</span> iOS</button>
+          <button class="tab-btn" onclick="switchDeviceTab('overview-mac','browser')"><span class="tab-icon">&#127760;</span> Browser</button>
+        </div>
+        <div class="device-tab-content active" data-group="overview-mac" data-tab="ios">
+          <div class="video-wrap"><video controls preload="metadata"><source src="guide_videos/mac/ios-play-and-validate.mp4" type="video/mp4"></video><div class="video-caption">Video &mdash; macOS + iOS: Click Play, launch app on iPhone, watch rules turn green</div></div>
+        </div>
+        <div class="device-tab-content" data-group="overview-mac" data-tab="browser">
+          <div class="video-wrap"><video controls preload="metadata"><source src="guide_videos/mac/browser-play-and-validate-mac.mp4" type="video/mp4"></video><div class="video-caption">Video &mdash; macOS + Browser: Click Play, URL opens via Playwright, logs stream in</div></div>
+        </div>
       </div>
-
-      <h3 id="panel-center" style="scroll-margin-top:32px">&#128202; Center Panel &mdash; Live Log Stream</h3>
-      <p>Every SDK event appears here in real time as it's captured from your device. Each log entry shows:</p>
-      <ul style="margin: 8px 0 16px 20px; font-size:14px; color:var(--text-secondary)">
-        <li><strong>Timestamp</strong> (e.g., 3:04:31 PM)</li>
-        <li><strong>Color-coded badges</strong> with three color states:
-          <span class="ui-mock-badge" style="background:#2563eb;color:white;font-size:10px">REQUEST PING</span> <strong style="color:var(--blue)">Blue</strong> &mdash; ping/request events,
-          <span class="ui-mock-badge" style="background:#4b5563;color:white;font-size:10px">SDK INIT</span>
-          <span class="ui-mock-badge" style="background:#4b5563;color:white;font-size:10px">CONFIG RECEIVED</span>
-          <span class="ui-mock-badge" style="background:#4b5563;color:white;font-size:10px">PLAY</span>
-          <span class="ui-mock-badge" style="background:#4b5563;color:white;font-size:10px">METADATA</span>
-          <span class="ui-mock-badge" style="background:#4b5563;color:white;font-size:10px">PLAYHEAD</span> <strong style="color:var(--text-muted)">Grey</strong> &mdash; normal SDK events,
-          <span class="ui-mock-badge" style="background:#ef4444;color:white;font-size:10px">ERROR</span> <strong style="color:var(--red)">Red</strong> &mdash; only when validation fails for that log entry
-        </li>
-        <li><strong>Event description</strong> (e.g., "EMM/UAID Request Ping", "Event playheadPosition (5)")</li>
-      </ul>
-
-      <div class="callout info">
-        <span class="callout-icon">&#128270;</span>
-        <div class="callout-text">
-          <strong>Click any log entry to inspect it.</strong>
-          The right side opens a detail pane showing <strong>PING INFO</strong> and <strong>COMMENTS</strong> tabs. The Ping Info tab shows Request Summary, Response Summary, Parameter Table (searchable), and the full Request URL &mdash; useful for debugging exactly what the SDK sent.
+      <div class="tab-content" data-group="overview-vid" data-tab="win">
+        <div class="device-tabs" data-group="overview-win">
+          <button class="tab-btn active" onclick="switchDeviceTab('overview-win','android')"><span class="tab-icon">&#129302;</span> Android</button>
+        </div>
+        <div class="device-tab-content active" data-group="overview-win" data-tab="android">
+          <div class="video-wrap"><video controls preload="metadata"><source src="guide_videos/win/android-play-and-validate-win.mp4" type="video/mp4"></video><div class="video-caption">Video &mdash; Windows + Android: Click Play, launch app on Android, watch rules turn green</div></div>
         </div>
       </div>
 
-      <h4>Real-time Error Highlighting</h4>
-      <p>The log stream actively highlights problems:</p>
-      <ul style="margin: 8px 0 16px 20px; font-size:14px; color:var(--text-secondary)">
-        <li><strong style="color:var(--red)">Red background rows</strong> &mdash; Validation errors detected (e.g., metadata fields don't match CMS mapping, debug flag missing). A red banner shows "VALIDATION FAILED (N ISSUES)" with a description of what's wrong.</li>
-        <li><strong style="color:var(--amber)">Yellow background rows</strong> &mdash; Warnings that may need attention but aren't blocking failures.</li>
-        <li><strong>Normal rows</strong> &mdash; Events that passed validation or don't have validation rules.</li>
-      </ul>
-      <p>The test case label bar above the log stream shows which test is active (e.g., "Test 1: Play a VOD stream till end of video without pausing") and includes a <strong>"Jump to latest"</strong> button to scroll to the most recent log.</p>
+      <h3>Three-Panel Layout</h3>
+      <div class="screenshot-wrap"><img src="guide_images/mac/FullInterface-mac.png" alt="Full Validation Interface showing all three panels" style="width:100%;display:block;border-radius:8px;"><div class="screenshot-caption">Full Interface &mdash; Left: validation checklist | Center: live log stream | Right: session &amp; filters</div></div>
 
-      <div class="screenshot-wrap"><img src="guide_images/LogSection.png" alt="Live Log Stream showing SDK events with color-coded badges" style="width:100%;display:block;border-radius:8px;"><div class="screenshot-caption">Live Log Stream — SDK events with timestamps, badges, and Jump to latest button</div></div>
-
-      <h3 id="panel-right" style="scroll-margin-top:32px">&#128196; Right Panel &mdash; Session &amp; Filters</h3>
-
-      <h4>Session Controls</h4>
-      <ul style="margin: 8px 0 16px 20px; font-size:14px; color:var(--text-secondary)">
-        <li><strong style="color:var(--nielsen-purple)">Export</strong> (purple button) &mdash; Downloads the current session as a <code>.json</code> file with all validation results, captured logs, and a SHA-256 integrity hash. Enabled once logs exist and an App ID is detected.</li>
-        <li><strong>Import</strong> &mdash; Load a previously exported <code>.json</code> session. Click the button or <strong>drag-and-drop</strong> the file directly onto "or drop file here" area. Imported sessions are verified for integrity.</li>
-      </ul>
-
-      <h4>Filters</h4>
-      <p>Below the session controls, a collapsible <strong>FILTERS</strong> section lets you narrow down the log stream. An active filter count badge appears when filters are applied. Available filters:</p>
-      <div class="table-wrap">
-        <table>
-          <tr><th>Filter</th><th>Purpose</th></tr>
-          <tr><td><strong>App ID</strong></td><td>Filter by specific Nielsen App ID (useful if multiple SDK instances detected)</td></tr>
-          <tr><td><strong>Product</strong></td><td>Filter by product type (DCR Video, DCR Static, DTVR)</td></tr>
-          <tr><td><strong>Ping Type</strong></td><td>Filter by ping type (e.g., VIEW, TIMER, SESSION, EMM/UAID)</td></tr>
-          <tr><td><strong>Session</strong></td><td>Filter by SDK session ID (useful for multi-session validation)</td></tr>
-        </table>
+      <div class="feature-grid" style="margin-top:20px">
+        <div class="feature-card" style="text-align:left;padding:20px">
+          <div class="fc-icon">&#128203;</div>
+          <h5 id="panel-left" style="scroll-margin-top:32px">Left &mdash; Validation Checklist</h5>
+          <p>Your test control center. Shows product tabs, numbered test cases, and pass/fail rules. Click <strong>Play</strong> to start a test. Rules turn green as events pass.</p>
+        </div>
+        <div class="feature-card" style="text-align:left;padding:20px">
+          <div class="fc-icon">&#128202;</div>
+          <h5 id="panel-center" style="scroll-margin-top:32px">Center &mdash; Live Log Stream</h5>
+          <p>Every SDK event in real time. Color-coded badges show types. <strong style="color:var(--red)">Red</strong> = failures. <strong style="color:var(--amber)">Yellow</strong> = warnings. Click any row to inspect full ping details.</p>
+        </div>
+        <div class="feature-card" style="text-align:left;padding:20px">
+          <div class="fc-icon">&#128196;</div>
+          <h5 id="panel-right" style="scroll-margin-top:32px">Right &mdash; Session &amp; Filters</h5>
+          <p><strong style="color:#10b981">Share</strong> sends results to your TAM. <strong style="color:var(--nielsen-purple)">Export</strong> saves locally. <strong>Import</strong> loads a session. Filters narrow logs by App ID, product, or type.</p>
+        </div>
       </div>
-      <p style="font-size:13px;color:var(--text-muted)">Use "Clear all" to remove all active filters at once. Each filter dropdown shows the count of available options.</p>
 
-      <div class="screenshot-wrap"><img src="guide_images/RightPanel.png" alt="Right Panel showing Session controls and Filters" style="width:100%;display:block;border-radius:8px;max-width:380px;margin:0 auto;"><div class="screenshot-caption">Session & Filters Panel — Export/Import and log filters</div></div>
+      <div class="callout info">
+        <span class="callout-icon">&#128161;</span>
+        <div class="callout-text">
+          <strong>Built-in Interactive Tutorial</strong>
+          On first launch, the tool walks you through the interface step by step. To restart it anytime, click the <strong>route icon</strong> in the header bar.
+        </div>
+      </div>
 
-      <h3 id="config-modal" style="scroll-margin-top:32px">Configuration Modal</h3>
-      <p>Click the <strong>gear icon</strong> (&#9881;) in the header to open Configuration. It shows:</p>
+      <div class="accordion" style="margin-top:24px">
+        <div class="acc-item">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <h4>How the Validation Checklist works</h4>
+            <span class="acc-arrow">&#9660;</span>
+          </div>
+          <div class="acc-body">
+            <ul>
+              <li><strong>Test Case 1 must run first</strong> &mdash; checks SDK health (loaded, configured, debug flag). All others are locked until this completes.</li>
+              <li><strong>&#128274; Locked / &#128275; Unlocked</strong> &mdash; remaining tests unlock once Test Case 1 passes or fails.</li>
+              <li><strong>Rules</strong> show &#10003; green (pass), &#10007; red (fail), or &#9679; gray (pending). Grouped by category (metadata, playhead, sequence).</li>
+              <li><strong>Click the &#8250; arrow</strong> next to any rule for its FAQ &mdash; what it checks and how to fix failures.</li>
+              <li><strong>Validate button</strong> (purple) &mdash; click after completing a full playback to verify the event sequence.</li>
+            </ul>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0">
+              <div><div class="screenshot-wrap"><img src="guide_images/ValidationPanelAll.png" alt="All test cases collapsed" style="width:100%;display:block;border-radius:8px;"><div class="screenshot-caption">All test cases (collapsed)</div></div></div>
+              <div><div class="screenshot-wrap"><img src="guide_images/ValidationPanel.png" alt="Test Case 1 expanded" style="width:100%;display:block;border-radius:8px;"><div class="screenshot-caption">Test Case 1 expanded</div></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <h4>How the Log Stream works</h4>
+            <span class="acc-arrow">&#9660;</span>
+          </div>
+          <div class="acc-body">
+            <ul>
+              <li><strong>Badges</strong>: <span style="background:#2563eb;color:white;font-size:10px;padding:1px 6px;border-radius:3px">REQUEST PING</span> blue = network, <span style="background:#4b5563;color:white;font-size:10px;padding:1px 6px;border-radius:3px">SDK INIT</span> gray = events, <span style="background:#ef4444;color:white;font-size:10px;padding:1px 6px;border-radius:3px">ERROR</span> red = failures</li>
+              <li><strong>Click any row</strong> to open PING INFO &mdash; Request/Response Summary, Parameter Table, full URL</li>
+              <li><strong>"Jump to latest"</strong> button scrolls to newest log</li>
+              <li>Error rows show a <strong>"VALIDATION FAILED"</strong> banner with the specific issue</li>
+            </ul>
+            <div class="screenshot-wrap"><img src="guide_images/LogSection.png" alt="Live Log Stream" style="width:100%;display:block;border-radius:8px;"><div class="screenshot-caption">Live Log Stream &mdash; events with timestamps and badges</div></div>
+          </div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <h4>How Filters work</h4>
+            <span class="acc-arrow">&#9660;</span>
+          </div>
+          <div class="acc-body">
+            <p>The collapsible FILTERS section narrows the log stream. Available filters:</p>
+            <div class="table-wrap">
+              <table>
+                <tr><th>Filter</th><th>Purpose</th></tr>
+                <tr><td><strong>App ID</strong></td><td>Filter by Nielsen App ID (multi-instance scenarios)</td></tr>
+                <tr><td><strong>Product</strong></td><td>Filter by product type (DCR Video, DCR Static, DTVR)</td></tr>
+                <tr><td><strong>Ping Type</strong></td><td>Filter by type (VIEW, TIMER, SESSION, EMM/UAID)</td></tr>
+                <tr><td><strong>Session</strong></td><td>Filter by SDK session ID</td></tr>
+              </table>
+            </div>
+            <div class="screenshot-wrap"><img src="guide_images/RightPanel.png" alt="Right Panel showing Session controls and Filters" style="width:100%;display:block;border-radius:8px;max-width:380px;margin:0 auto;"><div class="screenshot-caption">Session &amp; Filters Panel &mdash; Export/Import/Share buttons and log filters</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. SELECT DEVICE & SETUP -->
+    <div class="section" id="platforms">
+      <h2><span class="section-number">6</span> Select Device &amp; Setup</h2>
+      <p class="lead">Click the <strong>gear icon</strong> (&#9881;) in the header to open Configuration. Select your device, choose products to validate, and click Continue.</p>
 
       <div class="platform-tabs" data-group="config">
         <button class="tab-btn active" onclick="switchTab('config','mac')"><span class="tab-icon">&#127822;</span> macOS</button>
         <button class="tab-btn" onclick="switchTab('config','win')"><span class="tab-icon">&#128187;</span> Windows</button>
       </div>
       <div class="tab-content active" data-group="config" data-tab="mac">
-        <div class="video-wrap"><video controls preload="metadata"><source src="guide_videos/mac/diagnostic-configure-mac.mp4" type="video/mp4"></video><div class="video-caption">Video — macOS: Opening the Diagnostic Tool, configuring device selection and product types</div></div>
+        <div class="video-wrap"><video controls preload="metadata"><source src="guide_videos/mac/diagnostic-configure-mac.mp4" type="video/mp4"></video><div class="video-caption">Video &mdash; macOS: Configuring device selection and product types</div></div>
       </div>
       <div class="tab-content" data-group="config" data-tab="win">
-        <div class="video-wrap"><video controls preload="metadata"><source src="guide_videos/win/diagnostic-configure-win.mp4" type="video/mp4"></video><div class="video-caption">Video — Windows: Opening the Diagnostic Tool, configuring device selection and product types</div></div>
-      </div>
-
-      <div class="table-wrap">
-        <table>
-          <tr><th>Setting</th><th>When</th><th>Purpose</th></tr>
-          <tr><td><strong>Device</strong></td><td>Always</td><td>Select your connected device, simulator, emulator, or browser from the dropdown</td></tr>
-          <tr><td><strong>Products</strong></td><td>Always</td><td>Check the product types to validate (e.g., DCR Video, DCR Static). DTVR only in Global variant.</td></tr>
-          <tr><td><strong>Web Address</strong></td><td>Browser selected</td><td>Full URL of the page with SDK integrated (include <code>https://</code>)</td></tr>
-          <tr><td><strong>IP Address</strong></td><td>Fire TV selected</td><td>Device IP address (e.g., 192.168.1.100)</td></tr>
-          <tr><td><strong>Refresh Devices</strong></td><td>Always</td><td>Re-scan for connected devices if yours doesn't appear</td></tr>
-          <tr><td><strong>Continue</strong></td><td>Always</td><td>Saves configuration and returns to the validation view</td></tr>
-        </table>
+        <div class="video-wrap"><video controls preload="metadata"><source src="guide_videos/win/diagnostic-configure-win.mp4" type="video/mp4"></video><div class="video-caption">Video &mdash; Windows: Configuring device selection and product types</div></div>
       </div>
 
       <div class="callout tip">
         <span class="callout-icon">&#128161;</span>
         <div class="callout-text">
-          <strong>Device not showing up?</strong>
-          Click <strong>Refresh Devices</strong> to re-scan for connected devices. This works for both <strong>USB-connected</strong> devices (iPhone, Android, Fire TV VegaOS) and <strong>wireless</strong> devices (Fire TV via Wi-Fi, Apple TV). The dropdown updates with any newly detected devices. For iOS, make sure the device is unlocked and the "Trust This Computer" prompt has been accepted. For Android, enable USB debugging in Developer Options.
+          <strong>Device not showing up?</strong> Click <strong>Refresh Devices</strong> to re-scan. For iOS, ensure the device is unlocked and "Trust" accepted. For Android, enable USB debugging.
         </div>
       </div>
 
-      <h3>Full Interface Overview</h3>
-      <p>Here's how all three panels work together during a live validation session:</p>
-      <div class="tab-content active" data-group="fullui" data-tab="mac">
-        <div class="screenshot-wrap"><img src="guide_images/mac/FullInterface-mac.png" alt="Full Validation Interface showing all three panels" style="width:100%;display:block;border-radius:8px;"><div class="screenshot-caption">macOS — Full Interface: Left: validation checklist | Center: live log stream | Right: session & filters</div></div>
+      <!-- ═══════════════════ MOBILE ═══════════════════ -->
+      <h3 id="platform-mobile" style="scroll-margin-top:32px">Mobile</h3>
+      <div class="accordion">
+        <div class="acc-item">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <h4>&#128241; iPhone / iPad (USB)</h4>
+            <span class="acc-arrow">&#9660;</span>
+          </div>
+          <div class="acc-body">
+            <p><strong>Connection:</strong> USB cable &nbsp;|&nbsp; <strong>Host:</strong> macOS only</p>
+            <div class="steps">
+              <div class="step"><div class="step-num">1</div><div class="step-content"><h4>Enable Developer Mode (iOS 16+)</h4><p>Settings &rarr; Privacy &amp; Security &rarr; Developer Mode &rarr; toggle ON. Device restarts.</p></div></div>
+              <div class="step"><div class="step-num">2</div><div class="step-content"><h4>Connect via USB</h4><p>Use an Apple-certified cable. Tap <strong>Trust</strong> on the "Trust This Computer?" prompt and enter passcode.</p></div></div>
+              <div class="step"><div class="step-num">3</div><div class="step-content"><h4>Ensure debug flag</h4><p>App must have <code>nol_devDebug</code> set to <code>DEBUG</code> in Nielsen SDK init.</p></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <h4>&#128241; iOS Simulator</h4>
+            <span class="acc-arrow">&#9660;</span>
+          </div>
+          <div class="acc-body">
+            <p><strong>Connection:</strong> Xcode &nbsp;|&nbsp; <strong>Host:</strong> macOS only</p>
+            <div class="steps">
+              <div class="step"><div class="step-num">1</div><div class="step-content"><p>Open Xcode &rarr; Window &rarr; Devices and Simulators &rarr; boot a simulator.</p></div></div>
+              <div class="step"><div class="step-num">2</div><div class="step-content"><p>Build and run your app targeting the booted simulator. Ensure <code>nol_devDebug = DEBUG</code>.</p></div></div>
+              <div class="step"><div class="step-num">3</div><div class="step-content"><p>The simulator appears in the tool's device list. If not, click Refresh Devices.</p></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <h4>&#129302; Android (USB)</h4>
+            <span class="acc-arrow">&#9660;</span>
+          </div>
+          <div class="acc-body">
+            <p><strong>Connection:</strong> USB cable &nbsp;|&nbsp; <strong>Host:</strong> macOS, Windows</p>
+            <div class="steps">
+              <div class="step"><div class="step-num">1</div><div class="step-content"><h4>Enable Developer Options</h4><p>Settings &rarr; About Phone &rarr; tap <strong>Build Number</strong> 7 times.</p></div></div>
+              <div class="step"><div class="step-num">2</div><div class="step-content"><h4>Enable USB Debugging</h4><p>Settings &rarr; Developer Options &rarr; USB Debugging &rarr; ON.</p></div></div>
+              <div class="step"><div class="step-num">3</div><div class="step-content"><h4>Connect via USB</h4><p>Tap <strong>Allow</strong> on the USB debugging prompt. Check "Always allow from this computer".</p></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <h4>&#129302; Android Emulator</h4>
+            <span class="acc-arrow">&#9660;</span>
+          </div>
+          <div class="acc-body">
+            <p><strong>Connection:</strong> ADB &nbsp;|&nbsp; <strong>Host:</strong> macOS, Windows</p>
+            <div class="steps">
+              <div class="step"><div class="step-num">1</div><div class="step-content"><p>In Android Studio: Tools &rarr; Device Manager &rarr; Create or select a phone profile (API 30+, Google APIs).</p></div></div>
+              <div class="step"><div class="step-num">2</div><div class="step-content"><p>Click Play to launch the emulator. Run your app with <code>nol_devDebug = DEBUG</code>.</p></div></div>
+              <div class="step"><div class="step-num">3</div><div class="step-content"><p>The emulator appears automatically. If not, click Refresh Devices.</p></div></div>
+            </div>
+          </div>
+        </div>
       </div>
-      <p style="font-size:13px;color:var(--text-muted)">The three-panel layout: <strong>Left</strong> — validation checklist with expandable rules. <strong>Center</strong> — live log stream with color-coded badges. <strong>Right</strong> — session export/import and log filters.</p>
+
+      <!-- ═══════════════════ BROWSER ═══════════════════ -->
+      <h3 id="platform-browser" style="scroll-margin-top:32px">Browser</h3>
+      <div class="accordion">
+        <div class="acc-item">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <h4>&#127760; Chrome / Firefox / Safari (Desktop)</h4>
+            <span class="acc-arrow">&#9660;</span>
+          </div>
+          <div class="acc-body">
+            <p><strong>Connection:</strong> Playwright (automatic) &nbsp;|&nbsp; <strong>Host:</strong> macOS, Windows</p>
+            <p>No device setup needed. Enter the full URL (with <code>https://</code>) and click Continue. The tool launches its own browser via Playwright &mdash; the debug flag is appended automatically.</p>
+            <p style="font-size:13px;color:var(--text-muted)">First run downloads browser binaries (~500 MB). Subsequent runs are instant.</p>
+          </div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <h4>&#128241; Android Chrome (USB)</h4>
+            <span class="acc-arrow">&#9660;</span>
+          </div>
+          <div class="acc-body">
+            <p><strong>Connection:</strong> USB + CDP &nbsp;|&nbsp; <strong>Host:</strong> macOS, Windows</p>
+            <p>The tool remotely controls Chrome on your Android phone over USB &mdash; <strong>no proxy or certificate setup needed</strong>.</p>
+            <h4>One-Time Setup</h4>
+            <div class="steps">
+              <div class="step"><div class="step-num">1</div><div class="step-content"><h4>Enable Developer Options + USB Debugging</h4><p>Settings &rarr; About Phone &rarr; tap Build Number 7 times. Then Settings &rarr; Developer Options &rarr; USB Debugging ON.</p></div></div>
+              <div class="step"><div class="step-num">2</div><div class="step-content"><h4>Enable Chrome Flag</h4><p>On the phone, open Chrome &rarr; type <code>chrome://flags</code> &rarr; search <strong>"Enable command line on non-rooted devices"</strong> &rarr; Enabled &rarr; Relaunch Chrome.</p></div></div>
+              <div class="step"><div class="step-num">3</div><div class="step-content"><h4>Connect via USB</h4><p>Plug phone into computer. Tap Allow on the USB debugging prompt.</p></div></div>
+            </div>
+            <h4>Every Session</h4>
+            <p>Plug USB &rarr; select <strong>Android Chrome (USB)</strong> in tool &rarr; enter URL &rarr; Continue. Chrome opens automatically on the phone. <strong>No cleanup needed</strong> when done.</p>
+            <p><strong>Geo-locked sites:</strong> Use VPN on the <strong>Android device itself</strong> (not the Mac).</p>
+          </div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <h4>&#128241; iOS Safari (Wi-Fi)</h4>
+            <span class="acc-arrow">&#9660;</span>
+          </div>
+          <div class="acc-body">
+            <p><strong>Connection:</strong> Wi-Fi proxy &nbsp;|&nbsp; <strong>Host:</strong> macOS only &nbsp;|&nbsp; <strong>Same Wi-Fi required</strong></p>
+            <p>Routes Safari traffic through the tool's proxy. The wizard guides you through 3 steps: <strong>Certificate &rarr; Wi-Fi Proxy &rarr; Open URL</strong></p>
+            <h4>Step 1: Certificate (One-Time)</h4>
+            <div class="steps">
+              <div class="step"><div class="step-num">1</div><div class="step-content"><p>Scan the <strong>QR code</strong> shown in the wizard with your iPhone camera.</p></div></div>
+              <div class="step"><div class="step-num">2</div><div class="step-content"><p>Tap <strong>Allow</strong> to download the profile.</p></div></div>
+              <div class="step"><div class="step-num">3</div><div class="step-content"><p>Settings &rarr; General &rarr; VPN &amp; Device Management &rarr; install "NielsenToolCA".</p></div></div>
+              <div class="step"><div class="step-num">4</div><div class="step-content"><p>Settings &rarr; General &rarr; About &rarr; Certificate Trust Settings &rarr; toggle ON for "NielsenToolCA".</p></div></div>
+            </div>
+            <h4>Step 2: Wi-Fi Proxy (Every Session)</h4>
+            <div class="steps">
+              <div class="step"><div class="step-num">1</div><div class="step-content"><p>Settings &rarr; Wi-Fi &rarr; tap (i) on your network &rarr; Configure Proxy &rarr; Manual.</p></div></div>
+              <div class="step"><div class="step-num">2</div><div class="step-content"><p>Enter Server IP and Port from the wizard. Tap Save.</p></div></div>
+            </div>
+            <h4>Step 3: Open URL</h4>
+            <p>Scan the URL QR code to open in Safari. The wizard shows green "Receiving logs" once traffic is captured.</p>
+            <div class="callout critical" style="margin:12px 0">
+              <span class="callout-icon">&#9888;&#65039;</span>
+              <div class="callout-text"><strong>Turn OFF the Wi-Fi proxy when done!</strong> Leaving it on with the tool closed = no internet on iPhone. See <a href="#after-testing">After Testing</a>.</div>
+            </div>
+            <p><strong>Geo-locked sites:</strong> VPN on your <strong>Mac</strong> (not iPhone). Keep iPhone VPN OFF.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════ TV / STREAMING ═══════════════════ -->
+      <h3 id="platform-tv" style="scroll-margin-top:32px">TV / Streaming</h3>
+      <div class="accordion">
+        <div class="acc-item">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <h4>&#128250; Android TV</h4>
+            <span class="acc-arrow">&#9660;</span>
+          </div>
+          <div class="acc-body">
+            <p><strong>Connection:</strong> ADB over Wi-Fi &nbsp;|&nbsp; <strong>Host:</strong> macOS, Windows &nbsp;|&nbsp; <strong>Same Wi-Fi required</strong></p>
+            <div class="steps">
+              <div class="step"><div class="step-num">1</div><div class="step-content"><h4>Enable Developer Options</h4><p>Settings &rarr; Device Preferences &rarr; About &rarr; click <strong>Build</strong> 7 times.</p></div></div>
+              <div class="step"><div class="step-num">2</div><div class="step-content"><h4>Enable ADB Debugging</h4><p>Settings &rarr; Device Preferences &rarr; Developer Options &rarr; ADB debugging ON.</p></div></div>
+              <div class="step"><div class="step-num">3</div><div class="step-content"><h4>Find IP &amp; connect</h4><p>Settings &rarr; Network &amp; Internet &rarr; note the IP. Enter it in the tool and click Continue.</p></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <h4>&#128250; Android TV Emulator</h4>
+            <span class="acc-arrow">&#9660;</span>
+          </div>
+          <div class="acc-body">
+            <p><strong>Connection:</strong> ADB &nbsp;|&nbsp; <strong>Host:</strong> macOS, Windows</p>
+            <p>Android Studio &rarr; Device Manager &rarr; Create Device &rarr; TV category &rarr; "Android TV (1080p)" &rarr; API 30+ with Google APIs. Launch emulator, then select in tool. Auto-detected.</p>
+          </div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <h4>&#128250; Fire TV (Wi-Fi)</h4>
+            <span class="acc-arrow">&#9660;</span>
+          </div>
+          <div class="acc-body">
+            <p><strong>Connection:</strong> ADB over Wi-Fi &nbsp;|&nbsp; <strong>Host:</strong> macOS, Windows &nbsp;|&nbsp; <strong>Same Wi-Fi required</strong></p>
+            <div class="steps">
+              <div class="step"><div class="step-num">1</div><div class="step-content"><p>Settings &rarr; My Fire TV &rarr; Developer Options &rarr; ADB Debugging ON.</p></div></div>
+              <div class="step"><div class="step-num">2</div><div class="step-content"><p>Settings &rarr; My Fire TV &rarr; About &rarr; Network &rarr; note IP address.</p></div></div>
+              <div class="step"><div class="step-num">3</div><div class="step-content"><p>Enter IP in the tool and click Continue.</p></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <h4>&#128250; Fire TV (VegaOS)</h4>
+            <span class="acc-arrow">&#9660;</span>
+          </div>
+          <div class="acc-body">
+            <p><strong>Connection:</strong> USB &nbsp;|&nbsp; <strong>Host:</strong> macOS, Windows</p>
+            <div class="steps">
+              <div class="step"><div class="step-num">1</div><div class="step-content"><p>Settings &rarr; Device Options &rarr; Developer Mode ON &rarr; ADB Debugging ON.</p></div></div>
+              <div class="step"><div class="step-num">2</div><div class="step-content"><p>Set Connection mode to <strong>USB</strong> (not TCP/IP).</p></div></div>
+              <div class="step"><div class="step-num">3</div><div class="step-content"><p>Connect via USB cable. Select in tool and click Continue.</p></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <h4>&#128250; Fire TV (VegaOS) Emulator</h4>
+            <span class="acc-arrow">&#9660;</span>
+          </div>
+          <div class="acc-body">
+            <p><strong>Connection:</strong> ADB &nbsp;|&nbsp; <strong>Host:</strong> macOS, Windows</p>
+            <p>Install Vega SDK &rarr; start Virtual Device via VS Code (Command Palette &rarr; "Vega Virtual Device: Start simulator"). Click Continue in tool first, then deploy your app. Auto-detected via ADB.</p>
+          </div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <h4>&#128250; LG webOS TV</h4>
+            <span class="acc-arrow">&#9660;</span>
+          </div>
+          <div class="acc-body">
+            <p><strong>Connection:</strong> CDP (port) &nbsp;|&nbsp; <strong>Host:</strong> macOS, Windows &nbsp;|&nbsp; <strong>App in debug mode required</strong></p>
+            <div class="steps">
+              <div class="step"><div class="step-num">1</div><div class="step-content"><h4>Enable Developer Mode</h4><p><a href="https://webostv.developer.lge.com/develop/getting-started/developer-mode-app" target="_blank">Follow LG's guide</a>. Install "Developer Mode" app from LG Content Store &rarr; sign in &rarr; enable Dev Mode &rarr; enable Key Server.</p></div></div>
+              <div class="step"><div class="step-num">2</div><div class="step-content"><h4>Run ares-inspect</h4><p><a href="https://webostv.developer.lge.com/develop/getting-started/app-debugging" target="_blank">Follow this guide</a>. After running <code>ares-inspect</code>, note the port from: <code>Application Debugging - http://localhost:56999/...</code></p></div></div>
+              <div class="step"><div class="step-num">3</div><div class="step-content"><h4>Enter port in tool</h4><p>Select <strong>LG webOS TV</strong>, enter the port number, click Continue.</p></div></div>
+            </div>
+            <p style="font-size:13px;color:var(--text-muted)">Port changes each time you run ares-inspect. Keep it running &mdash; closing it drops the connection.</p>
+          </div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <h4>&#128250; LG webOS Simulator</h4>
+            <span class="acc-arrow">&#9660;</span>
+          </div>
+          <div class="acc-body">
+            <p><strong>Connection:</strong> CDP (localhost:9998) &nbsp;|&nbsp; <strong>Host:</strong> macOS, Windows</p>
+            <div class="steps">
+              <div class="step"><div class="step-num">1</div><div class="step-content"><p><a href="https://webostv.developer.lge.com/develop/tools/simulator-installation" target="_blank">Download the webOS TV Simulator</a>.</p></div></div>
+              <div class="step"><div class="step-num">2</div><div class="step-content"><h4>Launch with debug flag</h4><p><strong>macOS:</strong> <code>open /Applications/webOS_TV*Simulator*.app --args --remote-debugging-port=9998</code><br><strong>Windows:</strong> Run <code>.exe --remote-debugging-port=9998</code> from terminal.</p></div></div>
+              <div class="step"><div class="step-num">3</div><div class="step-content"><p>Select <strong>LG webOS Simulator</strong> in tool &rarr; Continue. Then File &rarr; Launch App in simulator.</p></div></div>
+            </div>
+            <p style="font-size:13px;color:var(--text-muted)">Double-clicking the app won't enable debugging. Always launch from Terminal.</p>
+          </div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <h4>&#128250; Samsung Tizen TV</h4>
+            <span class="acc-arrow">&#9660;</span>
+          </div>
+          <div class="acc-body">
+            <p><strong>Connection:</strong> CDP (IP + port) &nbsp;|&nbsp; <strong>Host:</strong> macOS, Windows &nbsp;|&nbsp; <strong>App in debug mode required</strong></p>
+            <div class="steps">
+              <div class="step"><div class="step-num">1</div><div class="step-content"><h4>Enable Developer Mode</h4><p><a href="https://developer.samsung.com/smarttv/develop/getting-started/using-sdk/tv-device.html" target="_blank">Follow Samsung's guide</a>. Apps panel &rarr; enter <strong>12345</strong> &rarr; turn ON &rarr; enter your PC's IP &rarr; reboot.</p></div></div>
+              <div class="step"><div class="step-num">2</div><div class="step-content"><h4>Launch app in Debug mode</h4><p><a href="https://engineeringportal.nielsen.com/wiki/TizenTv_Debugging" target="_blank">Follow this guide</a>. In Tizen Studio console, find URL like <code>http://192.168.x.x:XXXXX</code> &mdash; the number after colon is the debug port.</p></div></div>
+              <div class="step"><div class="step-num">3</div><div class="step-content"><h4>Enter IP + Port</h4><p>Select <strong>Samsung Tizen TV</strong>, enter TV's IP and debug port, click Continue.</p></div></div>
+            </div>
+            <p style="font-size:13px;color:var(--text-muted)">Debug port is dynamic &mdash; changes every session. Always check Tizen Studio console.</p>
+          </div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <h4>&#128250; Apple TV (Wi-Fi)</h4>
+            <span class="acc-arrow">&#9660;</span>
+          </div>
+          <div class="acc-body">
+            <p><strong>Connection:</strong> Wi-Fi (Bonjour pairing) &nbsp;|&nbsp; <strong>Host:</strong> macOS only &nbsp;|&nbsp; <strong>Same Wi-Fi required</strong></p>
+            <div class="steps">
+              <div class="step"><div class="step-num">1</div><div class="step-content"><h4>Open Remote Settings on Apple TV</h4><p>Settings &rarr; Remotes and Devices &rarr; Remote App and Devices. Keep this screen open.</p></div></div>
+              <div class="step"><div class="step-num">2</div><div class="step-content"><h4>Connect in tool</h4><p>Select <strong>Apple TV (Wi-Fi)</strong> &rarr; click <strong>Connect Apple TV</strong>. The tool discovers your Apple TV.</p></div></div>
+              <div class="step"><div class="step-num">3</div><div class="step-content"><h4>Enter PIN</h4><p>A 6-digit PIN appears on the Apple TV. Type it into the tool.</p></div></div>
+              <div class="step"><div class="step-num">4</div><div class="step-content"><h4>Start Tunnel</h4><p>The tool starts a log tunnel. May require your Mac's admin (sudo) password. Pairing is persistent &mdash; no re-pairing next time.</p></div></div>
+            </div>
+            <div class="callout tip" style="margin:8px 0">
+              <span class="callout-icon">&#128161;</span>
+              <div class="callout-text">Both devices must be on the same network. Corporate Wi-Fi may block discovery &mdash; use a phone's mobile hotspot as a workaround.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <a class="link-ref" href="https://github.com/NielsenDigitalSDK/sdk-diagnostic-tool/blob/main/docs/TROUBLESHOOTING.md" target="_blank">
+        <span class="link-ref-icon">&#128295;</span>
+        <div>
+          <div class="link-ref-text">Platform-specific troubleshooting</div>
+          <div class="link-ref-url">Detailed fixes for each device type in TROUBLESHOOTING.md</div>
+        </div>
+      </a>
     </div>
 
-    <!-- 6. RUNNING VALIDATION -->
+
+    <!-- 7. RUNNING VALIDATION -->
     <div class="section" id="workflow">
-      <h2><span class="section-number">6</span> Running Your First Validation</h2>
+      <h2><span class="section-number">7</span> Running Your First Validation</h2>
 
       <div class="callout critical">
         <span class="callout-icon">&#9888;&#65039;</span>
@@ -1150,37 +1456,6 @@
       <div class="tab-content" data-group="waitlogs" data-tab="win">
         <div class="screenshot-wrap"><img src="guide_images/win/DebugWarningOrAppNotRun-win.png" alt="Windows validation interface showing Waiting for logs state" style="width:100%;display:block;border-radius:8px;"><div class="screenshot-caption">Windows — Initial State: "Waiting for logs" with debug flag reminder. Click Play, then launch your app.</div></div>
       </div>
-
-      <h3>Platform &amp; Device Walkthroughs</h3>
-      <div class="platform-tabs" data-group="validate">
-        <button class="tab-btn active" onclick="switchTab('validate','mac')"><span class="tab-icon">&#127822;</span> macOS</button>
-        <button class="tab-btn" onclick="switchTab('validate','win')"><span class="tab-icon">&#128187;</span> Windows</button>
-      </div>
-
-      <!-- macOS tab -->
-      <div class="tab-content active" data-group="validate" data-tab="mac">
-        <div class="device-tabs" data-group="validate-mac">
-          <button class="tab-btn active" onclick="switchDeviceTab('validate-mac','ios')"><span class="tab-icon">&#128241;</span> iOS</button>
-          <button class="tab-btn" onclick="switchDeviceTab('validate-mac','browser')"><span class="tab-icon">&#127760;</span> Browser</button>
-        </div>
-        <div class="device-tab-content active" data-group="validate-mac" data-tab="ios">
-          <div class="video-wrap"><video controls preload="metadata"><source src="guide_videos/mac/ios-play-and-validate.mp4" type="video/mp4"></video><div class="video-caption">Video — macOS + iOS: Click Play, launch app on iPhone/iPad, watch rules turn green</div></div>
-        </div>
-        <div class="device-tab-content" data-group="validate-mac" data-tab="browser">
-          <div class="video-wrap"><video controls preload="metadata"><source src="guide_videos/mac/browser-play-and-validate-mac.mp4" type="video/mp4"></video><div class="video-caption">Video — macOS + Browser: Click Play, URL opens automatically via Playwright, logs stream in</div></div>
-        </div>
-      </div>
-
-      <!-- Windows tab -->
-      <div class="tab-content" data-group="validate" data-tab="win">
-        <div class="device-tabs" data-group="validate-win">
-          <button class="tab-btn active" onclick="switchDeviceTab('validate-win','android')"><span class="tab-icon">&#129302;</span> Android</button>
-        </div>
-        <div class="device-tab-content active" data-group="validate-win" data-tab="android">
-          <div class="video-wrap"><video controls preload="metadata"><source src="guide_videos/win/android-play-and-validate-win.mp4" type="video/mp4"></video><div class="video-caption">Video — Windows + Android: Click Play, launch app on Android device, watch rules turn green</div></div>
-        </div>
-      </div>
-
       <h3>Before You Begin</h3>
       <p>&#9989; Device connected and unlocked (USB) or on same Wi-Fi network</p>
       <p>&#9989; App installed but <strong>NOT launched yet</strong> (mobile only &mdash; browser opens automatically)</p>
@@ -1231,9 +1506,9 @@
       </a>
     </div>
 
-    <!-- 7. INTERPRETING RESULTS -->
+    <!-- 8. INTERPRETING RESULTS -->
     <div class="section" id="results">
-      <h2><span class="section-number">7</span> Interpreting Results</h2>
+      <h2><span class="section-number">8</span> Interpreting Results</h2>
 
       <div class="status-grid">
         <div class="status-card" style="border-top: 3px solid #94a3b8">
@@ -1279,9 +1554,9 @@
 
     </div>
 
-    <!-- 8. FAILURE TYPES -->
+    <!-- 9. FAILURE TYPES -->
     <div class="section" id="failure-types">
-      <h2><span class="section-number">8</span> Failure Types</h2>
+      <h2><span class="section-number">9</span> Failure Types</h2>
       <p class="lead">When validation detects an issue, the tool categorizes it into one of these failure types. Each type appears differently in the log stream and checklist.</p>
 
       <div class="accordion">
@@ -1345,53 +1620,156 @@
 
     </div>
 
-    <!-- 9. EXPORTS -->
+    <!-- 10. SESSION EXPORT, IMPORT & SHARE -->
     <div class="section" id="exports">
-      <h2><span class="section-number">9</span> Session Export &amp; Import</h2>
+      <h2><span class="section-number">10</span> Sharing Results</h2>
+      <p class="lead">After completing validation, share your results with your Nielsen TAM for certification review. The tool provides two methods: direct sharing (recommended) and manual export.</p>
 
-      
-      <div class="video-wrap"><video controls preload="metadata"><source src="guide_videos/export-and-import.mp4" type="video/mp4"></video><div class="video-caption">Video — Exporting a session to JSON and importing it back with full state restored (common across platforms)</div></div>
+      <h3 id="share-with-nielsen" style="scroll-margin-top:32px">Share with Nielsen (Recommended)</h3>
+      <p>The fastest way to submit your validation results. One click &mdash; your TAM is notified and can review your session immediately.</p>
 
-      <div class="screenshot-wrap"><img src="guide_images/SessionExport.png" alt="Session Export and Import panel" style="width:100%;display:block;border-radius:8px;max-width:380px;margin:0 auto;"><div class="screenshot-caption">Session Panel — Export (purple) and Import buttons with drag-and-drop zone</div></div>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-content"><h4>Complete your validation</h4><p>Run tests until logs are captured and at least one App ID is detected.</p></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-content"><h4>Click "Share with Nielsen"</h4><p>The green <strong>Share with Nielsen</strong> button is in the Session panel (right side), below Export and Import. Click it.</p></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-content"><h4>Done</h4><p>You'll see <em>"Session shared successfully"</em>. Your TAM receives a notification and can load your session directly in their tool for review.</p></div></div>
+      </div>
+
+      <!-- SCREENSHOT NEEDED: SessionPanel-Share.png -->
+      <div class="screenshot-wrap"><img src="guide_images/SessionPanel-Share.png" alt="Session panel showing Export, Import, and Share with Nielsen buttons" style="width:100%;display:block;border-radius:8px;max-width:380px;margin:0 auto;"><div class="screenshot-caption">Session Panel &mdash; Export (purple), Import (gray), and Share with Nielsen (green)</div></div>
+
+      <!-- VIDEO NEEDED: share-with-nielsen.mp4 -->
+      <div class="video-wrap"><video controls preload="metadata"><source src="guide_videos/share-with-nielsen.mp4" type="video/mp4"></video><div class="video-caption">Video &mdash; Sharing a session with your TAM in one click</div></div>
+
+      <h3 id="shared-sessions" style="scroll-margin-top:32px">Shared Sessions</h3>
+      <p>Both you and your TAM can view shared sessions from the <strong>Shared Sessions</strong> page (accessible from the home screen).</p>
+
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-icon">&#128100;</div>
+          <h4>As a Client</h4>
+          <p>You see all sessions <strong>you've</strong> shared. Use this to track what you've submitted, re-review past sessions, or verify your TAM has received them.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">&#128101;</div>
+          <h4>Your TAM Sees</h4>
+          <p>Your TAM sees sessions from all their assigned clients. They can load any session into their tool to inspect logs, review validation results, and provide feedback.</p>
+        </div>
+      </div>
+
+      <p>From the Shared Sessions page you can:</p>
+      <ul style="margin: 8px 0 16px 20px; font-size:14px; color:var(--text-secondary)">
+        <li>Browse all your shared sessions with product, platform, and upload date</li>
+        <li>Click <strong>Load</strong> to open any session in the Diagnostic Tool for review</li>
+        <li>Search and filter by product or platform</li>
+      </ul>
+
+
+      <!-- VIDEO NEEDED: shared-sessions-browse.mp4 -->
+      <div class="video-wrap"><video controls preload="metadata"><source src="guide_videos/shared-sessions-browse.mp4" type="video/mp4"></video><div class="video-caption">Video &mdash; Browsing shared sessions and loading one into the Diagnostic Tool</div></div>
+
+      <h3>Export &amp; Import (Alternative)</h3>
+      <p>You can also export sessions as <code>.json</code> files for local use or to share with team members internally.</p>
 
       <div class="card-grid">
         <div class="card">
           <div class="card-icon">&#128229;</div>
           <h4>Export</h4>
-          <p>Downloads a <code>.json</code> file containing all validation results, captured logs, and session metadata. The file includes a SHA-256 integrity hash to detect modifications.</p>
+          <p>Downloads a <code>.json</code> file with all validation results, logs, and metadata. Includes an integrity hash. Use this for local backups or sharing with colleagues within your team.</p>
         </div>
         <div class="card">
           <div class="card-icon">&#128228;</div>
           <h4>Import</h4>
-          <p>Load a previously exported <code>.json</code> session file. Click the <strong>Import</strong> button or <strong>drag-and-drop</strong> the file directly onto the "or drop file here" area. The tool verifies the integrity hash before restoring the session. Once imported, the session is fully interactive &mdash; you can click logs to inspect them, expand rules, use filters, and review all validation results exactly as they were at export time.</p>
+          <p>Load a previously exported <code>.json</code> session. Drag-and-drop or click Import. The session is fully interactive once loaded &mdash; you can inspect logs, expand rules, and review results.</p>
         </div>
+      </div>
+
+      <div class="video-wrap"><video controls preload="metadata"><source src="guide_videos/export-and-import.mp4" type="video/mp4"></video><div class="video-caption">Video &mdash; Exporting a session and importing it back</div></div>
+
+      <div class="callout info">
+        <span class="callout-icon">&#128161;</span>
+        <div class="callout-text">
+          <strong>Share with Nielsen vs Export &mdash; which to use?</strong>
+          Use <strong>Share with Nielsen</strong> to submit results to your TAM for certification review (recommended). Use <strong>Export</strong> if you need a local copy or want to share the file internally with your team via email or Slack.
+        </div>
+      </div>
+    </div>
+
+    <!-- 14. AFTER TESTING -->
+    <div class="section" id="after-testing">
+      <h2><span class="section-number">11</span> After Testing &mdash; Restore Internet</h2>
+      <p class="lead">Some platforms route device traffic through your Mac. When the tool stops, that route goes nowhere. Follow the cleanup steps below to restore normal internet on your devices.</p>
+
+      <div class="callout critical">
+        <span class="callout-icon">&#9888;&#65039;</span>
+        <div class="callout-text">
+          <strong>Your device will lose internet if you skip this!</strong>
+          If you turned something ON for testing, turn it OFF when done. The only things you can leave permanently are the <strong>CA certificates</strong> &mdash; they don't affect normal browsing.
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <tr><th>Platform</th><th>What to do</th><th>Where</th></tr>
+          <tr>
+            <td><strong>iOS Safari (Wi-Fi Proxy)</strong></td>
+            <td><strong>Turn OFF Wi-Fi proxy</strong></td>
+            <td>iPhone &rarr; Settings &rarr; Wi-Fi &rarr; tap (i) on your network &rarr; Configure Proxy &rarr; <strong>Off</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Android Chrome (USB)</strong></td>
+            <td>Nothing needed</td>
+            <td>The tool controls Chrome over USB. When you close the session or unplug USB, everything returns to normal automatically.</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="callout tip">
+        <span class="callout-icon">&#128161;</span>
+        <div class="callout-text">
+          <strong>Rule of thumb:</strong> If you turned something ON for testing, turn it OFF when done. The only things you can leave permanently are the <strong>CA certificates</strong> &mdash; they don't affect normal browsing.
+        </div>
+      </div>
+    </div>
+
+
+    <!-- 11. CLIENT ID VERIFICATION -->
+    <div class="section" id="client-id-verification">
+      <h2><span class="section-number">12</span> Client ID Verification</h2>
+      <p class="lead">The tool verifies that you're testing your own app. This is a security measure to ensure data isolation between clients.</p>
+
+      <h3>How It Works</h3>
+      <p>When you start a capture session, the tool detects the <code>nol_clientid</code> from the Nielsen SDK's config response and checks it against your registered client IDs. If the detected ID doesn't match your account, the capture stops immediately.</p>
+
+      <div class="callout critical">
+        <span class="callout-icon">&#128683;</span>
+        <div class="callout-text">
+          <strong>Unauthorized &mdash; this app belongs to a different client</strong>
+          <p style="margin-top:4px;font-size:13px">If you see this error, it means the app or website you're testing uses a Nielsen client ID that isn't registered to your account. The tool will show the detected client ID and your authorized IDs.</p>
+        </div>
+      </div>
+
+      <h3>What To Do If You See This Error</h3>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-content"><h4>Verify you're testing the right app/URL</h4><p>Make sure you're pointing to YOUR app or website, not someone else's.</p></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-content"><h4>Check your client IDs with your TAM</h4><p>If you recently added a new app or changed your Nielsen configuration, your registered client IDs may need updating. Contact your TAM.</p></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-content"><h4>Change device configuration</h4><p>The error persists until you change your device configuration (click the gear icon). Simply re-running the same test won't clear it.</p></div></div>
       </div>
 
       <div class="callout info">
         <span class="callout-icon">&#128161;</span>
         <div class="callout-text">
-          <strong>Why Import?</strong>
-          Importing lets you review a session without re-running the tests. Share the exported JSON with your team or your Nielsen contact &mdash; anyone with the tool can import it and see the full session. This is useful for collaborative debugging, certification review, or comparing results across different test runs.
+          <strong>Primarily affects browser and Smart TV platforms</strong>
+          This check triggers when the tool detects an App ID and fetches its config from Nielsen's servers. It's most common with <strong>browsers</strong> (wrong URL entered) and <strong>Smart TVs</strong> (connected to wrong device). For native apps you built yourself, it's unlikely to trigger since you're running your own app.
         </div>
       </div>
 
-      <h3>What to Send to Your Nielsen Contact</h3>
-      <p>When submitting for certification review:</p>
-      <p>&#10004; <strong>The exported .json session file</strong> &mdash; the primary deliverable containing everything Nielsen needs.</p>
-      <p>&#10004; <strong>Platform and device</strong> &mdash; e.g., "iPhone 15, iOS 18.3, USB" or "Chrome via Playwright, macOS".</p>
-
-      <div class="callout tip">
-        <span class="callout-icon">&#128161;</span>
-        <div class="callout-text">
-          <strong>Export after every session</strong>
-          Even if everything passed. This creates a record that speeds up the certification process with Nielsen Ops.
-        </div>
-      </div>
+      <!-- SCREENSHOT NEEDED: UnauthorizedError.png — The unauthorized error message in the UI -->
+      <div class="screenshot-wrap"><img src="guide_images/UnauthorizedError.png" alt="Unauthorized error showing detected vs authorized client IDs" style="width:100%;display:block;border-radius:8px;max-width:600px;margin:0 auto;"><div class="screenshot-caption">Client ID Mismatch Error &mdash; Shows the detected ID and your authorized IDs</div></div>
     </div>
 
     <!-- 10. PRODUCT TYPES -->
     <div class="section" id="products">
-      <h2><span class="section-number">10</span> Product Types</h2>
+      <h2><span class="section-number">13</span> Product Types</h2>
       <p>Select the product type matching your integration. Each loads different test cases and validation rules.</p>
 
       <div class="callout critical" style="margin-bottom:20px">
@@ -1467,86 +1845,9 @@
         </div>
       </div>
     </div>
-
-    <!-- 11. SUPPORTED PLATFORMS -->
-    <div class="section" id="platforms">
-      <h2><span class="section-number">11</span> Supported Platforms</h2>
-      <p>The Diagnostic Tool captures logs from the following devices and environments:</p>
-
-      <div class="platform-grid">
-        <div class="platform-card">
-          <h5>&#128241; iPhone / iPad (USB)</h5>
-          <p>Physical device via USB cable</p>
-          <div class="prereqs"><span>USB cable</span><span>Unlocked</span><span>"Trust" accepted</span><span>iOS 16+ Dev Mode</span></div>
-        </div>
-        <div class="platform-card">
-          <h5>&#128241; iOS Simulator</h5>
-          <p>Xcode iOS Simulator (booted)</p>
-          <div class="prereqs"><span>Xcode installed</span><span>Simulator booted</span></div>
-        </div>
-        <div class="platform-card">
-          <h5>&#129302; Android Device (USB)</h5>
-          <p>Physical device via USB cable</p>
-          <div class="prereqs"><span>USB cable</span><span>USB debugging ON</span><span>Computer authorized</span></div>
-        </div>
-        <div class="platform-card">
-          <h5>&#129302; Android Emulator</h5>
-          <p>Android Studio emulator (booted)</p>
-          <div class="prereqs"><span>Emulator running</span></div>
-        </div>
-        <div class="platform-card">
-          <h5>&#128250; Fire TV (Wi-Fi)</h5>
-          <p>Amazon Fire TV via IP connection</p>
-          <div class="prereqs"><span>Same Wi-Fi</span><span>ADB debugging ON</span><span>IP address</span></div>
-        </div>
-        <div class="platform-card">
-          <h5>&#128250; Fire TV VegaOS (USB)</h5>
-          <p>Fire TV VegaOS variant via USB only</p>
-          <div class="prereqs"><span>USB cable</span><span>Developer Mode ON</span><span>ADB debugging ON</span></div>
-        </div>
-        <div class="platform-card">
-          <h5>&#127760; Browser</h5>
-          <p>Chrome, Firefox, Safari via Playwright</p>
-          <div class="prereqs"><span>Full URL</span><span>Internet (first run ~500MB)</span></div>
-        </div>
-        <div class="platform-card">
-          <h5>&#128250; Apple TV (Wi-Fi)</h5>
-          <p>Apple TV via Wi-Fi pairing &amp; tunnel</p>
-          <div class="prereqs"><span>Same Wi-Fi</span><span>tvOS 17+</span><span>sudo password</span></div>
-        </div>
-      </div>
-
-      <h3>Apple TV Connection Flow</h3>
-      <p>Apple TV requires a multi-step pairing process:</p>
-      <div class="steps">
-        <div class="step"><div class="step-num">1</div><div class="step-content"><h4>Open Remote Settings on Apple TV</h4><p>Go to Settings &#8594; Remotes and Devices &#8594; Remote App and Devices. Keep this screen open.</p></div></div>
-        <div class="step"><div class="step-num">2</div><div class="step-content"><h4>Select your device</h4><p>In the tool's Configuration, discovered Apple TV devices appear in the device list. Select yours.</p></div></div>
-        <div class="step"><div class="step-num">3</div><div class="step-content"><h4>Start Pairing</h4><p>Click the Connect button. A 6-digit PIN appears on your Apple TV screen.</p></div></div>
-        <div class="step"><div class="step-num">4</div><div class="step-content"><h4>Enter PIN</h4><p>Type the 6-digit PIN into the tool's dialog. Pairing is persistent across sessions &mdash; no re-pairing needed next time.</p></div></div>
-        <div class="step"><div class="step-num">5</div><div class="step-content"><h4>Start Tunnel</h4><p>The tool starts a log tunnel. You may be asked for your Mac's admin (sudo) password.</p></div></div>
-        <div class="step"><div class="step-num">6</div><div class="step-content"><h4>Verify &amp; Capture</h4><p>The tool verifies syslog connectivity. Once confirmed, you're ready to start validation.</p></div></div>
-      </div>
-
-      <div class="callout tip">
-        <span class="callout-icon">&#128161;</span>
-        <div class="callout-text">
-          <strong>Both devices must be on the same network.</strong>
-          Corporate Wi-Fi may block device discovery (mDNS). As a workaround, use a phone's mobile hotspot &mdash; connect both your Mac and Apple TV to it.
-        </div>
-      </div>
-
-      <a class="link-ref" href="https://github.com/NielsenDigitalSDK/sdk-diagnostic-tool/blob/main/docs/TROUBLESHOOTING.md" target="_blank">
-        <span class="link-ref-icon">&#128295;</span>
-        <div>
-          <div class="link-ref-text">Platform-specific troubleshooting</div>
-          <div class="link-ref-url">Detailed fixes for each device type in TROUBLESHOOTING.md</div>
-        </div>
-      </a>
-    </div>
-
-    <!-- 12. TIPS -->
+    <!-- 15. TIPS -->
     <div class="section" id="tips">
-      <h2><span class="section-number">12</span> Tips &amp; Best Practices</h2>
+      <h2><span class="section-number">14</span> Tips &amp; Best Practices</h2>
 
       <div class="callout critical">
         <span class="callout-icon">&#9888;&#65039;</span>
@@ -1589,9 +1890,6 @@
       </div>
     </div>
 
-    <!-- 13. LINKS -->
-    <div class="section" id="links">
-      <h2><span class="section-number">13</span> Quick Reference Links</h2>
       <p>These resources on GitHub always reflect the latest version:</p>
 
       <a class="link-ref" href="https://github.com/NielsenDigitalSDK/sdk-diagnostic-tool" target="_blank">
@@ -1612,17 +1910,16 @@
         <span class="link-ref-icon">&#128230;</span>
         <div>
           <div class="link-ref-text">Latest Release</div>
-          <div class="link-ref-url">Download macOS and Windows builds (Global + Cookieless)</div>
+          <div class="link-ref-url">Download macOS and Windows builds</div>
         </div>
       </a>
 
       <div style="margin-top:48px;padding-top:24px;border-top:1px solid var(--border);text-align:center">
-        <p style="color:var(--text-muted);font-size:13px">For assistance, contact the Nielsen Ops/Certification team or your Nielsen Technical Account Manager (TAM).</p>
-        <p style="color:var(--text-muted);font-size:12px;margin-top:8px">&copy; 2026 The Nielsen Company (US), LLC. All Rights Reserved. Confidential and Proprietary.</p>
+        <p style="color:var(--text-muted);font-size:13px">For assistance, contact your Nielsen Technical Account Manager (TAM).</p>
+        <p style="color:var(--text-muted);font-size:12px;margin-top:8px">&copy; 2026 The Nielsen Company (US), LLC. All Rights Reserved.</p>
       </div>
-    </div>
 
-  </div>
+  </div><!-- .content -->
 </main>
 
 <script>
