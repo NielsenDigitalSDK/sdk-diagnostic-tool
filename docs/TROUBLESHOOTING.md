@@ -155,6 +155,8 @@ VegaOS is Amazon's newer operating system for certain Fire TV devices. It uses `
 
 ## 📺 Apple TV (Wi-Fi)
 
+> **📖 Full Guide Available:** For the complete Apple TV troubleshooting reference — including all error messages, permission fixes, pairing slot exhaustion, and step-by-step recovery — see the **[Apple TV Troubleshooting Guide](https://nielsendigitalsdk.github.io/sdk-diagnostic-tool/troubleshooting-apple-tv.html)**.
+
 Apple TV uses a 3-step connection process: **Discover → Pair → Connect**. Issues can occur at each step.
 
 ### Step 1: No Apple TVs discovered
@@ -316,6 +318,8 @@ This error means the `nol_clientid` detected in the Nielsen SDK config does not 
 ---
 
 ## 📺 Samsung Tizen TV
+
+> **📖 Full Guide Available:** For the complete Samsung TV troubleshooting reference — including port selection (HbbTV vs Tizen Web App), Developer Mode setup, terminal verification commands, and common mistakes — see the **[Samsung Tizen TV Troubleshooting Guide](https://nielsendigitalsdk.github.io/sdk-diagnostic-tool/troubleshooting-samsung-tv.html)**.
 
 ### Cannot connect / "Connection timed out"
 

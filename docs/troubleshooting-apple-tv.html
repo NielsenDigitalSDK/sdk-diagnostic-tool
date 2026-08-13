@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apple TV — Troubleshooting Guide | SDK Diagnostic Tool</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --nielsen-purple: #6E37FA;
+    --nielsen-purple-light: #8B5CF6;
+    --nielsen-purple-bg: #ede9fe;
+    --nielsen-navy: #002041;
+    --bg: #f8fafc;
+    --bg-card: #ffffff;
+    --bg-code: #f1f5f9;
+    --bg-sidebar: #0f172a;
+    --text: #1e293b;
+    --text-secondary: #334155;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    --border-light: #f1f5f9;
+    --green: #10b981;
+    --green-bg: #ecfdf5;
+    --green-border: #a7f3d0;
+    --red: #ef4444;
+    --red-bg: #fef2f2;
+    --red-border: #fecaca;
+    --amber: #f59e0b;
+    --amber-bg: #fffbeb;
+    --amber-border: #fde68a;
+    --blue: #3b82f6;
+    --blue-bg: #eff6ff;
+    --blue-border: #bfdbfe;
+    --sidebar-w: 260px;
+    --max-content: 820px;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f172a;
+      --bg-card: #1e293b;
+      --bg-code: #1e293b;
+      --text: #f1f5f9;
+      --text-secondary: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border: #334155;
+      --border-light: #1e293b;
+      --green-bg: #052e16;
+      --green-border: #166534;
+      --red-bg: #450a0a;
+      --red-border: #991b1b;
+      --amber-bg: #451a03;
+      --amber-border: #92400e;
+      --blue-bg: #172554;
+      --blue-border: #1e40af;
+      --nielsen-purple-bg: #2e1065;
+    }
+  }
+  [data-theme="dark"] {
+    --bg: #0f172a;
+    --bg-card: #1e293b;
+    --bg-code: #1e293b;
+    --text: #f1f5f9;
+    --text-secondary: #e2e8f0;
+    --text-muted: #94a3b8;
+    --border: #334155;
+    --border-light: #1e293b;
+    --green-bg: #052e16;
+    --green-border: #166534;
+    --red-bg: #450a0a;
+    --red-border: #991b1b;
+    --amber-bg: #451a03;
+    --amber-border: #92400e;
+    --blue-bg: #172554;
+    --blue-border: #1e40af;
+    --nielsen-purple-bg: #2e1065;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.7;
+    font-size: 15px;
+    transition: background 0.3s, color 0.3s;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    position: fixed; top: 0; left: 0;
+    width: var(--sidebar-w); height: 100vh;
+    background: var(--bg-sidebar);
+    overflow-y: auto; z-index: 100;
+    padding: 0;
+    transition: transform 0.3s ease;
+  }
+  .sidebar-header {
+    padding: 24px 20px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .sidebar-header h2 { color: #fff; font-size: 14px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+  .sidebar-header p { color: #94a3b8; font-size: 12px; margin-top: 4px; }
+  .nav-group { padding: 12px 0; }
+  .nav-group-label {
+    padding: 4px 20px; font-size: 10px; font-weight: 700;
+    color: #64748b; text-transform: uppercase; letter-spacing: 1px;
+    margin-top: 4px; border-top: 1px solid rgba(255,255,255,0.04); padding-top: 12px;
+  }
+  .nav-group:first-of-type .nav-group-label { border-top: none; padding-top: 4px; }
+  .nav-link {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 20px; font-size: 13px; color: #94a3b8;
+    text-decoration: none; transition: all 0.15s;
+    border-left: 3px solid transparent;
+  }
+  .nav-link:hover { color: #e2e8f0; background: rgba(255,255,255,0.04); }
+  .nav-link.active { color: #fff; background: rgba(99,102,241,0.1); border-left-color: var(--nielsen-purple); font-weight: 600; }
+  .back-link {
+    display: flex; align-items: center; gap: 8px;
+    padding: 12px 20px; font-size: 13px; color: #94a3b8;
+    text-decoration: none; transition: all 0.15s;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .back-link:hover { color: #e2e8f0; background: rgba(255,255,255,0.04); }
+
+  .theme-toggle {
+    position: sticky; bottom: 0; left: 0; right: 0;
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 20px; margin-top: 12px;
+    background: var(--bg-sidebar);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    cursor: pointer; border-left: none; border-right: none; border-bottom: none;
+    color: #94a3b8; font-size: 12px; font-family: inherit; width: 100%;
+  }
+  .theme-toggle:hover { background: rgba(255,255,255,0.06); color: #e2e8f0; }
+
+  /* Mobile */
+  .mobile-toggle {
+    display: none; position: fixed; top: 12px; left: 12px; z-index: 200;
+    width: 40px; height: 40px; border-radius: 10px;
+    background: var(--bg-card); border: 1px solid var(--border);
+    cursor: pointer; align-items: center; justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1); font-size: 18px; color: var(--text);
+  }
+
+  /* Main */
+  .main { margin-left: var(--sidebar-w); padding: 48px 48px 96px; }
+  .content { max-width: var(--max-content); margin: 0 auto; }
+
+  /* Typography */
+  h1 { font-size: 28px; font-weight: 800; margin-bottom: 8px; display: flex; align-items: center; gap: 12px; }
+  h2 { font-size: 22px; font-weight: 700; margin: 48px 0 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  h3 { font-size: 17px; font-weight: 700; margin: 32px 0 12px; color: var(--text); }
+  .lead { color: var(--text-secondary); font-size: 16px; margin-bottom: 24px; line-height: 1.7; }
+  p { margin-bottom: 12px; }
+
+  /* Tables */
+  .table-wrap { overflow-x: auto; margin: 16px 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; background: var(--bg-card); border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--border); }
+  th { background: var(--border-light); font-weight: 700; text-align: left; padding: 10px 14px; font-size: 13px; }
+  td { padding: 10px 14px; border-top: 1px solid var(--border); }
+  tr:hover td { background: var(--border-light); }
+
+  /* Code */
+  code { background: var(--bg-code); padding: 2px 7px; border-radius: 5px; font-size: 13px; font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace; border: 1px solid var(--border); }
+  pre { background: var(--bg-code); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px; overflow-x: auto; font-size: 13px; margin: 12px 0; font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace; line-height: 1.6; }
+  pre code { background: none; border: none; padding: 0; }
+
+  /* Callouts */
+  .callout { display: flex; gap: 14px; padding: 16px 20px; border-radius: var(--radius-sm); margin: 16px 0; align-items: flex-start; }
+  .callout-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+  .callout-text { font-size: 14px; }
+  .callout-text strong:first-child { display: block; margin-bottom: 2px; }
+  .callout.critical { background: var(--red-bg); border: 1px solid var(--red-border); }
+  .callout.warn { background: var(--amber-bg); border: 1px solid var(--amber-border); }
+  .callout.tip { background: var(--green-bg); border: 1px solid var(--green-border); }
+  .callout.info { background: var(--blue-bg); border: 1px solid var(--blue-border); }
+
+  /* Cards */
+  .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 24px; margin-bottom: 12px; }
+  .card h4 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+  .card p { color: var(--text-secondary); font-size: 14px; }
+
+  /* Steps */
+  .steps { margin: 16px 0 24px; }
+  .step { display: flex; gap: 16px; margin-bottom: 16px; align-items: flex-start; }
+  .step-num { width: 32px; height: 32px; border-radius: 8px; background: var(--nielsen-purple); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; flex-shrink: 0; }
+  .step-content h4 { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+  .step-content p { font-size: 14px; color: var(--text-secondary); margin-bottom: 4px; }
+
+  /* Checklist */
+  .checklist { list-style: none; margin: 16px 0; }
+  .checklist li { padding: 8px 0; padding-left: 28px; position: relative; font-size: 14px; color: var(--text-secondary); }
+  .checklist li::before { content: ''; position: absolute; left: 0; top: 11px; width: 16px; height: 16px; border: 2px solid var(--border); border-radius: 4px; }
+
+  /* Links */
+  a { color: #7c3aed; text-decoration-color: rgba(124,58,237,0.3); }
+  a:hover { color: #6E37FA; text-decoration-color: #6E37FA; }
+  @media (prefers-color-scheme: dark) {
+    a { color: #a78bfa; text-decoration-color: rgba(167,139,250,0.3); }
+    a:hover { color: #c4b5fd; text-decoration-color: #c4b5fd; }
+  }
+  [data-theme="dark"] a { color: #a78bfa; }
+  .nav-link, .nav-link:hover, .back-link, .back-link:hover { color: inherit; text-decoration: none; }
+
+  /* Ordered/Unordered lists */
+  ol, ul { margin: 8px 0 16px 24px; }
+  li { margin-bottom: 6px; font-size: 14px; color: var(--text-secondary); }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .sidebar { transform: translateX(-100%); }
+    .sidebar.open { transform: translateX(0); box-shadow: 4px 0 32px rgba(0,0,0,0.3); }
+    .mobile-toggle { display: flex; }
+    .main { margin-left: 0; padding: 64px 20px 80px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <h2>SDK Diagnostic Tool</h2>
+    <p>Apple TV Troubleshooting</p>
+  </div>
+  <a class="back-link" href="index.html">&#8592; Back to Client Guide</a>
+  <div class="nav-group">
+    <div class="nav-group-label">Guide</div>
+    <a class="nav-link active" href="#prerequisites">Prerequisites</a>
+    <a class="nav-link" href="#connection-flow">Connection Flow</a>
+    <a class="nav-link" href="#error-reference">Error Reference</a>
+    <a class="nav-link" href="#known-issues">Known Issues &amp; Fixes</a>
+    <a class="nav-link" href="#still-not-working">Still Not Working?</a>
+    <a class="nav-link" href="#quick-checklist">Quick Checklist</a>
+  </div>
+  <div class="nav-group">
+    <div class="nav-group-label">Related</div>
+    <a class="nav-link" href="troubleshooting-samsung-tv.html">Samsung TV Guide</a>
+    <a class="nav-link" href="TROUBLESHOOTING.md">All Platforms</a>
+  </div>
+  <button class="theme-toggle" onclick="toggleTheme()" title="Switch theme">
+    <span id="theme-icon">&#9790;</span>
+    <span id="theme-label">Dark Mode</span>
+  </button>
+</nav>
+
+<button class="mobile-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">&#9776;</button>
+
+<main class="main">
+  <div class="content">
+
+    <h1>&#128250; Apple TV — Troubleshooting Guide</h1>
+    <p class="lead">Complete troubleshooting reference for connecting the SDK Diagnostic Tool to Apple TV devices via Wi-Fi. Covers the Discover, Pair, and Connect steps.</p>
+
+    <!-- Prerequisites -->
+    <div id="prerequisites">
+      <h2>Prerequisites</h2>
+      <ul>
+        <li><strong>macOS</strong> — Apple TV capture is Mac-only</li>
+        <li><strong>tvOS 17 or later</strong> on the Apple TV</li>
+        <li>Mac and Apple TV on the <strong>same Wi-Fi network</strong></li>
+        <li>Internet connection on first use (tool downloads dependencies automatically)</li>
+      </ul>
+    </div>
+
+    <!-- Connection Flow -->
+    <div id="connection-flow">
+      <h2>Connection Flow</h2>
+      <p>The tool connects to Apple TV in three steps:</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Step</th><th>What Happens</th><th>What You Need to Do</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Discover</strong></td>
+              <td>Tool searches for Apple TVs advertising on the local network</td>
+              <td>Keep Apple TV on <strong>Settings &rarr; Remotes and Devices &rarr; Remote App and Devices</strong></td>
+            </tr>
+            <tr>
+              <td><strong>Pair</strong></td>
+              <td>Tool exchanges a PIN with the Apple TV to establish trust</td>
+              <td>Enter the 6-digit PIN shown on the TV screen</td>
+            </tr>
+            <tr>
+              <td><strong>Connect</strong></td>
+              <td>Tool starts a tunnel daemon (requires Mac password)</td>
+              <td>Enter your Mac login password when prompted</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>After Connect, the tool verifies that log data is flowing from the Apple TV.</p>
+    </div>
+
+    <!-- Error Reference -->
+    <div id="error-reference">
+      <h2>Error Reference</h2>
+
+      <h3>Discover Step</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Error</th><th>Cause</th><th>Fix</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><code>No Apple TV devices found on your network</code></td>
+              <td>Apple TV is not on the pairing screen, or not on the same network</td>
+              <td>Open <strong>Settings &rarr; Remotes and Devices &rarr; Remote App and Devices</strong> on the Apple TV and keep it open</td>
+            </tr>
+            <tr>
+              <td><code>Discovery failed due to a permission error in the Python cache</code></td>
+              <td>Root-owned files left behind from a previous session</td>
+              <td>Run the command shown in the error message (see <a href="#permission-fix">Permission Fix</a> below)</td>
+            </tr>
+            <tr>
+              <td><code>Python 3.13 is not available for the discovery tool</code></td>
+              <td>First-run dependency download failed</td>
+              <td>Ensure internet access and press Try Again</td>
+            </tr>
+            <tr>
+              <td><code>Device scan timed out</code></td>
+              <td>Network issue — Mac can't reach the Apple TV via multicast</td>
+              <td>Verify both devices are on the same Wi-Fi (not a guest network or VLAN)</td>
+            </tr>
+            <tr>
+              <td><code>Discovery tools could not reach the network to resolve dependencies</code></td>
+              <td>No internet — tool needs to download packages on first use</td>
+              <td>Connect to internet and press Try Again</td>
+            </tr>
+            <tr>
+              <td><code>Could not set up connection tools</code></td>
+              <td>uv binary download failed</td>
+              <td>Check internet access (github.com must be reachable)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Pair Step</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Error</th><th>Cause</th><th>Fix</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><code>Invalid PIN</code></td>
+              <td>Wrong PIN entered</td>
+              <td>Check the PIN on the Apple TV screen and re-enter</td>
+            </tr>
+            <tr>
+              <td><code>Pairing was denied on the device</code></td>
+              <td>Someone pressed Deny on the Apple TV</td>
+              <td>Accept the pairing request on the TV and retry</td>
+            </tr>
+            <tr>
+              <td><code>Connection refused. Ensure device is on pairing screen</code></td>
+              <td>Apple TV left the pairing screen</td>
+              <td>Go back to Settings &rarr; Remotes and Devices &rarr; Remote App and Devices on the TV</td>
+            </tr>
+            <tr>
+              <td><code>Connection timed out</code></td>
+              <td>Network issue between Mac and Apple TV</td>
+              <td>Check same Wi-Fi, no firewall blocking</td>
+            </tr>
+            <tr>
+              <td><code>Pairing cancelled</code></td>
+              <td>Cancelled in the tool</td>
+              <td>Press Discover to restart</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Connect Step</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Error</th><th>Cause</th><th>Fix</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><code>Invalid password</code></td>
+              <td>Wrong Mac login password</td>
+              <td>Re-enter your Mac login password (the same one you use to unlock your Mac)</td>
+            </tr>
+            <tr>
+              <td><code>Device not connected to tunnel</code></td>
+              <td>Tunnel started but Apple TV didn't connect — usually caused by too many existing pairings</td>
+              <td>Clear all pairings on Apple TV (see <a href="#pairing-slot-exhaustion">Pairing Slot Exhaustion</a> below)</td>
+            </tr>
+            <tr>
+              <td><code>Tunnel startup timed out</code></td>
+              <td>First-run downloads took too long, or port conflict</td>
+              <td>Ensure internet access; if repeated, restart the tool</td>
+            </tr>
+            <tr>
+              <td><code>Could not verify log stream</code></td>
+              <td>Tunnel is up but syslog data isn't flowing</td>
+              <td>Ensure the Apple TV is awake and on the home screen, then press Try Again</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Known Issues -->
+    <div id="known-issues">
+      <h2>Known Issues &amp; Fixes</h2>
+
+      <h3 id="permission-fix">Permission Fix</h3>
+      <div class="callout warn">
+        <span class="callout-icon">&#9888;&#65039;</span>
+        <div class="callout-text">
+          <strong>Symptom:</strong> "Discovery failed due to a permission error in the Python cache (root-owned files from a previous 'sudo' run)"
+        </div>
+      </div>
+      <p>This happens when a previous tunnel session wrote files as root into your user directories. The tool attempts to fix this automatically. If it can't, it shows a terminal command to run.</p>
+
+      <p><strong>If the error says</strong> <code>~/.local/share</code>:</p>
+      <pre><code>sudo chown -R $(whoami) ~/.local/share</code></pre>
+
+      <p><strong>If the error says</strong> <code>~/.cache/uv</code>:</p>
+      <pre><code>sudo rm -rf ~/.cache/uv</code></pre>
+
+      <p><strong>If unsure, run both:</strong></p>
+      <pre><code>sudo chown -R $(whoami) ~/.local/share && sudo rm -rf ~/.cache/uv</code></pre>
+
+      <p>Then press Try Again in the tool. This is a one-time fix — the latest tool version prevents this from recurring.</p>
+
+      <h3 id="pairing-slot-exhaustion">Pairing Slot Exhaustion</h3>
+      <div class="callout warn">
+        <span class="callout-icon">&#9888;&#65039;</span>
+        <div class="callout-text">
+          <strong>Symptom:</strong> Discover and Pair succeed, but Connect fails with "Device not connected to tunnel"
+        </div>
+      </div>
+      <p>Apple TV has a limited number of pairing slots under Remote App &amp; Devices. When multiple tools (Xcode, the IADT tool, previous sessions) each hold a pairing record, the Apple TV may refuse new tunnel connections.</p>
+
+      <p><strong>Fix:</strong></p>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-content"><p>On Apple TV: go to <strong>Settings &rarr; Remotes and Devices &rarr; Remote App and Devices</strong></p></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-content"><p>You'll see a list of paired devices (Macs, iPhones, etc.)</p></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-content"><p><strong>Forget</strong> (remove) all entries that you don't actively need</p></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-content"><p>Go back to the tool and press Discover to start fresh</p></div></div>
+      </div>
+
+      <h3 id="stale-processes">Stale Background Processes</h3>
+      <div class="callout warn">
+        <span class="callout-icon">&#9888;&#65039;</span>
+        <div class="callout-text">
+          <strong>Symptom:</strong> Discovery fails intermittently, or "Device not connected to tunnel" appears after a previously working session
+        </div>
+      </div>
+      <p>If the tool was force-quit or crashed, a background tunnel process may still be running and holding the Apple TV connection.</p>
+      <p><strong>Fix:</strong></p>
+      <pre><code>sudo pkill -9 -f pymobiledevice3</code></pre>
+      <p>Then relaunch the tool and reconnect.</p>
+    </div>
+
+    <!-- Still Not Working -->
+    <div id="still-not-working">
+      <h2>Still Not Working?</h2>
+      <p>If none of the above resolved the issue, try these steps in order:</p>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-content"><h4>Restart the Apple TV</h4><p>Settings &rarr; System &rarr; Restart</p></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-content"><h4>Forget all pairings on the Apple TV</h4><p>Settings &rarr; Remotes and Devices &rarr; Remote App and Devices &rarr; remove all entries</p></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-content"><h4>Run full cleanup on Mac</h4><pre><code>sudo chown -R $(whoami) ~/.local/share && sudo rm -rf ~/.cache/uv && sudo pkill -9 -f pymobiledevice3</code></pre></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-content"><h4>Restart the Mac</h4><p>Full restart, not just sleep/wake.</p></div></div>
+        <div class="step"><div class="step-num">5</div><div class="step-content"><h4>Relaunch the tool</h4><p>Go through Discover &rarr; Pair &rarr; Connect again</p></div></div>
+        <div class="step"><div class="step-num">6</div><div class="step-content"><h4>VPN interference</h4><p>If a VPN client is installed (even if disconnected), try temporarily uninstalling its network extension — some VPN clients interfere with multicast network discovery even when not actively connected.</p></div></div>
+      </div>
+    </div>
+
+    <!-- Quick Checklist -->
+    <div id="quick-checklist">
+      <h2>Quick Checklist</h2>
+      <p>Before starting, confirm:</p>
+      <ul class="checklist">
+        <li>Apple TV is on <strong>Settings &rarr; Remotes and Devices &rarr; Remote App and Devices</strong> screen</li>
+        <li>Mac and Apple TV are on the <strong>same Wi-Fi</strong> network</li>
+        <li>Apple TV is running <strong>tvOS 17 or later</strong></li>
+        <li>No more than 2-3 entries under Apple TV's Remote App &amp; Devices</li>
+        <li>Mac has <strong>internet access</strong> (needed for first-time setup only)</li>
+        <li>Tool is on the <strong>latest version</strong></li>
+      </ul>
+    </div>
+
+    <div style="margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-muted);">
+      <p>For additional help, contact your Nielsen Technical Account Manager (TAM).</p>
+      <p style="margin-top: 8px;"><a href="index.html">&larr; Back to Client Guide</a> &nbsp;|&nbsp; <a href="troubleshooting-samsung-tv.html">Samsung TV Troubleshooting &rarr;</a></p>
+    </div>
+
+  </div>
+</main>
+
+<script>
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('theme', next);
+  document.getElementById('theme-icon').textContent = next === 'dark' ? '\u2600' : '\u263E';
+  document.getElementById('theme-label').textContent = next === 'dark' ? 'Light Mode' : 'Dark Mode';
+}
+(function() {
+  const saved = localStorage.getItem('theme');
+  if (saved) {
+    document.documentElement.setAttribute('data-theme', saved);
+    if (saved === 'dark') {
+      document.getElementById('theme-icon').textContent = '\u2600';
+      document.getElementById('theme-label').textContent = 'Light Mode';
+    }
+  }
+})();
+
+// Active nav highlight
+document.addEventListener('scroll', function() {
+  const sections = document.querySelectorAll('[id]');
+  const links = document.querySelectorAll('.nav-link[href^="#"]');
+  let current = '';
+  sections.forEach(function(section) {
+    if (window.scrollY >= section.offsetTop - 100) {
+      current = section.getAttribute('id');
+    }
+  });
+  links.forEach(function(link) {
+    link.classList.remove('active');
+    if (link.getAttribute('href') === '#' + current) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Samsung Tizen TV — Troubleshooting Guide | SDK Diagnostic Tool</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --nielsen-purple: #6E37FA;
+    --nielsen-purple-light: #8B5CF6;
+    --nielsen-purple-bg: #ede9fe;
+    --nielsen-navy: #002041;
+    --bg: #f8fafc;
+    --bg-card: #ffffff;
+    --bg-code: #f1f5f9;
+    --bg-sidebar: #0f172a;
+    --text: #1e293b;
+    --text-secondary: #334155;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    --border-light: #f1f5f9;
+    --green: #10b981;
+    --green-bg: #ecfdf5;
+    --green-border: #a7f3d0;
+    --red: #ef4444;
+    --red-bg: #fef2f2;
+    --red-border: #fecaca;
+    --amber: #f59e0b;
+    --amber-bg: #fffbeb;
+    --amber-border: #fde68a;
+    --blue: #3b82f6;
+    --blue-bg: #eff6ff;
+    --blue-border: #bfdbfe;
+    --sidebar-w: 260px;
+    --max-content: 820px;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f172a;
+      --bg-card: #1e293b;
+      --bg-code: #1e293b;
+      --text: #f1f5f9;
+      --text-secondary: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border: #334155;
+      --border-light: #1e293b;
+      --green-bg: #052e16;
+      --green-border: #166534;
+      --red-bg: #450a0a;
+      --red-border: #991b1b;
+      --amber-bg: #451a03;
+      --amber-border: #92400e;
+      --blue-bg: #172554;
+      --blue-border: #1e40af;
+      --nielsen-purple-bg: #2e1065;
+    }
+  }
+  [data-theme="dark"] {
+    --bg: #0f172a;
+    --bg-card: #1e293b;
+    --bg-code: #1e293b;
+    --text: #f1f5f9;
+    --text-secondary: #e2e8f0;
+    --text-muted: #94a3b8;
+    --border: #334155;
+    --border-light: #1e293b;
+    --green-bg: #052e16;
+    --green-border: #166534;
+    --red-bg: #450a0a;
+    --red-border: #991b1b;
+    --amber-bg: #451a03;
+    --amber-border: #92400e;
+    --blue-bg: #172554;
+    --blue-border: #1e40af;
+    --nielsen-purple-bg: #2e1065;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.7;
+    font-size: 15px;
+    transition: background 0.3s, color 0.3s;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    position: fixed; top: 0; left: 0;
+    width: var(--sidebar-w); height: 100vh;
+    background: var(--bg-sidebar);
+    overflow-y: auto; z-index: 100;
+    padding: 0;
+    transition: transform 0.3s ease;
+  }
+  .sidebar-header {
+    padding: 24px 20px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .sidebar-header h2 { color: #fff; font-size: 14px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+  .sidebar-header p { color: #94a3b8; font-size: 12px; margin-top: 4px; }
+  .nav-group { padding: 12px 0; }
+  .nav-group-label {
+    padding: 4px 20px; font-size: 10px; font-weight: 700;
+    color: #64748b; text-transform: uppercase; letter-spacing: 1px;
+    margin-top: 4px; border-top: 1px solid rgba(255,255,255,0.04); padding-top: 12px;
+  }
+  .nav-group:first-of-type .nav-group-label { border-top: none; padding-top: 4px; }
+  .nav-link {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 20px; font-size: 13px; color: #94a3b8;
+    text-decoration: none; transition: all 0.15s;
+    border-left: 3px solid transparent;
+  }
+  .nav-link:hover { color: #e2e8f0; background: rgba(255,255,255,0.04); }
+  .nav-link.active { color: #fff; background: rgba(99,102,241,0.1); border-left-color: var(--nielsen-purple); font-weight: 600; }
+  .back-link {
+    display: flex; align-items: center; gap: 8px;
+    padding: 12px 20px; font-size: 13px; color: #94a3b8;
+    text-decoration: none; transition: all 0.15s;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .back-link:hover { color: #e2e8f0; background: rgba(255,255,255,0.04); }
+
+  .theme-toggle {
+    position: sticky; bottom: 0; left: 0; right: 0;
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 20px; margin-top: 12px;
+    background: var(--bg-sidebar);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    cursor: pointer; border-left: none; border-right: none; border-bottom: none;
+    color: #94a3b8; font-size: 12px; font-family: inherit; width: 100%;
+  }
+  .theme-toggle:hover { background: rgba(255,255,255,0.06); color: #e2e8f0; }
+
+  /* Mobile */
+  .mobile-toggle {
+    display: none; position: fixed; top: 12px; left: 12px; z-index: 200;
+    width: 40px; height: 40px; border-radius: 10px;
+    background: var(--bg-card); border: 1px solid var(--border);
+    cursor: pointer; align-items: center; justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1); font-size: 18px; color: var(--text);
+  }
+
+  /* Main */
+  .main { margin-left: var(--sidebar-w); padding: 48px 48px 96px; }
+  .content { max-width: var(--max-content); margin: 0 auto; }
+
+  /* Typography */
+  h1 { font-size: 28px; font-weight: 800; margin-bottom: 8px; display: flex; align-items: center; gap: 12px; }
+  h2 { font-size: 22px; font-weight: 700; margin: 48px 0 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  h3 { font-size: 17px; font-weight: 700; margin: 32px 0 12px; color: var(--text); }
+  .lead { color: var(--text-secondary); font-size: 16px; margin-bottom: 24px; line-height: 1.7; }
+  p { margin-bottom: 12px; }
+
+  /* Tables */
+  .table-wrap { overflow-x: auto; margin: 16px 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; background: var(--bg-card); border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--border); }
+  th { background: var(--border-light); font-weight: 700; text-align: left; padding: 10px 14px; font-size: 13px; }
+  td { padding: 10px 14px; border-top: 1px solid var(--border); }
+  tr:hover td { background: var(--border-light); }
+
+  /* Code */
+  code { background: var(--bg-code); padding: 2px 7px; border-radius: 5px; font-size: 13px; font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace; border: 1px solid var(--border); }
+  pre { background: var(--bg-code); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px; overflow-x: auto; font-size: 13px; margin: 12px 0; font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace; line-height: 1.6; }
+  pre code { background: none; border: none; padding: 0; }
+
+  /* Callouts */
+  .callout { display: flex; gap: 14px; padding: 16px 20px; border-radius: var(--radius-sm); margin: 16px 0; align-items: flex-start; }
+  .callout-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+  .callout-text { font-size: 14px; }
+  .callout-text strong:first-child { display: block; margin-bottom: 2px; }
+  .callout.critical { background: var(--red-bg); border: 1px solid var(--red-border); }
+  .callout.warn { background: var(--amber-bg); border: 1px solid var(--amber-border); }
+  .callout.tip { background: var(--green-bg); border: 1px solid var(--green-border); }
+  .callout.info { background: var(--blue-bg); border: 1px solid var(--blue-border); }
+
+  /* Cards */
+  .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 24px; margin-bottom: 12px; }
+  .card h4 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+  .card p { color: var(--text-secondary); font-size: 14px; }
+
+  /* Steps */
+  .steps { margin: 16px 0 24px; }
+  .step { display: flex; gap: 16px; margin-bottom: 16px; align-items: flex-start; }
+  .step-num { width: 32px; height: 32px; border-radius: 8px; background: var(--nielsen-purple); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; flex-shrink: 0; }
+  .step-content h4 { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+  .step-content p { font-size: 14px; color: var(--text-secondary); margin-bottom: 4px; }
+
+  /* Checklist */
+  .checklist { list-style: none; margin: 16px 0; }
+  .checklist li { padding: 8px 0; padding-left: 28px; position: relative; font-size: 14px; color: var(--text-secondary); }
+  .checklist li::before { content: ''; position: absolute; left: 0; top: 11px; width: 16px; height: 16px; border: 2px solid var(--border); border-radius: 4px; }
+
+  /* Links */
+  a { color: #7c3aed; text-decoration-color: rgba(124,58,237,0.3); }
+  a:hover { color: #6E37FA; text-decoration-color: #6E37FA; }
+  @media (prefers-color-scheme: dark) {
+    a { color: #a78bfa; text-decoration-color: rgba(167,139,250,0.3); }
+    a:hover { color: #c4b5fd; text-decoration-color: #c4b5fd; }
+  }
+  [data-theme="dark"] a { color: #a78bfa; }
+  .nav-link, .nav-link:hover, .back-link, .back-link:hover { color: inherit; text-decoration: none; }
+
+  /* Ordered/Unordered lists */
+  ol, ul { margin: 8px 0 16px 24px; }
+  li { margin-bottom: 6px; font-size: 14px; color: var(--text-secondary); }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .sidebar { transform: translateX(-100%); }
+    .sidebar.open { transform: translateX(0); box-shadow: 4px 0 32px rgba(0,0,0,0.3); }
+    .mobile-toggle { display: flex; }
+    .main { margin-left: 0; padding: 64px 20px 80px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <h2>SDK Diagnostic Tool</h2>
+    <p>Samsung TV Troubleshooting</p>
+  </div>
+  <a class="back-link" href="index.html">&#8592; Back to Client Guide</a>
+  <div class="nav-group">
+    <div class="nav-group-label">Guide</div>
+    <a class="nav-link active" href="#prerequisites">Prerequisites</a>
+    <a class="nav-link" href="#which-port">Which Port to Use?</a>
+    <a class="nav-link" href="#connection-flow">Connection Flow</a>
+    <a class="nav-link" href="#error-reference">Error Reference</a>
+    <a class="nav-link" href="#enable-dev-mode">Enable Developer Mode</a>
+    <a class="nav-link" href="#hbbtv">HbbTV Apps (Port 7014)</a>
+    <a class="nav-link" href="#tizen-web-app">Tizen Web Apps</a>
+    <a class="nav-link" href="#verify-connectivity">Verify Connectivity</a>
+    <a class="nav-link" href="#common-mistakes">Common Mistakes</a>
+    <a class="nav-link" href="#still-not-working">Still Not Working?</a>
+    <a class="nav-link" href="#quick-checklist">Quick Checklist</a>
+  </div>
+  <div class="nav-group">
+    <div class="nav-group-label">Related</div>
+    <a class="nav-link" href="troubleshooting-apple-tv.html">Apple TV Guide</a>
+    <a class="nav-link" href="TROUBLESHOOTING.md">All Platforms</a>
+  </div>
+  <button class="theme-toggle" onclick="toggleTheme()" title="Switch theme">
+    <span id="theme-icon">&#9790;</span>
+    <span id="theme-label">Dark Mode</span>
+  </button>
+</nav>
+
+<button class="mobile-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">&#9776;</button>
+
+<main class="main">
+  <div class="content">
+
+    <h1>&#128250; Samsung Tizen TV — Troubleshooting Guide</h1>
+    <p class="lead">Complete troubleshooting reference for connecting the SDK Diagnostic Tool to Samsung Smart TVs. Covers HbbTV applications and Tizen Web Apps deployed via Tizen Studio.</p>
+
+    <!-- Prerequisites -->
+    <div id="prerequisites">
+      <h2>Prerequisites</h2>
+      <ul>
+        <li>Samsung Smart TV with <strong>Developer Mode enabled</strong></li>
+        <li>Mac/PC and TV on the <strong>same network</strong></li>
+        <li><strong>Tizen Studio</strong> installed (for Tizen Web Apps) OR <strong>Developer Mode</strong> enabled (for HbbTV apps)</li>
+        <li>Know your app type: <strong>HbbTV</strong> or <strong>Tizen Web App</strong> (this determines the debug port)</li>
+      </ul>
+    </div>
+
+    <!-- Which Port -->
+    <div id="which-port">
+      <h2>Which Port to Use?</h2>
+      <p>This is the most common source of confusion. The port depends on your app type:</p>
+
+      <div class="callout critical">
+        <span class="callout-icon">&#128683;</span>
+        <div class="callout-text">
+          <strong>Port 26101 is NOT a debug port.</strong>
+          Samsung's own documentation states: "Port 26101 is an internal device port. It cannot be opened separately." If you entered 26101, change it to the correct debug port for your app type.
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>App Type</th><th>Debug Port</th><th>How to Get It</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><strong>HbbTV application</strong></td>
+              <td><strong>7014</strong> (fixed)</td>
+              <td>Built-in — just enable Developer Mode and reboot</td>
+            </tr>
+            <tr>
+              <td><strong>Tizen Web App</strong> (via Tizen Studio)</td>
+              <td><strong>Dynamic</strong> (changes each session)</td>
+              <td>Shown in Tizen Studio console when you "Debug As &rarr; Tizen Web Application"</td>
+            </tr>
+            <tr>
+              <td><strong>SDB / device connection</strong></td>
+              <td>26101</td>
+              <td><strong>DO NOT use this port.</strong> This is Samsung's internal device port for app deployment, not debugging</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Connection Flow -->
+    <div id="connection-flow">
+      <h2>Connection Flow</h2>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-content"><p>Enter the TV's <strong>IP address</strong> (find it on TV: Menu &rarr; Connection &rarr; Network &rarr; Network Status &rarr; IP Settings)</p></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-content"><p>Enter the <strong>debug port</strong> (see table above)</p></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-content"><p>Click <strong>Continue</strong></p></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-content"><p>The tool probes the TV to verify the debug server is reachable</p></div></div>
+        <div class="step"><div class="step-num">5</div><div class="step-content"><p>If successful, launch or reload your app on the TV — the tool captures SDK logs in real-time</p></div></div>
+      </div>
+    </div>
+
+    <!-- Error Reference -->
+    <div id="error-reference">
+      <h2>Error Reference</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Error</th><th>Cause</th><th>Fix</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><code>Connection timed out. TV did not respond within 10 seconds</code></td>
+              <td>Wrong IP, wrong port, TV off, or not on same network</td>
+              <td>Verify IP address, check port (see table above), confirm same network</td>
+            </tr>
+            <tr>
+              <td><code>Remote debugger not reachable. Confirm the TV is powered on and Developer Mode is active</code></td>
+              <td>Port is closed — Developer Mode not enabled OR app not running in debug mode</td>
+              <td>Enable Developer Mode (see below) and launch your app in debug mode</td>
+            </tr>
+            <tr>
+              <td><code>Debug server reachable but no debug targets found. Make sure the app is running</code></td>
+              <td>Debug port is open but no app is active</td>
+              <td>Launch or reload your app on the TV</td>
+            </tr>
+            <tr>
+              <td><code>Invalid IP address format</code></td>
+              <td>Non-IPv4 value entered</td>
+              <td>Enter a valid IP like 192.168.0.105</td>
+            </tr>
+            <tr>
+              <td><code>Invalid port number</code></td>
+              <td>Port outside 1–65535</td>
+              <td>Enter the correct debug port</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Enable Developer Mode -->
+    <div id="enable-dev-mode">
+      <h2>Enable Developer Mode on Samsung TV</h2>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-content"><p>Open the <strong>Apps</strong> panel on the TV</p></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-content"><p>Using the remote, enter <strong>12345</strong> — a Developer Mode popup appears</p></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-content"><p>Switch <strong>Developer Mode</strong> to <strong>ON</strong></p></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-content"><p>Enter your computer's IP address in the <strong>Host PC IP</strong> field</p></div></div>
+        <div class="step"><div class="step-num">5</div><div class="step-content"><p><strong>Restart the TV</strong> (required — Developer Mode activates only after reboot)</p></div></div>
+      </div>
+      <div class="callout tip">
+        <span class="callout-icon">&#9989;</span>
+        <div class="callout-text">
+          <strong>Confirmation</strong>
+          After reboot, a "Developer Mode" banner appears briefly at the top of the screen to confirm it's active.
+        </div>
+      </div>
+    </div>
+
+    <!-- HbbTV -->
+    <div id="hbbtv">
+      <h2>For HbbTV Applications (Port 7014)</h2>
+      <p>If your app is a broadcast HbbTV application (common for broadcasters like Mediametrie):</p>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-content"><p>Enable Developer Mode on TV (steps above)</p></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-content"><p>Switch to <strong>live TV</strong> and open the channel that triggers your HbbTV app</p></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-content"><h4>Verify from your computer</h4><p>Open a browser and navigate to:</p><pre><code>http://&lt;TV_IP&gt;:7014</code></pre><p>If you see a Web Inspector page with a clickable link, the debug port is working.</p></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-content"><p>In the IADT tool: enter the TV IP and port <strong>7014</strong>, then click Continue</p></div></div>
+      </div>
+
+      <h3>Requirements</h3>
+      <ul>
+        <li>Samsung 2024 D-series TV or newer (supports HbbTV Web Inspector)</li>
+        <li>Chromium-based browser on your PC (Chrome, Edge) for manual Web Inspector access</li>
+        <li>TV firmware must be up to date (Menu &rarr; Support &rarr; Software Update &rarr; Update Now)</li>
+      </ul>
+    </div>
+
+    <!-- Tizen Web App -->
+    <div id="tizen-web-app">
+      <h2>For Tizen Web Apps (Dynamic Port via Tizen Studio)</h2>
+      <p>If your app is deployed via Tizen Studio:</p>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-content"><p>Open <strong>Tizen Studio</strong></p></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-content">
+          <h4>Connect to the TV</h4>
+          <ul>
+            <li>Open <strong>Device Manager</strong> (Tools &rarr; Device Manager)</li>
+            <li>Click <strong>Remote Device Manager</strong> &rarr; <strong>Add Device</strong></li>
+            <li>Enter TV name, IP address, and port <strong>26101</strong> (this is only for SDB connection, NOT for debugging)</li>
+            <li>Click <strong>Connect</strong></li>
+          </ul>
+        </div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-content">
+          <h4>Launch app in debug mode</h4>
+          <ul>
+            <li>Right-click your project &rarr; <strong>Debug As &rarr; Tizen Web Application</strong></li>
+            <li>The console output shows a URL like: <code>http://192.168.0.105:7011</code></li>
+            <li>The number after the colon (<strong>7011</strong> in this example) is your debug port</li>
+          </ul>
+        </div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-content"><p>Enter that port in the IADT tool along with the TV's IP, then click Continue</p></div></div>
+      </div>
+
+      <div class="callout warn">
+        <span class="callout-icon">&#9888;&#65039;</span>
+        <div class="callout-text">
+          <strong>Important:</strong> The debug port is <strong>dynamic</strong> — it changes every time you launch in debug mode. Always check the Tizen Studio console for the current port.
+        </div>
+      </div>
+    </div>
+
+    <!-- Verify Connectivity -->
+    <div id="verify-connectivity">
+      <h2>Verifying Connectivity from Terminal</h2>
+      <p>Before using the IADT tool, you can verify the TV's debug port is open:</p>
+      <pre><code># Check if the debug port is reachable (replace IP and port)
+nc -zv 192.168.0.105 7014
+
+# Or try fetching the debug target list
+curl -s http://192.168.0.105:7014/json</code></pre>
+
+      <h3>Expected Results</h3>
+      <ul>
+        <li><code>nc</code>: Should say "Connection ... succeeded" or "open"</li>
+        <li><code>curl</code>: Should return a JSON array (e.g., <code>[{"description":"","devtoolsFrontendUrl":"..."}]</code>)</li>
+      </ul>
+
+      <div class="callout info">
+        <span class="callout-icon">&#128161;</span>
+        <div class="callout-text">
+          <strong>If both timeout or refuse:</strong> The debug server isn't running. Go back and verify Developer Mode is enabled and the app is launched in debug mode.
+        </div>
+      </div>
+    </div>
+
+    <!-- Common Mistakes -->
+    <div id="common-mistakes">
+      <h2>Common Mistakes</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Mistake</th><th>Why It's Wrong</th><th>What to Do Instead</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Entering port <strong>26101</strong></td>
+              <td>This is Samsung's SDB port (app deployment), not a debug port</td>
+              <td>Use <strong>7014</strong> (HbbTV) or the port from Tizen Studio console</td>
+            </tr>
+            <tr>
+              <td>Entering port <strong>7011</strong> when app isn't launched in debug mode</td>
+              <td>Port 7011 is only open when Tizen Studio actively debugs an app</td>
+              <td>Launch app via "Debug As &rarr; Tizen Web Application" first</td>
+            </tr>
+            <tr>
+              <td>TV Developer Mode not rebooted</td>
+              <td>Developer Mode only activates after a full restart</td>
+              <td>Power off and on the TV after enabling</td>
+            </tr>
+            <tr>
+              <td>App running in normal mode</td>
+              <td>Production/normal apps don't expose a debug port</td>
+              <td>Must launch via "Debug As" in Tizen Studio, or use HbbTV path (7014)</td>
+            </tr>
+            <tr>
+              <td>PC and TV on different networks</td>
+              <td>Debug connection requires direct network access</td>
+              <td>Verify same subnet (both 192.168.x.x or both 10.x.x.x)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Still Not Working -->
+    <div id="still-not-working">
+      <h2>Still Not Working?</h2>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-content"><h4>Update TV firmware</h4><p>Menu &rarr; Support &rarr; Software Update &rarr; Update Now</p></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-content"><h4>Verify Developer Mode is active</h4><p>After reboot, a banner should appear briefly at the top of the screen</p></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-content"><h4>Check TV IP hasn't changed</h4><p>Re-check under Menu &rarr; Connection &rarr; Network &rarr; Network Status &rarr; IP Settings</p></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-content"><h4>Try port 7014 directly in Chrome</h4><p>Navigate to <code>http://&lt;TV_IP&gt;:7014</code> from your Mac. If it loads a debug page, use port 7014 in the tool.</p></div></div>
+        <div class="step"><div class="step-num">5</div><div class="step-content"><h4>Restart the TV</h4><p>Some Samsung TVs require a fresh restart for Developer Mode to fully activate</p></div></div>
+        <div class="step"><div class="step-num">6</div><div class="step-content"><h4>Check Host PC IP</h4><p>In Developer Mode settings, ensure the IP matches your current Mac/PC IP address</p></div></div>
+        <div class="step"><div class="step-num">7</div><div class="step-content"><h4>Disable TV power saving</h4><p>Some Samsung TVs close debug ports when in standby or eco mode</p></div></div>
+      </div>
+    </div>
+
+    <!-- Reference Links -->
+    <div id="reference-links">
+      <h2>Reference Links</h2>
+      <ul>
+        <li><a href="https://developer.samsung.com/smarttv/develop/getting-started/using-sdk/tv-device.html" target="_blank">Samsung: TV Device Setup &amp; Debugging</a></li>
+        <li><a href="https://developer.samsung.com/smarttv/develop/tools/additional-tools/web-inspector-for-hbbtv.html" target="_blank">Samsung: Web Inspector for HbbTV</a></li>
+        <li><a href="https://engineeringportal.nielsen.com/wiki/TizenTv_Debugging" target="_blank">Nielsen Engineering Portal: Tizen TV Debugging</a></li>
+      </ul>
+    </div>
+
+    <!-- Quick Checklist -->
+    <div id="quick-checklist">
+      <h2>Quick Checklist</h2>
+      <p>Before starting, confirm:</p>
+      <ul class="checklist">
+        <li>Developer Mode is <strong>ON</strong> and TV has been <strong>rebooted</strong> after enabling</li>
+        <li>Mac/PC and TV are on the <strong>same network</strong></li>
+        <li>You know your app type: <strong>HbbTV</strong> (port 7014) or <strong>Tizen Web App</strong> (port from Tizen Studio)</li>
+        <li>App is <strong>running on the TV</strong> (for HbbTV: channel is tuned; for Tizen: "Debug As" launched)</li>
+        <li>You are NOT using port 26101 (that's SDB, not debug)</li>
+        <li>TV firmware is <strong>up to date</strong></li>
+      </ul>
+    </div>
+
+    <div style="margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-muted);">
+      <p>For additional help, contact your Nielsen Technical Account Manager (TAM).</p>
+      <p style="margin-top: 8px;"><a href="index.html">&larr; Back to Client Guide</a> &nbsp;|&nbsp; <a href="troubleshooting-apple-tv.html">Apple TV Troubleshooting &rarr;</a></p>
+    </div>
+
+  </div>
+</main>
+
+<script>
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('theme', next);
+  document.getElementById('theme-icon').textContent = next === 'dark' ? '\u2600' : '\u263E';
+  document.getElementById('theme-label').textContent = next === 'dark' ? 'Light Mode' : 'Dark Mode';
+}
+(function() {
+  const saved = localStorage.getItem('theme');
+  if (saved) {
+    document.documentElement.setAttribute('data-theme', saved);
+    if (saved === 'dark') {
+      document.getElementById('theme-icon').textContent = '\u2600';
+      document.getElementById('theme-label').textContent = 'Light Mode';
+    }
+  }
+})();
+
+// Active nav highlight
+document.addEventListener('scroll', function() {
+  const sections = document.querySelectorAll('[id]');
+  const links = document.querySelectorAll('.nav-link[href^="#"]');
+  let current = '';
+  sections.forEach(function(section) {
+    if (window.scrollY >= section.offsetTop - 100) {
+      current = section.getAttribute('id');
+    }
+  });
+  links.forEach(function(link) {
+    link.classList.remove('active');
+    if (link.getAttribute('href') === '#' + current) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>
