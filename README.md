@@ -176,10 +176,10 @@ If you see this error:
 | Android Emulator | Emulator not listed — ADB server conflict | [View](docs/TROUBLESHOOTING.md#-android-emulator) |
 | Fire TV (Wi-Fi) | Cannot connect — ADB debugging or network issue | [View](docs/TROUBLESHOOTING.md#-fire-tv-standard--wi-fi) |
 | Fire TV (VegaOS) | No logs — requires USB, uses loggingctl not logcat | [View](docs/TROUBLESHOOTING.md#-fire-tv-vegaos) |
-| Apple TV (Wi-Fi) | Discovery, pairing, or tunnel issues | [View](docs/TROUBLESHOOTING.md#-apple-tv-wi-fi) |
+| Apple TV (Wi-Fi) | Discovery, pairing, or tunnel issues | [View](docs/TROUBLESHOOTING.md#-apple-tv-wi-fi) &nbsp;\|&nbsp; [Full Guide](https://nielsendigitalsdk.github.io/sdk-diagnostic-tool/troubleshooting-apple-tv.html) |
 | Browser (Chrome/Firefox/Safari) | Browser fails to launch or no logs | [View](docs/TROUBLESHOOTING.md#-browser-chrome--firefox--safari) |
-| Samsung Tizen TV | Cannot connect — debug port or Developer Mode issue | See Interactive Guide |
-| LG webOS TV | Cannot connect — ares-inspect not running or wrong port | See Interactive Guide |
+| Samsung Tizen TV | Cannot connect — debug port or Developer Mode issue | [View](docs/TROUBLESHOOTING.md#-samsung-tizen-tv) &nbsp;\|&nbsp; [Full Guide](https://nielsendigitalsdk.github.io/sdk-diagnostic-tool/troubleshooting-samsung-tv.html) |
+| LG webOS TV | Cannot connect — ares-inspect not running or wrong port | [View](docs/TROUBLESHOOTING.md#-lg-webos-tv) |
 | macOS | "NielsenSDKTool" is damaged / can't be opened | [View](docs/TROUBLESHOOTING.md#-macos--general) |
 | Auto-Update | Update fails or settings lost | [View](docs/TROUBLESHOOTING.md#-auto-update-issues) |
 | All Platforms | No logs — incorrect operation order or debug flag not enabled | [View](docs/TROUBLESHOOTING.md#-before-you-start) |
